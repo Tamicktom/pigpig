@@ -106,8 +106,8 @@ COPY . .
 
 RUN composer run-script post-autoload-dump --no-interaction
 
-RUN cp .env.example .env \
-    && php artisan key:generate --force --no-interaction
+# RUN cp .env.example .env \
+#     && php artisan key:generate --force --no-interaction
 
 RUN npm ci \
     && npm run build \
