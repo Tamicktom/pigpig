@@ -40,7 +40,5 @@ bootstrap/cache/*
 # Documentation (not needed in image)
 *.md
 
-# Docker dev stack (not used by production Dockerfile)
+# Docker dev stack (compose file not needed inside image)
 docker-compose.yml
-docker/php/docker-entrypoint.sh
-docker/vite/docker-entrypoint.sh

@@ -83,6 +83,7 @@ export default function Login({
                             </div>
 
                             <Button
+                                id="login-submit-button"
                                 type="submit"
                                 className="mt-4 w-full"
                                 tabIndex={4}

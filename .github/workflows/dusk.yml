@@ -1,0 +1,93 @@
+name: dusk
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - master
+      - workos
+  pull_request:
+    branches:
+      - develop
+      - main
+      - master
+      - workos
+
+jobs:
+  dusk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Prepare Dusk environment
+        run: |
+          touch database/dusk.sqlite
+          KEY=$(grep '^APP_KEY=' .env | sed 's/^APP_KEY=//')
+          {
+            echo "APP_NAME=Laravel"
+            echo "APP_ENV=dusk.local"
+            echo "APP_KEY=${KEY}"
+            echo "APP_DEBUG=true"
+            echo "APP_URL=http://127.0.0.1:8000"
+            echo "LOG_CHANNEL=stack"
+            echo "LOG_LEVEL=debug"
+            echo "DB_CONNECTION=sqlite"
+            echo "DB_DATABASE=${GITHUB_WORKSPACE}/database/dusk.sqlite"
+            echo "CACHE_STORE=array"
+            echo "SESSION_DRIVER=file"
+            echo "QUEUE_CONNECTION=sync"
+            echo "BROADCAST_CONNECTION=log"
+            echo "MAIL_MAILER=array"
+            echo "VITE_APP_NAME=Laravel"
+          } > .env.dusk.local
+          cp .env.dusk.local .env
+          php artisan migrate --force
+
+      - name: Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Start Laravel server
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 --no-reload &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/up >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not become ready in time"
+          exit 1
+
+      - name: Run Dusk
+        run: php artisan dusk
