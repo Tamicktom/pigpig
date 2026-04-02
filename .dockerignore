@@ -1,29 +1,46 @@
+# Git and IDE
 .git
+.gitignore
 .github
-.idea
-.vscode
+.cursor
 
+# Dependencies (installed in image)
 node_modules
 vendor
 
+# Environment (injected at runtime)
 .env
-.env.backup
-.env.production
+.env.*
+!.env.example
 
+# Tests and tooling
+tests
+phpunit.xml
+.phpunit.result.cache
+.php-cs-fixer.php
+pint.json
+
+# Build outputs (rebuilt in image). Leading ./ avoids some YAML parsers mis-reading bare paths as nested keys.
+./public/build
+./public/hot
+./bootstrap/ssr
+
+# Logs and caches (writable at runtime)
 storage/logs/*
 !storage/logs/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
 bootstrap/cache/*
 !bootstrap/cache/.gitignore
 
-.phpunit.result.cache
-phpunit.xml.bak
-
-npm-debug.log
-yarn-error.log
-
+# Documentation (not needed in image)
 *.md
-!README.md
 
-Dockerfile*
-docker-compose*.yml
-compose*.yaml
+# Docker dev stack (not used by production Dockerfile)
+docker-compose.yml
+docker/php/docker-entrypoint.sh
+docker/vite/docker-entrypoint.sh
