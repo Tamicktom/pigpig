@@ -1,47 +1,61 @@
 <?php
 
+namespace Tests\Integration\Mailpit;
+
 // * Libraries imports
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
+use PHPUnit\Framework\Attributes\Group;
+// * Tests imports
 use Tests\Support\MailpitClient;
+use Tests\TestCase;
 
-beforeEach(function () {
-    if (! filter_var(env('RUN_MAILPIT_TESTS', false), FILTER_VALIDATE_BOOLEAN)) {
-        $this->markTestSkipped('Set RUN_MAILPIT_TESTS=true and start Mailpit to run this group.');
+#[Group('mailpit')]
+class PasswordResetMailpitTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! filter_var(env('RUN_MAILPIT_TESTS', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->markTestSkipped('Set RUN_MAILPIT_TESTS=true and start Mailpit to run this group.');
+        }
+
+        $client = MailpitClient::fromConfig();
+
+        if (! $client->ping()) {
+            $this->markTestSkipped('Mailpit API is not reachable at '.config('services.mailpit.api_url'));
+        }
+
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.host' => env('MAILPIT_SMTP_HOST', '127.0.0.1'),
+            'mail.mailers.smtp.port' => (int) env('MAILPIT_SMTP_PORT', 1025),
+            'mail.mailers.smtp.encryption' => env('MAILPIT_SMTP_ENCRYPTION'),
+            'mail.mailers.smtp.username' => env('MAILPIT_SMTP_USERNAME'),
+            'mail.mailers.smtp.password' => env('MAILPIT_SMTP_PASSWORD'),
+        ]);
+
+        $client->deleteAllMessages();
     }
 
-    $client = MailpitClient::fromConfig();
+    public function test_password_reset_notification_is_delivered_to_mailpit(): void
+    {
+        $this->skipUnlessFortifyHas(Features::resetPasswords());
 
-    if (! $client->ping()) {
-        $this->markTestSkipped('Mailpit API is not reachable at '.config('services.mailpit.api_url'));
+        $user = User::factory()->create();
+
+        $this->post(route('password.email'), ['email' => $user->email]);
+
+        $messages = MailpitClient::fromConfig()->listMessages();
+
+        $this->assertNotEmpty($messages);
+
+        $subjects = array_map(fn (array $m) => $m['Subject'] ?? '', $messages);
+
+        $this->assertContains(__('Reset your password'), $subjects);
     }
-
-    config([
-        'mail.default' => 'smtp',
-        'mail.mailers.smtp.host' => env('MAILPIT_SMTP_HOST', '127.0.0.1'),
-        'mail.mailers.smtp.port' => (int) env('MAILPIT_SMTP_PORT', 1025),
-        'mail.mailers.smtp.encryption' => env('MAILPIT_SMTP_ENCRYPTION'),
-        'mail.mailers.smtp.username' => env('MAILPIT_SMTP_USERNAME'),
-        'mail.mailers.smtp.password' => env('MAILPIT_SMTP_PASSWORD'),
-    ]);
-
-    $client->deleteAllMessages();
-});
-
-test('password reset notification is delivered to mailpit', function () {
-    if (! Features::enabled(Features::resetPasswords())) {
-        $this->markTestSkipped('Fortify password reset is disabled.');
-    }
-
-    $user = User::factory()->create();
-
-    $this->post(route('password.email'), ['email' => $user->email]);
-
-    $messages = MailpitClient::fromConfig()->listMessages();
-
-    expect($messages)->not->toBeEmpty();
-
-    $subjects = array_map(fn (array $m) => $m['Subject'] ?? '', $messages);
-
-    expect($subjects)->toContain(__('Reset your password'));
-})->group('mailpit');
+}
