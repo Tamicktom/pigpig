@@ -19,21 +19,61 @@ This document describes how Pigpig uses email today and how to use **Resend** in
 
 ## Phase 0 — Prerequisites (Resend account)
 
+Phase 0 is **operational only** (Resend dashboard and DNS). No application code changes are required to complete it.
+
+### Recommended order
+
+```mermaid
+flowchart TD
+  A[Resend_account_and_team] --> B[Add_domain_in_Resend]
+  B --> C[Publish_DNS_SPF_DKIM]
+  C --> D[Wait_for_Resend_verified]
+  D --> E[Create_API_key_least_privilege]
+  D --> F[Choose_MAIL_FROM_address_and_name]
+  E --> G[Store_secrets_for_Phase_2_3]
+  F --> G
+```
+
+- **Domain is the critical path:** Without a verified domain, `MAIL_MAILER=resend` will reject or fail sends. DNS propagation can take minutes to hours.
+- **API key:** You can create it while DNS propagates, but only **use** it in staging or production after the domain shows as verified and `MAIL_FROM_*` match that domain.
+
+### Operational checklist (definition of done)
+
+| Step | Definition of done |
+|------|---------------------|
+| Domain | Sending domain shows as verified (or equivalent) in [Resend Domains](https://resend.com/domains). |
+| DNS | SPF, DKIM, and any other records Resend shows are published at your authoritative DNS; no typos or wrong zone. |
+| From identity | You have chosen the exact `MAIL_FROM_ADDRESS` (for example `noreply@yourdomain.com`) and `MAIL_FROM_NAME` (for example your app name) on the **verified** domain. Do not use placeholder domains in real staging or production. |
+| API key | A key exists in the dashboard; the `re_...` value is stored only in a secret store or host environment UI (Coolify, and so on), **never** in Git. |
+| Optional | Use **Resend MCP** in Cursor (`list-domains`, `get-domain`, `verify-domain`, `list-api-keys`, `create-api-key`) to double-check status; DNS changes still happen at your DNS provider. |
+
+### Quick actions
+
 - [ ] Create an API key in the [Resend dashboard](https://resend.com/api-keys).
 - [ ] Verify your sending domain in [Resend Domains](https://resend.com/domains) (SPF/DKIM).
-- [ ] Set `MAIL_FROM_ADDRESS` and `MAIL_FROM_NAME` to addresses on the **verified** domain (do not use placeholder domains in production).
 
-Optional: use the **Resend MCP** in Cursor to list or verify domains (`list-domains`, `get-domain`, `verify-domain`) or manage API keys (`list-api-keys`, `create-api-key`).
+### Handoff to Phase 2–3
+
+When Phase 0 is done, have ready:
+
+- `RESEND_API_KEY`
+- Verified domain plus `MAIL_FROM_ADDRESS` and `MAIL_FROM_NAME`
+
+Apply these on the server as described in [Phase 2 — Environment configuration](#phase-2--environment-configuration) and [COOLIFY.md](./COOLIFY.md).
 
 ---
 
 ## Phase 1 — PHP dependency
 
-- [ ] Install the Resend PHP client (required for Laravel’s built-in `resend` mail transport):
+This repository already declares `resend/resend-php` in `composer.json`. After `composer install`, you can treat the dependency as satisfied and **skip** the `composer require` step unless you are syncing an older checkout.
+
+- [ ] Ensure the Resend PHP client is installed (required for Laravel’s built-in `resend` mail transport):
 
   ```bash
   composer require resend/resend-php
   ```
+
+  Skip the command above if `composer.json` already lists `resend/resend-php` and `vendor/` is present.
 
 - [ ] If Composer reports **permission denied** when writing under `vendor/composer/` (common when dependencies were installed as root inside Docker), fix ownership of `vendor` for your user, then run `composer install` again.
 
