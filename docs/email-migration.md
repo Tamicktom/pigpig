@@ -17,6 +17,22 @@ This document describes how Pigpig uses email today and how to use **Resend** in
 
 ---
 
+## Docker Compose: verification commands (local)
+
+Run Composer and Artisan **inside** the PHP container so paths, PHP, and extensions match the app service (`app` in `docker-compose.yml`).
+
+| Goal | Command |
+|------|---------|
+| Install dependencies (includes `resend/resend-php`) | `docker compose exec app composer install` |
+| Confirm Resend PHP client is installed | `docker compose exec app composer show resend/resend-php` |
+| Show effective default mailer (reads `.env`) | `docker compose exec app php artisan config:show mail.default` |
+| Full test suite | `docker compose exec app php artisan test --compact` |
+| Mailpit integration group (Mailpit must be reachable from the host for `MAILPIT_API_URL`; see `.env.example`) | `docker compose exec app env RUN_MAILPIT_TESTS=1 php artisan test --compact --group=mailpit` |
+
+On the host, `composer run test:mailpit` sets `RUN_MAILPIT_TESTS` for the host process; inside the container, pass `env RUN_MAILPIT_TESTS=1` as above.
+
+---
+
 ## Phase 0 — Prerequisites (Resend account)
 
 Phase 0 is **operational only** (Resend dashboard and DNS). No application code changes are required to complete it.
@@ -70,12 +86,12 @@ This repository already declares `resend/resend-php` in `composer.json`. After `
 - [ ] Ensure the Resend PHP client is installed (required for Laravel’s built-in `resend` mail transport):
 
   ```bash
-  composer require resend/resend-php
+  docker compose exec app composer require resend/resend-php
   ```
 
-  Skip the command above if `composer.json` already lists `resend/resend-php` and `vendor/` is present.
+  Skip the command above if `composer.json` already lists `resend/resend-php` and `vendor/` is present; then only run `docker compose exec app composer install` if `vendor/` is missing or out of date.
 
-- [ ] If Composer reports **permission denied** when writing under `vendor/composer/` (common when dependencies were installed as root inside Docker), fix ownership of `vendor` for your user, then run `composer install` again.
+- [ ] If Composer reports **permission denied** when writing under `vendor/composer/` (common when dependencies were installed as root inside Docker), fix ownership of `vendor` for your user, then run `docker compose exec app composer install` again.
 
 - [ ] **Optional later:** `composer require resend/resend-laravel` if you need extras from the [Resend Laravel guide](https://resend.com/docs/send-with-laravel.md) (dedicated facade, webhook events, inbound, etc.). The minimal setup is `resend/resend-php` plus `MAIL_MAILER=resend`.
 
@@ -85,15 +101,24 @@ This repository already declares `resend/resend-php` in `composer.json`. After `
 
 **Staging / production**
 
-- `MAIL_MAILER=resend`
-- `RESEND_API_KEY=re_...` (secret; inject via your host’s env UI)
-- `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` aligned with your verified domain
+Set these in your host environment UI (for example Coolify — see [COOLIFY.md](./COOLIFY.md)) on the **web** application. If a **queue worker** sends mail or notifications, set the **same** mail variables on the worker application.
+
+| Variable | Value / notes |
+|----------|----------------|
+| `MAIL_MAILER` | `resend` |
+| `RESEND_API_KEY` | `re_...` (secret only; never commit to Git) |
+| `MAIL_FROM_ADDRESS` | Address on your **verified** Resend domain |
+| `MAIL_FROM_NAME` | Display name (often matches `APP_NAME`) |
 
 **Local / Docker**
 
 - Keep `MAIL_MAILER=smtp` and Mailpit (`MAIL_HOST=mailpit`, etc.) as in `.env.example`.
+- Leave `RESEND_API_KEY` empty locally unless you intentionally test the Resend API from Docker.
+- Never commit real API keys; `.env` must stay out of version control.
 
 **Reference:** `.env.example` includes a Resend block and commented production-oriented hints.
+
+**Verify local mailer (optional):** `docker compose exec app php artisan config:show mail.default` should show `smtp` when using Mailpit.
 
 ---
 
@@ -119,9 +144,12 @@ The Resend MCP can help inspect or create webhooks (`list-webhooks`, `create-web
 
 ## Phase 5 — Verification
 
-- [ ] **Feature tests:** `tests/Feature/Auth/PasswordResetTest.php` and related tests use `Notification::fake()` — no change required for Resend.
-- [ ] **Mailpit group:** Keep `composer run test:mailpit` using SMTP → Mailpit; do not point this group at Resend (avoids real API calls and cost).
-- [ ] **Manual smoke (staging):** Trigger a password reset (or any mail path) and confirm inbox delivery.
+- [ ] **Automated tests (local container):** `docker compose exec app php artisan test --compact` — feature tests such as `tests/Feature/Auth/PasswordResetTest.php` use `Notification::fake()`; no Resend calls.
+- [ ] **Mailpit group:** Keep SMTP → Mailpit for `mailpit`-group tests; do not point this group at Resend (avoids real API calls and cost). Example: `docker compose exec app env RUN_MAILPIT_TESTS=1 php artisan test --compact --group=mailpit` (with Mailpit running and `MAILPIT_API_URL` reachable from the test process).
+- [ ] **Manual smoke (staging or production after Phase 2–3):**
+  1. Deploy with `MAIL_MAILER=resend` and valid `RESEND_API_KEY` / `MAIL_FROM_*`.
+  2. Trigger a flow that sends email (for example Fortify **forgot password** with a mailbox you control).
+  3. Confirm delivery in the inbox and, if needed, check [Resend logs](https://resend.com/emails) for the send attempt.
 
 ---
 

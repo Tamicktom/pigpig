@@ -112,7 +112,8 @@ No Coolify, usa **Execute Command**, **Post-deployment script**, ou o equivalent
 2. **Docker Build Stage**: `worker` (importante: não uses o stage `web`).
 3. **Portas**: o worker não precisa de porta HTTP pública; podes não publicar porta ou ignorar mapeamento HTTP.
 4. Copia as **mesmas** variáveis de ambiente da app web (especialmente `APP_KEY`, `DB_*`, `REDIS_*`, `APP_ENV=production`).
-5. O **comando** por defeito da imagem já é `php artisan queue:work redis ...`; só precisas de fazer deploy se o Coolify não sobrescrever o `CMD`.
+5. Se processares email ou notificações na fila, copia também as variáveis de mail da app web: `MAIL_MAILER`, `RESEND_API_KEY`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME` (e `MAIL_*` adicionais que a web use). Sem isto, jobs que enviam mail podem falhar no worker.
+6. O **comando** por defeito da imagem já é `php artisan queue:work redis ...`; só precisas de fazer deploy se o Coolify não sobrescrever o `CMD`.
 
 Garante que o Redis e a base de dados estão acessíveis a partir deste container (mesma rede / mesmos hosts internos).
 
@@ -122,8 +123,9 @@ Garante que o Redis e a base de dados estão acessíveis a partir deste containe
 
 - [ ] PostgreSQL e Redis criados e acessíveis na rede interna.
 - [ ] App web: Dockerfile na raiz, porta **8080**, `APP_KEY` e `APP_URL` corretos.
+- [ ] Email (produção): `MAIL_MAILER=resend`, `RESEND_API_KEY`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME` na app web.
 - [ ] `php artisan migrate --force` executado após o primeiro deploy.
-- [ ] (Opcional) App worker com stage **`worker`** e mesmas credenciais.
+- [ ] (Opcional) App worker com stage **`worker`** e mesmas credenciais (incluindo mail se jobs enviarem email).
 
 ## Problemas comuns
 
