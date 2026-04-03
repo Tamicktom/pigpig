@@ -60,4 +60,13 @@ class UserFactory extends Factory
             'two_factor_confirmed_at' => now(),
         ]);
     }
+
+    public function withSocialProfileUrls(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'instagram_url' => 'https://instagram.com/example',
+            'linkedin_url' => 'https://linkedin.com/in/example',
+            'twitter_url' => 'https://x.com/example',
+        ]);
+    }
 }

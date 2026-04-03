@@ -47,6 +47,29 @@ class PublicGroupDiscoveryTest extends TestCase
             ->where('viewer', null));
     }
 
+    public function test_guest_sees_optional_member_social_urls_on_group_show(): void
+    {
+        $drp = Drp::factory()->create(['name' => 'DRP-Social']);
+        $creator = User::factory()->create([
+            'drp_id' => $drp->id,
+            'linkedin_url' => 'https://linkedin.com/in/example-member',
+        ]);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'creator_id' => $creator->id,
+            'title' => 'Group With Social',
+        ]);
+
+        $response = $this->get(route('groups.show', $group));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('groups/show')
+            ->where('group.members.0.linkedin_url', 'https://linkedin.com/in/example-member')
+            ->where('group.members.0.instagram_url', null)
+            ->where('group.members.0.twitter_url', null));
+    }
+
     public function test_show_returns_404_when_drp_is_soft_deleted(): void
     {
         $drp = Drp::factory()->create();

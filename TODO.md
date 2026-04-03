@@ -156,14 +156,14 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Migração: colunas nullable (ex.: `instagram_url`, `linkedin_url`, `twitter_url`) ou estrutura equivalente validada.
-- [ ] Estender fluxo de perfil existente (Fortify / settings Inertia) com os novos campos.
-- [ ] Decidir o que aparece na área pública vs só autenticado; ajustar serializers/props das páginas públicas se necessário.
+- [x] Migração: colunas nullable (ex.: `instagram_url`, `linkedin_url`, `twitter_url`) ou estrutura equivalente validada.
+- [x] Estender fluxo de perfil existente (Fortify / settings Inertia) com os novos campos.
+- [x] Decidir o que aparece na área pública vs só autenticado; ajustar serializers/props das páginas públicas se necessário. _(URLs sociais opcionais na página pública do grupo quando preenchidas; e-mail e telefone privados — comentário em `PublicGroupController::show`.)_
 
 ### Testes sugeridos
 
-- [ ] Atualizar perfil com URLs válidas; campos vazios permitidos.
-- [ ] Validação de formato URL (se aplicável).
+- [x] Atualizar perfil com URLs válidas; campos vazios permitidos.
+- [x] Validação de formato URL (se aplicável).
 
 ### Definição de pronto
 

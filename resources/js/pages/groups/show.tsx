@@ -24,6 +24,9 @@ type PublicDrpOption = {
 type PublicMember = {
     id: number;
     name: string;
+    instagram_url: string | null;
+    linkedin_url: string | null;
+    twitter_url: string | null;
 };
 
 type PendingJoinRequestRow = {
@@ -281,10 +284,66 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                 No members listed.
                             </p>
                         ) : (
-                            <ul className="flex flex-col gap-2 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]">
+                            <ul className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]">
                                 {group.members.map((member) => (
-                                    <li key={member.id} className="text-sm">
-                                        {member.name}
+                                    <li
+                                        key={member.id}
+                                        className="flex flex-col gap-2 text-sm"
+                                    >
+                                        <span className="font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                            {member.name}
+                                        </span>
+                                        {member.instagram_url ||
+                                        member.linkedin_url ||
+                                        member.twitter_url ? (
+                                            <ul className="flex flex-wrap gap-x-3 gap-y-1">
+                                                {member.instagram_url ? (
+                                                    <li>
+                                                        <a
+                                                            id={`groups-show-member-${member.id}-instagram`}
+                                                            href={
+                                                                member.instagram_url
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
+                                                        >
+                                                            Instagram
+                                                        </a>
+                                                    </li>
+                                                ) : null}
+                                                {member.linkedin_url ? (
+                                                    <li>
+                                                        <a
+                                                            id={`groups-show-member-${member.id}-linkedin`}
+                                                            href={
+                                                                member.linkedin_url
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
+                                                        >
+                                                            LinkedIn
+                                                        </a>
+                                                    </li>
+                                                ) : null}
+                                                {member.twitter_url ? (
+                                                    <li>
+                                                        <a
+                                                            id={`groups-show-member-${member.id}-twitter`}
+                                                            href={
+                                                                member.twitter_url
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
+                                                        >
+                                                            X / Twitter
+                                                        </a>
+                                                    </li>
+                                                ) : null}
+                                            </ul>
+                                        ) : null}
                                     </li>
                                 ))}
                             </ul>

@@ -73,13 +73,19 @@ class PublicGroupController extends Controller
     }
 
     /**
-     * Public group detail with member display names only (no email or phone).
+     * Public group detail: member names; optional social URLs when set (email and phone stay private).
      */
     public function show(Request $request, Group $group): Response
     {
         $group->load([
             'drp:id,name,slug',
-            'members' => fn ($query) => $query->select('users.id', 'users.name'),
+            'members' => fn ($query) => $query->select(
+                'users.id',
+                'users.name',
+                'users.instagram_url',
+                'users.linkedin_url',
+                'users.twitter_url',
+            ),
         ]);
 
         if ($group->drp === null) {
@@ -156,6 +162,9 @@ class PublicGroupController extends Controller
                 'members' => $group->members->map(fn ($member): array => [
                     'id' => $member->id,
                     'name' => $member->name,
+                    'instagram_url' => $member->instagram_url,
+                    'linkedin_url' => $member->linkedin_url,
+                    'twitter_url' => $member->twitter_url,
                 ])->values()->all(),
             ],
             'viewer' => $viewer,
