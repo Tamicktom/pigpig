@@ -1,6 +1,6 @@
 //* Libraries imports
 import { Transition } from '@headlessui/react';
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 
 //* Actions imports
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
@@ -12,6 +12,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
 
 //* Routes imports
 import { edit } from '@/routes/profile';
@@ -26,6 +27,7 @@ export default function Profile({
 }) {
     const page = usePage();
     const auth = page.props.auth;
+    const user = auth.user;
 
     return (
         <>
@@ -39,6 +41,42 @@ export default function Profile({
                     title="Profile information"
                     description="Update your name, email, and optional social profile links"
                 />
+
+                {mustVerifyEmail &&
+                    user !== null &&
+                    user.email_verified_at === null && (
+                        <div className="space-y-2">
+                            <p className="text-sm text-muted-foreground">
+                                Your email address is unverified. Resend the
+                                verification email using the button below.
+                            </p>
+                            <Form
+                                {...send.form()}
+                                options={{ preserveScroll: true }}
+                                className="inline-block"
+                            >
+                                {(sendFormProps) => (
+                                    <Button
+                                        id="settings-profile-resend-verification"
+                                        type="submit"
+                                        disabled={sendFormProps.processing}
+                                        variant="secondary"
+                                    >
+                                        {sendFormProps.processing ? (
+                                            <Spinner />
+                                        ) : null}
+                                        Resend verification email
+                                    </Button>
+                                )}
+                            </Form>
+                            {status === 'verification-link-sent' && (
+                                <p className="text-sm font-medium text-green-600">
+                                    A new verification link has been sent to
+                                    your email address.
+                                </p>
+                            )}
+                        </div>
+                    )}
 
                 <Form
                     {...ProfileController.update.form()}
@@ -55,7 +93,7 @@ export default function Profile({
                                 <Input
                                     id="name"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.name}
+                                    defaultValue={user?.name ?? ''}
                                     name="name"
                                     required
                                     autoComplete="name"
@@ -75,7 +113,7 @@ export default function Profile({
                                     id="email"
                                     type="email"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.email}
+                                    defaultValue={user?.email ?? ''}
                                     name="email"
                                     required
                                     autoComplete="username"
@@ -97,9 +135,7 @@ export default function Profile({
                                     id="instagram_url"
                                     type="url"
                                     className="mt-1 block w-full"
-                                    defaultValue={
-                                        auth.user.instagram_url ?? ''
-                                    }
+                                    defaultValue={user?.instagram_url ?? ''}
                                     name="instagram_url"
                                     autoComplete="off"
                                     inputMode="url"
@@ -121,7 +157,7 @@ export default function Profile({
                                     id="linkedin_url"
                                     type="url"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.linkedin_url ?? ''}
+                                    defaultValue={user?.linkedin_url ?? ''}
                                     name="linkedin_url"
                                     autoComplete="off"
                                     inputMode="url"
@@ -143,7 +179,7 @@ export default function Profile({
                                     id="twitter_url"
                                     type="url"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.twitter_url ?? ''}
+                                    defaultValue={user?.twitter_url ?? ''}
                                     name="twitter_url"
                                     autoComplete="off"
                                     inputMode="url"
@@ -155,31 +191,6 @@ export default function Profile({
                                     message={errors.twitter_url}
                                 />
                             </div>
-
-                            {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
-                                    <div>
-                                        <p className="-mt-4 text-sm text-muted-foreground">
-                                            Your email address is unverified.{' '}
-                                            <Link
-                                                href={send()}
-                                                as="button"
-                                                className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                                            >
-                                                Click here to resend the
-                                                verification email.
-                                            </Link>
-                                        </p>
-
-                                        {status ===
-                                            'verification-link-sent' && (
-                                            <div className="mt-2 text-sm font-medium text-green-600">
-                                                A new verification link has
-                                                been sent to your email address.
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
 
                             <div className="flex items-center gap-4">
                                 <Button

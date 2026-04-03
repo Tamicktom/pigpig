@@ -64,6 +64,8 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
     const group = groupsShowPageProps.group;
     const viewer = groupsShowPageProps.viewer;
     const successMessage = page.props.success ?? null;
+    const needsEmailVerification =
+        page.props.auth.needsEmailVerification;
 
     return (
         <>
@@ -127,37 +129,47 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                 </p>
                             ) : null}
                             {viewer.can_request_join ? (
-                                <Form
-                                    {...joinRequestStore.form({
-                                        group: group.id,
-                                    })}
-                                    disableWhileProcessing
-                                    className="flex flex-col gap-2"
-                                >
-                                    {(formRenderProps) => (
-                                        <>
-                                            <InputError
-                                                message={
-                                                    formRenderProps.errors.join
-                                                }
-                                            />
-                                            <div>
-                                                <Button
-                                                    id="groups-show-request-join-submit"
-                                                    type="submit"
-                                                    disabled={
-                                                        formRenderProps.processing
+                                needsEmailVerification ? (
+                                    <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                                        Verify your email address before you
+                                        can request to join this group. Use the
+                                        banner at the top of the page to resend
+                                        the verification link.
+                                    </p>
+                                ) : (
+                                    <Form
+                                        {...joinRequestStore.form({
+                                            group: group.id,
+                                        })}
+                                        disableWhileProcessing
+                                        className="flex flex-col gap-2"
+                                    >
+                                        {(formRenderProps) => (
+                                            <>
+                                                <InputError
+                                                    message={
+                                                        formRenderProps.errors
+                                                            .join
                                                     }
-                                                >
-                                                    {formRenderProps.processing ? (
-                                                        <Spinner />
-                                                    ) : null}
-                                                    Request to join
-                                                </Button>
-                                            </div>
-                                        </>
-                                    )}
-                                </Form>
+                                                />
+                                                <div>
+                                                    <Button
+                                                        id="groups-show-request-join-submit"
+                                                        type="submit"
+                                                        disabled={
+                                                            formRenderProps.processing
+                                                        }
+                                                    >
+                                                        {formRenderProps.processing ? (
+                                                            <Spinner />
+                                                        ) : null}
+                                                        Request to join
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </Form>
+                                )
                             ) : null}
                             {!viewer.same_drp &&
                             !viewer.is_member &&

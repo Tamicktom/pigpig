@@ -1,6 +1,9 @@
 //* Libraries imports
 import { Link, usePage } from '@inertiajs/react';
 
+//* Components imports
+import { EmailVerificationBanner } from '@/components/email-verification-banner';
+
 //* Routes imports
 import { dashboard, home, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
@@ -19,6 +22,7 @@ export function GroupsPublicShell(
 
     return (
         <div className="min-h-screen bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC]">
+            <EmailVerificationBanner variant="public" />
             <header className="border-b border-[#19140035] dark:border-[#3E3E3A]">
                 <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 px-6 py-4">
                     <nav

@@ -5,7 +5,9 @@ namespace Tests\Feature\Auth;
 use App\Models\Drp;
 use App\Models\Polo;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -81,6 +83,29 @@ class RegistrationTest extends TestCase
             'phone' => '+5511987654321',
             'drp_id' => $drp->id,
         ]);
+    }
+
+    public function test_registration_sends_email_verification_notification(): void
+    {
+        $this->skipUnlessFortifyHas(Features::emailVerification());
+
+        Notification::fake();
+
+        $drp = Drp::factory()->create();
+
+        $this->post(route('register.store'), [
+            'name' => 'Verify User',
+            'email' => 'verify@example.com',
+            'phone' => '+5511987654321',
+            'drp_id' => $drp->id,
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $user = User::query()->where('email', 'verify@example.com')->first();
+
+        $this->assertNotNull($user);
+        Notification::assertSentTo($user, VerifyEmail::class);
     }
 
     public function test_registration_fails_without_drp_id(): void

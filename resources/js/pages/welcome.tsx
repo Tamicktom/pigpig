@@ -1,6 +1,9 @@
 //* Libraries imports
 import { Head, Link, usePage } from '@inertiajs/react';
 
+//* Components imports
+import { EmailVerificationBanner } from '@/components/email-verification-banner';
+
 //* Routes imports
 import { dashboard, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
@@ -22,6 +25,9 @@ export default function Welcome() {
                 />
             </Head>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+                <div className="w-full self-stretch">
+                    <EmailVerificationBanner variant="public" />
+                </div>
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="flex items-center justify-end gap-4">
                         <Link
