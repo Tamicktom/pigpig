@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\Polo;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -66,7 +67,21 @@ class FortifyServiceProvider extends ServiceProvider
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::registerView(fn () => Inertia::render('auth/register'));
+        Fortify::registerView(fn () => Inertia::render('auth/register', [
+            'polos' => Polo::query()
+                ->whereHas('drp')
+                ->with(['drp:id,name'])
+                ->orderBy('name')
+                ->get()
+                ->map(fn (Polo $polo): array => [
+                    'id' => $polo->id,
+                    'name' => $polo->name,
+                    'drp_id' => $polo->drp_id,
+                    'drp_name' => $polo->drp->name,
+                ])
+                ->values()
+                ->all(),
+        ]));
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
 

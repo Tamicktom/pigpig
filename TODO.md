@@ -41,16 +41,16 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Migração em `users`: `phone` (ou `telephone`) e `drp_id` (FK para `drps`, `restrict`/`cascade` conforme política).
-- [ ] Atualizar modelo `User` (`$fillable` / casts se necessário) e relação `belongsTo(Drp::class)`.
-- [ ] Ajustar `CreateNewUser` e regras de validação (ex.: `ProfileValidationRules` / request dedicado).
-- [ ] Formulário de registro Inertia: campo telefone + select de DRP (lista vinda do backend).
+- [x] Migração em `users`: `phone` (ou `telephone`) e `drp_id` (FK para `drps`, `restrict`/`cascade` conforme política).
+- [x] Atualizar modelo `User` (`$fillable` / casts se necessário) e relação `belongsTo(Drp::class)`.
+- [x] Ajustar `CreateNewUser` e regras de validação (ex.: `ProfileValidationRules` / request dedicado).
+- [x] Formulário de registro Inertia: campo telefone + select de DRP (lista vinda do backend).
 - [ ] (Opcional) Ajustar fluxo de verificação de e-mail se já estiver ativo no Fortify.
 
 ### Testes sugeridos
 
-- [ ] Registro com DRP válido persiste `drp_id` e `phone`.
-- [ ] Registro falha sem DRP, com DRP inexistente ou telefone inválido (regras que vocês adotarem).
+- [x] Registro com DRP válido persiste `drp_id` e `phone`.
+- [x] Registro falha sem DRP, com DRP inexistente ou telefone inválido (regras que vocês adotarem).
 
 ### Definição de pronto
 
