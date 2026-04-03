@@ -70,8 +70,12 @@ Define pelo menos as seguintes variáveis no painel da aplicação (ajusta valor
 | `QUEUE_CONNECTION` | `redis` |
 | `SESSION_DRIVER` | `database` (requer migrações; ver passo 5) |
 | `LOG_CHANNEL` | `stack` ou `stderr` conforme preferires |
+| `MAIL_MAILER` | `resend` em produção |
+| `RESEND_API_KEY` | Chave da API Resend (segredo) |
+| `MAIL_FROM_ADDRESS` | Endereço no domínio verificado na Resend |
+| `MAIL_FROM_NAME` | Nome exibido no “From” (ex.: valor de `APP_NAME`) |
 
-**Mail:** configura `MAIL_MAILER`, `MAIL_HOST`, etc., para o teu SMTP (não uses Mailpit de desenvolvimento em produção).
+**Mail (produção):** usa [Resend](https://resend.com) com o mailer nativo do Laravel — define `MAIL_MAILER=resend`, `RESEND_API_KEY` (segredo no painel) e `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` num domínio verificado na Resend. Guia do projeto: [`docs/email-migration.md`](./email-migration.md). Não uses Mailpit nem SMTP de desenvolvimento em produção.
 
 **Sessão e cookies:** em produção com domínio próprio, revê `SESSION_DOMAIN` e `SANCTUM_STATEFUL_DOMAINS` se usares funcionalidades que dependam disso.
 
