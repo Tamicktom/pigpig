@@ -131,18 +131,18 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Migração `group_join_requests` (nome pode variar): `group_id`, `user_id`, `status` (`pending`, `accepted`, `declined`), timestamps; índice/unique para evitar múltiplos `pending` duplicados se for regra.
-- [ ] Endpoints ou ações Inertia: `store` pedido, `accept`/`decline` só para responsável do grupo.
-- [ ] Service opcional para transições (validar DRP do solicitante = DRP do grupo, vagas, estado do pedido).
-- [ ] UI: botões/listas de pedidos pendentes para o responsável.
+- [x] Migração `group_join_requests` (nome pode variar): `group_id`, `user_id`, `status` (`pending`, `accepted`, `declined`), timestamps; índice/unique para evitar múltiplos `pending` duplicados se for regra.
+- [x] Endpoints ou ações Inertia: `store` pedido, `accept`/`decline` só para responsável do grupo.
+- [x] Service opcional para transições (validar DRP do solicitante = DRP do grupo, vagas, estado do pedido).
+- [x] UI: botões/listas de pedidos pendentes para o responsável.
 
 ### Testes sugeridos
 
-- [ ] Fluxo feliz: pedido → aceite → membro adicionado.
-- [ ] Recusa não adiciona membro.
-- [ ] Grupo cheio: aceite impossível ou erro claro.
-- [ ] Solicitante de outra DRP não consegue pedido (ou pedido inválido).
-- [ ] Pedido duplicado pendente tratado.
+- [x] Fluxo feliz: pedido → aceite → membro adicionado.
+- [x] Recusa não adiciona membro.
+- [x] Grupo cheio: aceite impossível ou erro claro.
+- [x] Solicitante de outra DRP não consegue pedido (ou pedido inválido).
+- [x] Pedido duplicado pendente tratado.
 
 ### Definição de pronto
 

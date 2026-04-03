@@ -43,7 +43,8 @@ class PublicGroupDiscoveryTest extends TestCase
             ->where('group.id', $group->id)
             ->where('group.title', 'Detail Group')
             ->where('group.drp.name', 'DRP-X')
-            ->has('group.members', 1));
+            ->has('group.members', 1)
+            ->where('viewer', null));
     }
 
     public function test_show_returns_404_when_drp_is_soft_deleted(): void

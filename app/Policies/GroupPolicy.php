@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Group;
+use App\Models\GroupJoinRequest;
 use App\Models\User;
 
 class GroupPolicy
@@ -26,6 +27,36 @@ class GroupPolicy
     public function create(?User $user): bool
     {
         return $user !== null && $user->drp_id !== null;
+    }
+
+    /**
+     * Request to join a group (same DRP as the group; authenticated with DRP set).
+     */
+    public function requestJoin(User $user, Group $group): bool
+    {
+        if ($user->drp_id === null) {
+            return false;
+        }
+
+        return (int) $user->drp_id === (int) $group->drp_id;
+    }
+
+    /**
+     * Accept a join request (group owner only).
+     */
+    public function acceptJoinRequest(User $user, Group $group, GroupJoinRequest $joinRequest): bool
+    {
+        return (int) $user->id === (int) $group->creator_id
+            && (int) $joinRequest->group_id === (int) $group->id;
+    }
+
+    /**
+     * Decline a join request (group owner only).
+     */
+    public function declineJoinRequest(User $user, Group $group, GroupJoinRequest $joinRequest): bool
+    {
+        return (int) $user->id === (int) $group->creator_id
+            && (int) $joinRequest->group_id === (int) $group->id;
     }
 
     public function update(?User $user, Group $group): bool

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\JoinRequestStatus;
 use App\Models\Drp;
 use App\Models\Group;
+use App\Models\GroupJoinRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -72,7 +75,7 @@ class PublicGroupController extends Controller
     /**
      * Public group detail with member display names only (no email or phone).
      */
-    public function show(Group $group): Response
+    public function show(Request $request, Group $group): Response
     {
         $group->load([
             'drp:id,name,slug',
@@ -81,6 +84,64 @@ class PublicGroupController extends Controller
 
         if ($group->drp === null) {
             abort(404);
+        }
+
+        $user = $request->user();
+        $viewer = null;
+
+        if ($user instanceof User) {
+            $isMember = $group->members->contains('id', $user->id);
+            $isOwner = (int) $user->id === (int) $group->creator_id;
+
+            $ownRequest = GroupJoinRequest::query()
+                ->where('group_id', $group->id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            $hasPendingRequest = $ownRequest !== null && $ownRequest->status === JoinRequestStatus::Pending;
+
+            $sameDrp = $user->drp_id !== null && (int) $user->drp_id === (int) $group->drp_id;
+
+            $canRequestJoin = $sameDrp
+                && ! $isMember
+                && ! $isOwner
+                && ! $hasPendingRequest
+                && (
+                    $ownRequest === null
+                    || $ownRequest->status === JoinRequestStatus::Declined
+                );
+
+            if ($ownRequest?->status === JoinRequestStatus::Accepted && ! $isMember) {
+                $canRequestJoin = false;
+            }
+
+            $ownerPendingJoinRequests = [];
+
+            if ($isOwner) {
+                $ownerPendingJoinRequests = GroupJoinRequest::query()
+                    ->where('group_id', $group->id)
+                    ->where('status', JoinRequestStatus::Pending)
+                    ->with(['user:id,name'])
+                    ->orderBy('id')
+                    ->get()
+                    ->map(fn (GroupJoinRequest $joinRequestRow): array => [
+                        'id' => $joinRequestRow->id,
+                        'user_name' => $joinRequestRow->user?->name ?? '',
+                    ])
+                    ->values()
+                    ->all();
+            }
+
+            $viewer = [
+                'is_member' => $isMember,
+                'is_owner' => $isOwner,
+                'has_pending_request' => $hasPendingRequest,
+                'same_drp' => $sameDrp,
+                'member_count' => $group->members->count(),
+                'max_members' => config('groups.max_members'),
+                'can_request_join' => $canRequestJoin,
+                'pending_join_requests' => $ownerPendingJoinRequests,
+            ];
         }
 
         return Inertia::render('groups/show', [
@@ -92,11 +153,12 @@ class PublicGroupController extends Controller
                     'name' => $group->drp->name,
                     'slug' => $group->drp->slug,
                 ],
-                'members' => $group->members->map(fn ($user): array => [
-                    'id' => $user->id,
-                    'name' => $user->name,
+                'members' => $group->members->map(fn ($member): array => [
+                    'id' => $member->id,
+                    'name' => $member->name,
                 ])->values()->all(),
             ],
+            'viewer' => $viewer,
             'canRegister' => Features::enabled(Features::registration()),
         ]);
     }

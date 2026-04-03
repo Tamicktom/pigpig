@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 use LogicException;
 
@@ -76,5 +77,13 @@ class Group extends Model
         return $this->belongsToMany(User::class, 'group_user')
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    /**
+     * @return HasMany<GroupJoinRequest, $this>
+     */
+    public function joinRequests(): HasMany
+    {
+        return $this->hasMany(GroupJoinRequest::class);
     }
 }
