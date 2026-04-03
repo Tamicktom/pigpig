@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Group;
+use App\Models\GroupJoinRequest;
 use Carbon\CarbonImmutable;
+use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -24,6 +28,20 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        Route::bind('joinRequest', function (string $value, RoutingRoute $route): GroupJoinRequest {
+            $group = $route->parameter('group');
+            $groupId = match (true) {
+                $group instanceof Group => $group->id,
+                is_numeric($group) => (int) $group,
+                default => abort(404),
+            };
+
+            return GroupJoinRequest::query()
+                ->where('group_id', $groupId)
+                ->whereKey($value)
+                ->firstOrFail();
+        });
     }
 
     /**

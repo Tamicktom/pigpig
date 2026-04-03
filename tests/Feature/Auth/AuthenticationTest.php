@@ -49,7 +49,7 @@ class AuthenticationTest extends TestCase
             'two_factor_confirmed_at' => now(),
         ])->save();
 
-        $response = $this->post(route('login'), [
+        $response = $this->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'password',
         ]);

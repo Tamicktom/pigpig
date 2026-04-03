@@ -83,6 +83,9 @@ services:
     working_dir: /var/www/html
     ports:
       - "${FORWARD_VITE_PORT:-5173}:5173"
+    environment:
+      VITE_USE_FILE_POLLING: "true"
+      VITE_HMR_CLIENT_PORT: "${FORWARD_VITE_PORT:-5173}"
     volumes:
       - .:/var/www/html
     env_file:

@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Models\Drp;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 
@@ -45,6 +46,42 @@ trait ProfileValidationRules
             $userId === null
                 ? Rule::unique(User::class)
                 : Rule::unique(User::class)->ignore($userId),
+        ];
+    }
+
+    /**
+     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
+     */
+    protected function phoneRules(): array
+    {
+        return ['required', 'string', 'max:30', 'regex:/^[\d\s\-+()]{8,30}$/'];
+    }
+
+    /**
+     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
+     */
+    protected function drpIdRules(): array
+    {
+        return [
+            'required',
+            'integer',
+            Rule::exists(Drp::class, 'id')->whereNull('deleted_at'),
+        ];
+    }
+
+    /**
+     * Optional social profile URLs (settings only; not used on registration).
+     *
+     * @return array<string, array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>>
+     */
+    protected function optionalSocialProfileUrlRules(): array
+    {
+        $urlRules = ['nullable', 'string', 'max:2048', 'url:http,https'];
+
+        return [
+            'instagram_url' => $urlRules,
+            'linkedin_url' => $urlRules,
+            'twitter_url' => $urlRules,
         ];
     }
 }
