@@ -25,7 +25,7 @@ class GroupPolicy
 
     public function create(?User $user): bool
     {
-        return $user !== null;
+        return $user !== null && $user->drp_id !== null;
     }
 
     public function update(?User $user, Group $group): bool

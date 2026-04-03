@@ -110,14 +110,14 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 ### Checklist
 
 - [ ] Página(s) autenticada(s): listagem de grupos da DRP do usuário (e/ou “meus grupos”).
-- [ ] Ação criar grupo: validar que `drp_id` do grupo = `drp_id` do usuário autenticado.
-- [ ] `Policy` / autorização: criar grupo só autenticado; opcionalmente “editar grupo” só responsável (preparar fase 6).
-- [ ] Navegação Wayfinder/Inertia conforme convenções do projeto.
+- [x] Ação criar grupo: validar que `drp_id` do grupo = `drp_id` do usuário autenticado.
+- [x] `Policy` / autorização: criar grupo só autenticado; opcionalmente “editar grupo” só responsável (preparar fase 6).
+- [x] Navegação Wayfinder/Inertia conforme convenções do projeto.
 
 ### Testes sugeridos
 
-- [ ] Usuário da DRP A cria grupo com sucesso em A.
-- [ ] Tentativa de criar grupo na DRP B falha (403/422 conforme desenho da API/UI).
+- [x] Usuário da DRP A cria grupo com sucesso em A.
+- [x] Tentativa de criar grupo na DRP B falha (403/422 conforme desenho da API/UI).
 
 ### Definição de pronto
 

@@ -139,12 +139,19 @@ class PublicGroupDiscoveryTest extends TestCase
         $this->assertTrue(Gate::forUser($user)->allows('create', Group::class));
     }
 
+    public function test_user_without_drp_id_cannot_create_group_via_policy(): void
+    {
+        $user = User::factory()->make(['drp_id' => null]);
+
+        $this->assertTrue(Gate::forUser($user)->denies('create', Group::class));
+    }
+
     public function test_guest_cannot_post_put_patch_delete_to_group_paths(): void
     {
         $drp = Drp::factory()->create();
         $group = Group::factory()->create(['drp_id' => $drp->id]);
 
-        $this->post(route('groups.index'), [])->assertStatus(405);
+        $this->post(route('groups.store'), [])->assertRedirect(route('login'));
         $this->put(route('groups.show', $group), [])->assertStatus(405);
         $this->patch(route('groups.show', $group), [])->assertStatus(405);
         $this->delete(route('groups.show', $group))->assertStatus(405);
