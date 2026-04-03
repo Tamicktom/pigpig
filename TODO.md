@@ -87,15 +87,15 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Rotas públicas (sem `auth`): índice de grupos (todos, com filtro por DRP opcional na mesma fase ou como sub-item).
-- [ ] Rota pública de detalhe do grupo com lista de membros.
-- [ ] Páginas Inertia: dados mínimos acordados (nome do grupo, tema, DRP, nomes dos membros na listagem pública — **não** expor e-mail/telefone na área pública salvo decisão explícita).
-- [ ] Garantir que rotas de mutação (criar grupo, pedidos, perfil) permaneçam protegidas.
+- [x] Rotas públicas (sem `auth`): índice de grupos (todos, com filtro por DRP opcional na mesma fase ou como sub-item).
+- [x] Rota pública de detalhe do grupo com lista de membros.
+- [x] Páginas Inertia: dados mínimos acordados (nome do grupo, tema, DRP, nomes dos membros na listagem pública — **não** expor e-mail/telefone na área pública salvo decisão explícita).
+- [x] Garantir que rotas de mutação (criar grupo, pedidos, perfil) permaneçam protegidas.
 
 ### Testes sugeridos
 
-- [ ] `Guest` acessa `200` na listagem e no show.
-- [ ] `Guest` não consegue POST/PUT/PATCH/DELETE em ações de grupo/membro.
+- [x] `Guest` acessa `200` na listagem e no show.
+- [x] `Guest` não consegue POST/PUT/PATCH/DELETE em ações de grupo/membro.
 
 ### Definição de pronto
 
