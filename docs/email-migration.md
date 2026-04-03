@@ -124,9 +124,60 @@ Set these in your host environment UI (for example Coolify — see [COOLIFY.md](
 
 ## Phase 3 — Deployment (Coolify / CI)
 
-- [ ] Add `RESEND_API_KEY` and set `MAIL_MAILER=resend` on the production/staging application.
-- [ ] Never commit API keys; store them as platform secrets.
-- [ ] See [COOLIFY.md](./COOLIFY.md) for where mail variables fit in the Coolify checklist.
+Phase 3 is **operational**: configure your hosting platform (for example Coolify). No application code changes are required if Phases 1–2 are satisfied.
+
+### Before you start (gates)
+
+| Gate | Definition of done |
+|------|---------------------|
+| Phase 0 | Sending domain verified in Resend; `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` use addresses on that domain. |
+| Phase 1 (this repository) | `resend/resend-php` is declared in `composer.json`. The production [`Dockerfile`](../Dockerfile) runs `composer install` in the build, so **web** and **worker** images ship with the Resend PHP client. |
+
+Do not point production at Resend until the domain shows as verified; otherwise sends fail or are rejected.
+
+### Staging — web application
+
+On the **staging web** application in Coolify (see [COOLIFY.md](./COOLIFY.md), Step 3), set:
+
+| Variable | Value |
+|----------|--------|
+| `MAIL_MAILER` | `resend` |
+| `RESEND_API_KEY` | `re_...` — store only as a **platform secret**; never commit to Git |
+| `MAIL_FROM_ADDRESS` | Address on your **verified** Resend domain |
+| `MAIL_FROM_NAME` | Display name (often matches `APP_NAME`) |
+
+- [ ] Variables saved; staging web deploy completes successfully.
+
+### Staging — queue worker (if applicable)
+
+If a separate **worker** application runs `queue:work` and any job sends mail or notifications, it must use the **same** mail-related variables as the web app. Without them, failures appear only in the worker.
+
+- [ ] Worker (staging): `MAIL_MAILER`, `RESEND_API_KEY`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME` match the staging web app.
+
+Details: [COOLIFY.md](./COOLIFY.md), Step 6.
+
+### Staging — smoke test
+
+- [ ] Trigger a flow that sends email (for example Fortify **forgot password** to a mailbox you control).
+- [ ] Confirm delivery in the inbox; use [Resend logs](https://resend.com/emails) if you need the provider-side record.
+
+### Production
+
+Repeat the same pattern for **production**: web app first, then worker (if it sends mail). Use production secrets; use separate API keys per environment if your security policy requires it.
+
+- [ ] Production web: `MAIL_MAILER=resend`, `RESEND_API_KEY`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME`.
+- [ ] Production worker: same mail variables when queue jobs send email.
+
+### CI (GitHub Actions)
+
+Workflows copy `.env.example` (SMTP / Mailpit-oriented). Feature tests rely on `Notification::fake()` and similar patterns; Dusk forces `MAIL_MAILER=array`. **Do not** add `RESEND_API_KEY` to CI for Phase 3 — avoid quota use and flaky external calls. Change workflows only if you observe real SMTP connection issues on the runner against a non-existent `mailpit` host.
+
+### Phase 3 definition of done
+
+- [ ] Staging web sends via Resend; smoke test passed.
+- [ ] Staging worker (if any) has mirrored mail configuration when jobs send mail.
+- [ ] Production web (and worker, if applicable) configured; optional production smoke.
+- [ ] No `re_...` values committed to Git or printed in public build logs.
 
 ---
 

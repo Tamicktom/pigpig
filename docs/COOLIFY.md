@@ -123,6 +123,7 @@ Garante que o Redis e a base de dados estão acessíveis a partir deste containe
 
 - [ ] PostgreSQL e Redis criados e acessíveis na rede interna.
 - [ ] App web: Dockerfile na raiz, porta **8080**, `APP_KEY` e `APP_URL` corretos.
+- [ ] Email Resend: ordem recomendada **staging → produção**; checklist em [docs/email-migration.md](./email-migration.md) (secção Phase 3).
 - [ ] Email (produção): `MAIL_MAILER=resend`, `RESEND_API_KEY`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME` na app web.
 - [ ] `php artisan migrate --force` executado após o primeiro deploy.
 - [ ] (Opcional) App worker com stage **`worker`** e mesmas credenciais (incluindo mail se jobs enviarem email).
