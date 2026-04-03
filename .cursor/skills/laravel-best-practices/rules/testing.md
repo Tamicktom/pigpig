@@ -1,5 +1,9 @@
 # Testing Best Practices
 
+## Docker Compose (this project)
+
+When developing with Docker Compose locally, run PHPUnit through the `app` container: `docker compose exec app php artisan test --compact …`. See `docs/email-migration.md` in the repository root.
+
 ## Use `LazilyRefreshDatabase` Over `RefreshDatabase`
 
 `RefreshDatabase` runs all migrations every test run even when the schema hasn't changed. `LazilyRefreshDatabase` only migrates when needed, significantly speeding up large suites.
