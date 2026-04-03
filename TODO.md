@@ -64,16 +64,16 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Migração `groups`: `drp_id`, identificação/tema (ex.: `title` ou `topic`), `creator_id` (responsável inicial), `external_communication_link` nullable (pode ficar só no schema até a fase 8 se preferir).
-- [ ] Membros: tabela pivot `group_user` (ou equivalente) com papel se necessário (`owner`/`member`) **ou** `creator_id` + pivot só para membros — documentar a escolha no código.
-- [ ] Garantir que o criador seja membro e/ou responsável de forma consistente (observer, action de criação ou service).
-- [ ] Models `Group`, relações com `Drp`, `User`, factories para testes.
+- [x] Migração `groups`: `drp_id`, identificação/tema (ex.: `title` ou `topic`), `creator_id` (responsável inicial), `external_communication_link` nullable (pode ficar só no schema até a fase 8 se preferir).
+- [x] Membros: tabela pivot `group_user` (ou equivalente) com papel se necessário (`owner`/`member`) **ou** `creator_id` + pivot só para membros — documentar a escolha no código.
+- [x] Garantir que o criador seja membro e/ou responsável de forma consistente (observer, action de criação ou service).
+- [x] Models `Group`, relações com `Drp`, `User`, factories para testes.
 
 ### Testes sugeridos
 
-- [ ] Criar grupo válido: `drp_id` e `creator_id` coerentes.
-- [ ] Grupo não pode “mudar de DRP” de forma inconsistente com membros (se a regra for fixa por grupo).
-- [ ] Criador refletido como responsável para políticas futuras.
+- [x] Criar grupo válido: `drp_id` e `creator_id` coerentes.
+- [x] Grupo não pode “mudar de DRP” de forma inconsistente com membros (se a regra for fixa por grupo).
+- [x] Criador refletido como responsável para políticas futuras.
 
 ### Definição de pronto
 

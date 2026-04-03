@@ -30,4 +30,12 @@ class Drp extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * @return HasMany<Group, $this>
+     */
+    public function groups(): HasMany
+    {
+        return $this->hasMany(Group::class);
+    }
 }
