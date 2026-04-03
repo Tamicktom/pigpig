@@ -138,7 +138,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
 
                         <div className="text-center text-sm text-muted-foreground">
                             Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={8}>
+                            <TextLink href={login.url()} tabIndex={8}>
                                 Log in
                             </TextLink>
                         </div>

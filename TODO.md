@@ -109,7 +109,7 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ### Checklist
 
-- [ ] Página(s) autenticada(s): listagem de grupos da DRP do usuário (e/ou “meus grupos”).
+- [x] Página(s) autenticada(s): listagem de grupos da DRP do usuário (e/ou “meus grupos”).
 - [x] Ação criar grupo: validar que `drp_id` do grupo = `drp_id` do usuário autenticado.
 - [x] `Policy` / autorização: criar grupo só autenticado; opcionalmente “editar grupo” só responsável (preparar fase 6).
 - [x] Navegação Wayfinder/Inertia conforme convenções do projeto.

@@ -12,6 +12,7 @@ Route::inertia('/', 'welcome', [
 Route::get('/groups', [PublicGroupController::class, 'index'])->name('groups.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/my/groups', [GroupController::class, 'myDrpIndex'])->name('my-groups.index');
     Route::get('/groups/create', [GroupController::class, 'create'])->name('groups.create');
     Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

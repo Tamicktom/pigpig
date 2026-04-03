@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\Drp;
 use App\Models\Polo;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
@@ -18,6 +19,15 @@ class RegistrationTest extends TestCase
         parent::setUp();
 
         $this->skipUnlessFortifyHas(Features::registration());
+    }
+
+    public function test_authenticated_users_are_redirected_away_from_registration_screen(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('register'))
+            ->assertRedirect(route('dashboard', absolute: false));
     }
 
     public function test_registration_screen_can_be_rendered(): void
