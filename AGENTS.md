@@ -46,6 +46,13 @@ When this project runs via Docker Compose, execute **Composer, Artisan, tests (`
 
 Examples: `docker compose exec app php artisan test --compact`, `docker compose exec app vendor/bin/pint --dirty --format agent`. GitHub Actions and other CI continue to run commands on the runner without Docker. See `docs/email-migration.md` for mail-related examples.
 
+## Email (transactional)
+
+- **Staging and production:** Outbound mail uses **[Resend](https://resend.com)** through Laravel’s built-in `resend` mail transport. Configure `MAIL_MAILER=resend`, `RESEND_API_KEY`, and `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` on a **verified sending domain** in the Resend dashboard. The PHP client is `resend/resend-php` (declared in `composer.json`). See `docs/email-migration.md` and `docs/COOLIFY.md` for the full matrix and deployment notes.
+- **Local development:** Use **Mailpit** over SMTP (`MAIL_MAILER=smtp`, Mailpit host/port in `.env.example`) so messages are captured locally without calling Resend. Do not use placeholder domains such as `hello@example.com` with Resend in real environments.
+- **Queue workers:** Any process that runs `queue:work` and sends mail or notifications must receive the **same** mail-related environment variables as the web application.
+- **Tests:** Default PHPUnit uses `MAIL_MAILER=array` (`phpunit.xml`). Feature tests use fakes (for example `Notification::fake()`). Optional live Resend send: `tests/Unit/Resend/ResendLiveSendTest.php` (group `resend-live`, opt-in via env — see `.env.example`).
+
 ## Conventions
 
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
