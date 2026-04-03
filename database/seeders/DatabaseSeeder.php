@@ -13,7 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(DrpSeeder::class);
+        $this->call([
+            DrpSeeder::class,
+            PoloSeeder::class,
+        ]);
 
         // User::factory(10)->create();
 

@@ -13,28 +13,31 @@ Este arquivo organiza o trabalho em **fases sequenciais**, alinhadas à [arquite
 
 ## Fase 1 — DRPs como dado de sistema
 
-**Objetivo:** Disponibilizar DRPs no banco para seleção no cadastro e para agrupar grupos, sem tela de administrador (seed/dados iniciais).
+**Objetivo:** Disponibilizar DRPs e **polos UNIVESP** no banco (dados versionados), para seleção no cadastro e para agrupar grupos, **sem tela de administrador**. A lista oficial de polos e o mapeamento polo → código DRP vêm do CSV [`database/seeders/polos_drp.csv`](database/seeders/polos_drp.csv); os códigos DRP únicos no arquivo (ex.: `DRP01` … `DRP14`) são a fonte das linhas em `drps`, com `slug` normalizado em minúsculas (`drp01`, …).
 
 ### Checklist
 
-- [ ] Migração `drps` (ex.: `name`, `slug` opcional, `timestamps`).
-- [ ] Model `Drp` + factory.
-- [ ] Seeder com lista inicial de DRPs (ajustar nomes conforme necessidade real da Univesp).
-- [ ] Registrar seeder em `DatabaseSeeder` se for padrão do projeto.
+- [x] Migração `drps` (`name`, `slug` opcional, `timestamps`; **soft deletes** na implementação atual).
+- [x] Model `Drp` + factory + relação `polos()`.
+- [x] Migração `polos` (`drp_id` FK para `drps`, `name`, unicidade composta `drp_id` + `name`).
+- [x] Model `Polo` + factory.
+- [x] Leitor [`database/seeders/Support/PolosDrpCsvReader.php`](database/seeders/Support/PolosDrpCsvReader.php) (cabeçalho `Polo,DRP`).
+- [x] `DrpSeeder` (idempotente, derivado dos códigos DRP distintos do CSV) e `PoloSeeder` (idempotente por DRP + nome do polo), registrados em [`DatabaseSeeder`](database/seeders/DatabaseSeeder.php) **nessa ordem**.
+- [x] CSV versionado no repositório; em **produção**, o arquivo deve ir no deploy para `php artisan db:seed` funcionar.
 
 ### Testes sugeridos
 
-- [ ] Feature ou unitário: após seed/migração em ambiente de teste, existe pelo menos uma DRP consultável (ou contagem esperada).
+- [x] Feature: [`tests/Feature/DrpSeederTest.php`](tests/Feature/DrpSeederTest.php) e [`tests/Feature/PoloSeederTest.php`](tests/Feature/PoloSeederTest.php) (contagens esperadas e idempotência do seed).
 
 ### Definição de pronto
 
-- Tabela `drps` migrável; `Drp` utilizável no código; dados iniciais reproduzíveis via seeder em dev/test.
+- Tabelas `drps` e `polos` migráveis; modelos utilizáveis no código; dados iniciais reproduzíveis via seeders em dev, teste e produção (com CSV presente no artefato).
 
 ---
 
 ## Fase 2 — Cadastro de aluno com DRP e telefone
 
-**Objetivo:** Registro com nome, e-mail, telefone, senha e **DRP** escolhida, conforme regra de negócio.
+**Objetivo:** Registro com nome, e-mail, telefone, senha e **DRP** escolhida, conforme regra de negócio. **Nota:** o vínculo do aluno é à **DRP** (`drp_id`); **polo não é obrigatório** no cadastro nesta fase (polos já existem no banco para uso futuro, p. ex. relatórios ou campo opcional).
 
 ### Checklist
 

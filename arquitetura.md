@@ -32,9 +32,10 @@ O backend em Laravel é o núcleo do sistema: regras de negócio, validação, a
 
 ### 2.3. Camada de Persistência (Banco de Dados)
 
-- **SGBD:** Banco relacional (ex.: **PostgreSQL**), adequado às relações entre alunos, DRPs, grupos, membros e pedidos de participação.
+- **SGBD:** Banco relacional (ex.: **PostgreSQL**), adequado às relações entre alunos, DRPs, polos, grupos, membros e pedidos de participação.
 - **ORM (Eloquent):** Interação orientada a objetos com o banco, com **migrações** versionando o esquema.
-- **Modelo conceitual (alto nível):** vínculo **Aluno (usuário) ↔ DRP**; **Grupo ↔ DRP**; membros do grupo; **pedidos de participação** com estados como pendente, aceito e recusado.
+- **Modelo conceitual (alto nível):** vínculo **Aluno (usuário) ↔ DRP**; **Grupo ↔ DRP**; **vários Polos → uma DRP** (`polos.drp_id`); membros do grupo; **pedidos de participação** com estados como pendente, aceito e recusado.
+- **Implementação atual (DRP):** a tabela `drps` inclui **soft deletes** (`deleted_at`), além de `name`, `slug` opcional e timestamps.
 
 ## 3. Regras de Negócio e Fluxos Principais
 
@@ -42,7 +43,7 @@ O backend em Laravel é o núcleo do sistema: regras de negócio, validação, a
 
 - **DRP (Diretoria Regional Pedagógica):** Eixo principal do produto. Os **grupos** são criados e listados **por DRP**; o aluno **declara a DRP à qual pertence** no cadastro (não há, neste desenho, derivação automática da DRP a partir de outro vínculo obrigatório).
 - **Grupo de PI:** Reúne alunos para o projeto integrador. Integrantes devem pertencer à **mesma DRP** do grupo.
-- **Polo (contexto institucional):** Na organização da UNIVESP, polos regionais podem existir sob DRPs. Neste produto, **o cadastro não exige polo** nem usa polo para determinar DRP; se no futuro campos opcionais ou relatórios institucionais precisarem de polo, isso pode ser evoluído sem mudar o requisito atual de **DRP explícita no registro**.
+- **Polo (contexto institucional):** Na UNIVESP, polos regionais existem sob DRPs. No banco, **polos estão modelados** (`polos` com `drp_id` e `name`) e são **populados por seed** a partir do arquivo versionado [`database/seeders/polos_drp.csv`](database/seeders/polos_drp.csv). **O cadastro do aluno não exige polo** nem deriva a DRP automaticamente do polo: o requisito continua sendo **DRP explícita no registro**; polo pode ser evoluído depois (opcional, relatórios, etc.) sem mudar essa regra.
 
 ### 3.2. Fluxo de Cadastro e Autenticação
 
@@ -71,7 +72,12 @@ Processo central: conectar alunos da mesma DRP por meio de grupos e pedidos expl
 
 ### 3.6. Cadastro de DRPs e Parâmetros do Sistema
 
-Não há **usuários administradores ou orientadores** no produto. O cadastro de **DRPs** (e parâmetros globais como tamanho máximo do grupo, se não forem apenas constantes no código) pode ser tratado como **dados iniciais via migrações, seeders ou configuração de ambiente**, fora do escopo de telas de “admin” para papéis distintos de aluno.
+Não há **usuários administradores ou orientadores** no produto. **DRPs e polos** são tratados como **dados iniciais via seed** (e migrações), sem telas de administração para outros papéis.
+
+- **Arquivo fonte:** [`database/seeders/polos_drp.csv`](database/seeders/polos_drp.csv), com cabeçalho `Polo,DRP` (nome do polo e código da DRP, ex.: `DRP01`).
+- **Ordem dos seeders:** `DrpSeeder` cria de forma **idempotente** uma linha em `drps` para cada código DRP distinto do CSV (`name` = código, `slug` em minúsculas). Em seguida, `PoloSeeder` insere polos de forma **idempotente** por par (`drp_id`, `name`). A classe `Database\Seeders\Support\PolosDrpCsvReader` lê e valida o CSV; se o arquivo estiver ausente ou ilegível, o seed falha com mensagem explícita.
+- **Produção:** o CSV deve **fazer parte do artefato deployado** (mesmo caminho relativo ao projeto), para `php artisan db:seed` reproduzir os dados em qualquer ambiente.
+- **Parâmetros globais** (ex.: tamanho máximo do grupo) podem continuar como constantes no código ou configuração de ambiente, conforme evolução do produto.
 
 ## 4. Visão do Fluxo (Resumo)
 
@@ -80,8 +86,10 @@ flowchart LR
   visitor[Visitor]
   student[Student]
   drp[DRP]
+  polo[Polo]
   group[Group]
   request[JoinRequest]
+  drp --> polo
   visitor -->|read groups and members| group
   student -->|register with DRP| drp
   student -->|create group in DRP| group
@@ -94,5 +102,5 @@ flowchart LR
 ## 5. Considerações de Segurança e Escalabilidade
 
 - **Segurança em camadas:** **Leitura pública** apenas nas rotas/páginas explicitamente públicas (listagem de grupos e membros), expondo o mínimo necessário. **Mutações** (criar grupo, pedir entrada, aceitar/recusar, editar perfil, alterar senha) exigem **autenticação** (e autorização por dono/membro onde couber). Dados sensíveis e tratamento de titulares seguem a **LGPD**. O Laravel oferece proteções nativas relevantes (incluindo **CSRF** em formulários web, mitigação de **SQL injection** via query builder/ORM, boas práticas contra **XSS** no front).
-- **Escalabilidade:** A stack Laravel + assets front-end via Vite permite evoluir deploy e cache de forma independente. **Cache** (ex.: Redis) pode acelerar listagens públicas frequentes (grupos, DRPs) e outras consultas repetidas.
+- **Escalabilidade:** A stack Laravel + assets front-end via Vite permite evoluir deploy e cache de forma independente. **Cache** (ex.: Redis) pode acelerar listagens públicas frequentes (grupos, DRPs, polos) e outras consultas repetidas.
 

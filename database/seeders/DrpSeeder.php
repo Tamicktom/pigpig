@@ -3,27 +3,26 @@
 namespace Database\Seeders;
 
 use App\Models\Drp;
+use Database\Seeders\Support\PolosDrpCsvReader;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DrpSeeder extends Seeder
 {
     /**
-     * Initial DRP rows aligned with typical UNIVESP regional hubs (update labels if your campus list differs).
+     * DRP rows derived from {@see PolosDrpCsvReader} (codes such as DRP01 … DRP14).
      *
      * @return list<array{name: string, slug: string}>
      */
     public static function seededDefinitions(): array
     {
-        return [
-            ['name' => 'DRP Bauru', 'slug' => 'bauru'],
-            ['name' => 'DRP Campinas', 'slug' => 'campinas'],
-            ['name' => 'DRP Grande ABC', 'slug' => 'grande-abc'],
-            ['name' => 'DRP Metropolitana de São Paulo', 'slug' => 'metropolitana-sp'],
-            ['name' => 'DRP Piracicaba', 'slug' => 'piracicaba'],
-            ['name' => 'DRP Presidente Prudente', 'slug' => 'presidente-prudente'],
-            ['name' => 'DRP Rio Preto', 'slug' => 'rio-preto'],
-            ['name' => 'DRP Vale do Paraíba', 'slug' => 'vale-do-paraiba'],
-        ];
+        return array_map(
+            fn (string $code): array => [
+                'name' => $code,
+                'slug' => Str::lower($code),
+            ],
+            PolosDrpCsvReader::uniqueDrpCodes()
+        );
     }
 
     /**
