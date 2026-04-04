@@ -14,6 +14,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
@@ -25,21 +28,22 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
+    const { t } = useTranslations();
     const page = usePage();
     const auth = page.props.auth;
     const user = auth.user;
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title={t('settings.profile.head_title')} />
 
-            <h1 className="sr-only">Profile settings</h1>
+            <h1 className="sr-only">{t('settings.profile.head_title')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Profile information"
-                    description="Update your name, email, and optional social profile links"
+                    title={t('settings.profile.heading_title')}
+                    description={t('settings.profile.heading_description')}
                 />
 
                 {mustVerifyEmail &&
@@ -47,8 +51,7 @@ export default function Profile({
                     user.email_verified_at === null && (
                         <div className="space-y-2">
                             <p className="text-sm text-muted-foreground">
-                                Your email address is unverified. Resend the
-                                verification email using the button below.
+                                {t('settings.profile.email_unverified')}
                             </p>
                             <Form
                                 {...send.form()}
@@ -65,14 +68,17 @@ export default function Profile({
                                         {sendFormProps.processing ? (
                                             <Spinner />
                                         ) : null}
-                                        Resend verification email
+                                        {t(
+                                            'settings.profile.resend_verification',
+                                        )}
                                     </Button>
                                 )}
                             </Form>
                             {status === 'verification-link-sent' && (
                                 <p className="text-sm font-medium text-green-600">
-                                    A new verification link has been sent to
-                                    your email address.
+                                    {t(
+                                        'settings.profile.verification_link_sent',
+                                    )}
                                 </p>
                             )}
                         </div>
@@ -88,7 +94,9 @@ export default function Profile({
                     {({ processing, recentlySuccessful, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">
+                                    {t('settings.profile.label.name')}
+                                </Label>
 
                                 <Input
                                     id="name"
@@ -97,7 +105,9 @@ export default function Profile({
                                     name="name"
                                     required
                                     autoComplete="name"
-                                    placeholder="Full name"
+                                    placeholder={t(
+                                        'settings.profile.placeholder.name',
+                                    )}
                                 />
 
                                 <InputError
@@ -107,7 +117,9 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">
+                                    {t('settings.profile.label.email')}
+                                </Label>
 
                                 <Input
                                     id="email"
@@ -117,7 +129,9 @@ export default function Profile({
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="Email address"
+                                    placeholder={t(
+                                        'settings.profile.placeholder.email',
+                                    )}
                                 />
 
                                 <InputError
@@ -128,7 +142,7 @@ export default function Profile({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="instagram_url">
-                                    Instagram (optional)
+                                    {t('settings.profile.label.instagram')}
                                 </Label>
 
                                 <Input
@@ -139,7 +153,9 @@ export default function Profile({
                                     name="instagram_url"
                                     autoComplete="off"
                                     inputMode="url"
-                                    placeholder="https://instagram.com/…"
+                                    placeholder={t(
+                                        'settings.profile.placeholder.instagram',
+                                    )}
                                 />
 
                                 <InputError
@@ -150,7 +166,7 @@ export default function Profile({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="linkedin_url">
-                                    LinkedIn (optional)
+                                    {t('settings.profile.label.linkedin')}
                                 </Label>
 
                                 <Input
@@ -161,7 +177,9 @@ export default function Profile({
                                     name="linkedin_url"
                                     autoComplete="off"
                                     inputMode="url"
-                                    placeholder="https://linkedin.com/in/…"
+                                    placeholder={t(
+                                        'settings.profile.placeholder.linkedin',
+                                    )}
                                 />
 
                                 <InputError
@@ -172,7 +190,7 @@ export default function Profile({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="twitter_url">
-                                    X / Twitter (optional)
+                                    {t('settings.profile.label.twitter')}
                                 </Label>
 
                                 <Input
@@ -183,7 +201,9 @@ export default function Profile({
                                     name="twitter_url"
                                     autoComplete="off"
                                     inputMode="url"
-                                    placeholder="https://x.com/…"
+                                    placeholder={t(
+                                        'settings.profile.placeholder.twitter',
+                                    )}
                                 />
 
                                 <InputError
@@ -199,7 +219,7 @@ export default function Profile({
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Save
+                                    {t('settings.common.save')}
                                 </Button>
 
                                 <Transition
@@ -210,7 +230,7 @@ export default function Profile({
                                     leaveTo="opacity-0"
                                 >
                                     <p className="text-sm text-neutral-600">
-                                        Saved
+                                        {t('settings.common.saved')}
                                     </p>
                                 </Transition>
                             </div>

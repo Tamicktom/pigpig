@@ -1,48 +1,61 @@
+//* Libraries imports
 import { Link } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
+
+//* Components imports
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+
+//* Hooks imports
 import { useCurrentUrl } from '@/hooks/use-current-url';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
 import { cn, toUrl } from '@/lib/utils';
+
+//* Routes imports
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
+
+//* Types imports
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: edit(),
-        icon: null,
-    },
-    {
-        title: 'Security',
-        href: editSecurity(),
-        icon: null,
-    },
-    {
-        title: 'Appearance',
-        href: editAppearance(),
-        icon: null,
-    },
-];
-
 export default function SettingsLayout({ children }: PropsWithChildren) {
+    const { t } = useTranslations();
     const { isCurrentOrParentUrl } = useCurrentUrl();
+
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: t('settings.nav.profile'),
+            href: edit(),
+            icon: null,
+        },
+        {
+            title: t('settings.nav.security'),
+            href: editSecurity(),
+            icon: null,
+        },
+        {
+            title: t('settings.nav.appearance'),
+            href: editAppearance(),
+            icon: null,
+        },
+    ];
 
     return (
         <div className="px-4 py-6">
             <Heading
-                title="Settings"
-                description="Manage your profile and account settings"
+                title={t('settings.layout.title')}
+                description={t('settings.layout.description')}
             />
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">
                     <nav
                         className="flex flex-col space-y-1 space-x-0"
-                        aria-label="Settings"
+                        aria-label={t('settings.layout.nav_aria_label')}
                     >
                         {sidebarNavItems.map((item, index) => (
                             <Button

@@ -200,15 +200,15 @@ php artisan test --compact
 
 ### File checklist
 
-- [ ] [`resources/js/layouts/settings/layout.tsx`](../resources/js/layouts/settings/layout.tsx)
-- [ ] [`resources/js/pages/settings/profile.tsx`](../resources/js/pages/settings/profile.tsx)
-- [ ] [`resources/js/pages/settings/security.tsx`](../resources/js/pages/settings/security.tsx)
-- [ ] [`resources/js/pages/settings/appearance.tsx`](../resources/js/pages/settings/appearance.tsx)
-- [ ] [`resources/js/components/appearance-tabs.tsx`](../resources/js/components/appearance-tabs.tsx) (if it exposes user-visible copy)
+- [x] [`resources/js/layouts/settings/layout.tsx`](../resources/js/layouts/settings/layout.tsx)
+- [x] [`resources/js/pages/settings/profile.tsx`](../resources/js/pages/settings/profile.tsx)
+- [x] [`resources/js/pages/settings/security.tsx`](../resources/js/pages/settings/security.tsx)
+- [x] [`resources/js/pages/settings/appearance.tsx`](../resources/js/pages/settings/appearance.tsx)
+- [x] [`resources/js/components/appearance-tabs.tsx`](../resources/js/components/appearance-tabs.tsx) (if it exposes user-visible copy)
 
 ### Definition of done
 
-- [ ] All settings tabs and navigation labels translated; `Head` titles localized.
+- [x] All settings tabs and navigation labels translated; `Head` titles localized.
 
 ### Validation
 
@@ -216,7 +216,7 @@ php artisan test --compact
 
 ### Suggested tests
 
-- [ ] Optional: Inertia visit to settings routes with locale cookie and assert a stable translated fragment (only if not brittle).
+- [x] [`tests/Feature/SettingsTranslationPropsTest.php`](../tests/Feature/SettingsTranslationPropsTest.php) — profile, security, and appearance Inertia `translations` for `en` / `pt_BR`.
 
 ---
 
@@ -327,4 +327,5 @@ php artisan test --compact
 |------|------|
 | 2026-04-04 | Phase 1 (auth) implemented: namespaced `auth.*` keys in `lang/en.json` / `lang/pt_BR.json`, `useTranslations()` on auth pages and related components, `AuthTranslationPropsTest`. |
 | 2026-04-04 | Phase 2 (app shell): `app.shell.*` keys, sidebar/header/user menu/breadcrumbs via `titleKey`, `AppShellTranslationPropsTest`. |
+| 2026-04-04 | Phase 3 (settings): `settings.*` keys, settings layout/pages/appearance tabs via `useTranslations()`, `SettingsTranslationPropsTest`. |
 | (add rows as this roadmap is updated) | |
