@@ -5,7 +5,9 @@ namespace Tests\Feature\Auth;
 use App\Models\Drp;
 use App\Models\Polo;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -49,6 +51,7 @@ class RegistrationTest extends TestCase
 
         $response->assertInertia(fn (Assert $page) => $page
             ->component('auth/register')
+            ->where('canRegister', Features::enabled(Features::registration()))
             ->has('polos', 2)
             ->where('polos.0.id', $poloA->id)
             ->where('polos.0.name', 'Alpha Polo')
@@ -81,6 +84,39 @@ class RegistrationTest extends TestCase
             'phone' => '+5511987654321',
             'drp_id' => $drp->id,
         ]);
+    }
+
+    public function test_registration_validation_error_messages_are_in_portuguese(): void
+    {
+        $response = $this->from(route('register'))->post(route('register.store'), []);
+
+        $response->assertSessionHasErrors('name');
+        $errors = session('errors');
+        $this->assertNotNull($errors);
+        $this->assertStringContainsString('obrigatório', $errors->first('name'));
+    }
+
+    public function test_registration_sends_email_verification_notification(): void
+    {
+        $this->skipUnlessFortifyHas(Features::emailVerification());
+
+        Notification::fake();
+
+        $drp = Drp::factory()->create();
+
+        $this->post(route('register.store'), [
+            'name' => 'Verify User',
+            'email' => 'verify@example.com',
+            'phone' => '+5511987654321',
+            'drp_id' => $drp->id,
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $user = User::query()->where('email', 'verify@example.com')->first();
+
+        $this->assertNotNull($user);
+        Notification::assertSentTo($user, VerifyEmail::class);
     }
 
     public function test_registration_fails_without_drp_id(): void

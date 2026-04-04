@@ -5,6 +5,9 @@ import { Head, Link } from '@inertiajs/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { dashboard } from '@/routes';
 import { create as groupsCreate, show as groupsShow } from '@/routes/groups';
@@ -44,22 +47,26 @@ type MyGroupsIndexPageProps = {
     };
 };
 
-export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageProps) {
+export default function MyGroupsIndex(
+    myGroupsIndexPageProps: MyGroupsIndexPageProps,
+) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="My DRP groups" />
+            <Head title={t('groups.my.head_title')} />
             <div className="flex max-w-3xl flex-col gap-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex flex-col gap-2">
                         <h1 className="text-2xl font-semibold tracking-tight">
-                            Groups in your DRP
+                            {t('groups.my.heading')}
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            You are browsing project groups registered under{' '}
+                            {t('groups.my.description_before_drp')}{' '}
                             <span className="font-medium text-foreground">
                                 {myGroupsIndexPageProps.drp.name}
                             </span>
-                            . This list only includes groups from your DRP.
+                            {t('groups.my.description_after_drp')}
                         </p>
                     </div>
                     <Button
@@ -69,15 +76,14 @@ export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageP
                         asChild
                     >
                         <Link href={groupsCreate.url()} prefetch>
-                            Create group
+                            {t('app.shell.nav.create_group')}
                         </Link>
                     </Button>
                 </div>
 
                 {myGroupsIndexPageProps.groups.data.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                        No groups in your DRP yet. Create the first one to get
-                        started.
+                        {t('groups.my.empty')}
                     </p>
                 ) : (
                     <ul className="flex flex-col gap-3">
@@ -97,7 +103,7 @@ export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageP
                                             </Link>
                                             {row.is_member ? (
                                                 <Badge variant="secondary">
-                                                    Member
+                                                    {t('groups.my.member_badge')}
                                                 </Badge>
                                             ) : null}
                                         </div>
@@ -111,7 +117,7 @@ export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageP
                                         href={groupsShow.url(row.id)}
                                         className="shrink-0 text-sm font-medium text-primary underline-offset-4 hover:underline"
                                     >
-                                        View
+                                        {t('groups.my.view')}
                                     </Link>
                                 </div>
                             </li>
@@ -122,7 +128,7 @@ export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageP
                 {myGroupsIndexPageProps.groups.last_page > 1 ? (
                     <nav
                         className="flex flex-wrap items-center gap-2 pt-4"
-                        aria-label="Pagination"
+                        aria-label={t('groups.my.pagination_aria')}
                     >
                         {myGroupsIndexPageProps.groups.links.map(
                             (link, index) => {
@@ -175,10 +181,12 @@ MyGroupsIndex.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
+            titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },
         {
             title: 'My DRP groups',
+            titleKey: 'app.shell.breadcrumb.my_drp_groups',
             href: myGroupsIndex.url(),
         },
     ],

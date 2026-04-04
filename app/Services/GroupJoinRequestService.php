@@ -21,19 +21,19 @@ class GroupJoinRequestService
     {
         if ($applicant->drp_id === null || (int) $applicant->drp_id !== (int) $group->drp_id) {
             throw ValidationException::withMessages([
-                'join' => __('You may only request to join groups in your DRP.'),
+                'join' => __('groups.join.error.same_drp_only'),
             ]);
         }
 
         if ((int) $group->creator_id === (int) $applicant->id) {
             throw ValidationException::withMessages([
-                'join' => __('You are already the group owner.'),
+                'join' => __('groups.join.error.already_owner'),
             ]);
         }
 
         if ($group->members()->where('users.id', $applicant->id)->exists()) {
             throw ValidationException::withMessages([
-                'join' => __('You are already a member of this group.'),
+                'join' => __('groups.join.error.already_member'),
             ]);
         }
 
@@ -45,13 +45,13 @@ class GroupJoinRequestService
         if ($existing !== null) {
             if ($existing->status === JoinRequestStatus::Pending) {
                 throw ValidationException::withMessages([
-                    'join' => __('You already have a pending request for this group.'),
+                    'join' => __('groups.join.error.pending_exists'),
                 ]);
             }
 
             if ($existing->status === JoinRequestStatus::Accepted) {
                 throw ValidationException::withMessages([
-                    'join' => __('This join request was already accepted.'),
+                    'join' => __('groups.join.error.already_accepted'),
                 ]);
             }
 
@@ -89,7 +89,7 @@ class GroupJoinRequestService
 
             if ($lockedRequest->status !== JoinRequestStatus::Pending) {
                 throw ValidationException::withMessages([
-                    'join_request' => __('This request is no longer pending.'),
+                    'join_request' => __('groups.join.request.error.not_pending'),
                 ]);
             }
 
@@ -97,7 +97,7 @@ class GroupJoinRequestService
 
             if ($applicant->drp_id === null || (int) $applicant->drp_id !== (int) $group->drp_id) {
                 throw ValidationException::withMessages([
-                    'join_request' => __('The applicant is not in the same DRP as this group.'),
+                    'join_request' => __('groups.join.request.error.applicant_wrong_drp'),
                 ]);
             }
 
@@ -105,7 +105,7 @@ class GroupJoinRequestService
 
             if ($memberCount >= config('groups.max_members')) {
                 throw ValidationException::withMessages([
-                    'join_request' => __('This group is full.'),
+                    'join_request' => __('groups.join.request.error.group_full'),
                 ]);
             }
 
@@ -140,7 +140,7 @@ class GroupJoinRequestService
 
             if ($lockedRequest->status !== JoinRequestStatus::Pending) {
                 throw ValidationException::withMessages([
-                    'join_request' => __('This request is no longer pending.'),
+                    'join_request' => __('groups.join.request.error.not_pending'),
                 ]);
             }
 

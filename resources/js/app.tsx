@@ -1,14 +1,47 @@
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { translate } from '@/lib/i18n';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const viteAppName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+function resolveDocumentTitle(innerTitle: string): string {
+    const pageProps = router.page?.props as
+        | {
+              translations?: Record<string, unknown>;
+              name?: string;
+          }
+        | undefined;
+
+    const translations =
+        (pageProps?.translations as Record<string, unknown> | undefined) ?? {};
+    const appName =
+        typeof pageProps?.name === 'string' && pageProps.name.length > 0
+            ? pageProps.name
+            : viteAppName;
+
+    if (!innerTitle.trim()) {
+        return appName;
+    }
+
+    const formatted = translate(
+        translations,
+        'app.meta.document_title',
+        { title: innerTitle, app: appName },
+    );
+
+    if (formatted === 'app.meta.document_title') {
+        return `${innerTitle} - ${appName}`;
+    }
+
+    return formatted;
+}
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => resolveDocumentTitle(title ?? ''),
     layout: (name) => {
         switch (true) {
             case name === 'welcome':

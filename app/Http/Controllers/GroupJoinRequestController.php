@@ -18,7 +18,7 @@ class GroupJoinRequestController extends Controller
 
         return redirect()
             ->route('groups.show', $group)
-            ->with('success', __('Join request sent.'));
+            ->with('success', __('groups.join.flash.sent'));
     }
 
     public function accept(AcceptGroupJoinRequestRequest $request, Group $group, GroupJoinRequest $joinRequest, GroupJoinRequestService $groupJoinRequestService): RedirectResponse
@@ -27,7 +27,7 @@ class GroupJoinRequestController extends Controller
 
         return redirect()
             ->route('groups.show', $group)
-            ->with('success', __('Join request accepted.'));
+            ->with('success', __('groups.join.flash.accepted'));
     }
 
     public function decline(DeclineGroupJoinRequestRequest $request, Group $group, GroupJoinRequest $joinRequest, GroupJoinRequestService $groupJoinRequestService): RedirectResponse
@@ -36,6 +36,6 @@ class GroupJoinRequestController extends Controller
 
         return redirect()
             ->route('groups.show', $group)
-            ->with('success', __('Join request declined.'));
+            ->with('success', __('groups.join.flash.declined'));
     }
 }

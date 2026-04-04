@@ -37,6 +37,14 @@ O backend em Laravel é o núcleo do sistema: regras de negócio, validação, a
 - **Modelo conceitual (alto nível):** vínculo **Aluno (usuário) ↔ DRP**; **Grupo ↔ DRP**; **vários Polos → uma DRP** (`polos.drp_id`); membros do grupo; **pedidos de participação** com estados como pendente, aceito e recusado.
 - **Implementação atual (DRP):** a tabela `drps` inclui **soft deletes** (`deleted_at`), além de `name`, `slug` opcional e timestamps.
 
+### 2.4. E-mail transacional (Resend)
+
+O envio de **e-mail transacional** (por exemplo notificações do **Laravel Fortify**: redefinição de senha, verificação de endereço quando ativo, e outros `Mail` / notificações da aplicação) segue o stack oficial do Laravel com o transporte **Resend**:
+
+- **Ambientes de staging e produção:** `MAIL_MAILER=resend`, chave de API `RESEND_API_KEY` e remetente `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` em um **domínio verificado** na Resend (SPF/DKIM conforme o painel). O cliente PHP é `resend/resend-php`, integrado a `config/mail.php` e `config/services.php`.
+- **Desenvolvimento local:** **Mailpit** via SMTP (`MAIL_MAILER=smtp`), para inspecionar mensagens sem consumir quota nem depender de DNS de produção. Detalhes de variáveis e comandos estão em [`docs/email-migration.md`](docs/email-migration.md); deploy em Coolify em [`docs/COOLIFY.md`](docs/COOLIFY.md).
+- **Filas:** se um **worker** (`queue:work`) disparar e-mail ou notificações, as mesmas variáveis de correio da aplicação web devem estar configuradas nesse processo.
+
 ## 3. Regras de Negócio e Fluxos Principais
 
 ### 3.1. Estrutura Organizacional

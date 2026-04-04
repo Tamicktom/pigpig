@@ -243,4 +243,48 @@ class GroupJoinRequestTest extends TestCase
         $this->post(route('groups.join-requests.store', $group))
             ->assertRedirect(route('login'));
     }
+
+    public function test_store_join_request_success_flash_is_localized_for_english(): void
+    {
+        $drp = Drp::factory()->create();
+        $owner = User::factory()->create(['drp_id' => $drp->id]);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'creator_id' => $owner->id,
+        ]);
+        $applicant = User::factory()->create(['drp_id' => $drp->id]);
+
+        $this->actingAs($applicant)
+            ->from(route('groups.show', $group))
+            ->call(
+                'POST',
+                route('groups.join-requests.store', $group),
+                [],
+                ['locale' => 'en'],
+            )
+            ->assertRedirect(route('groups.show', $group))
+            ->assertSessionHas('success', 'Join request sent.');
+    }
+
+    public function test_store_join_request_success_flash_is_localized_for_portuguese(): void
+    {
+        $drp = Drp::factory()->create();
+        $owner = User::factory()->create(['drp_id' => $drp->id]);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'creator_id' => $owner->id,
+        ]);
+        $applicant = User::factory()->create(['drp_id' => $drp->id]);
+
+        $this->actingAs($applicant)
+            ->from(route('groups.show', $group))
+            ->call(
+                'POST',
+                route('groups.join-requests.store', $group),
+                [],
+                ['locale' => 'pt_BR'],
+            )
+            ->assertRedirect(route('groups.show', $group))
+            ->assertSessionHas('success', 'Solicitação de entrada enviada.');
+    }
 }

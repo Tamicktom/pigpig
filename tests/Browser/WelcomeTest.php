@@ -13,8 +13,8 @@ class WelcomeTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->waitForText("Let's get started", 15)
-                ->assertSee("Let's get started");
+                ->waitForText('Pare de perder tempo procurando grupo para o PI', 15)
+                ->assertSee('Pare de perder tempo procurando grupo para o PI');
         });
     }
 }

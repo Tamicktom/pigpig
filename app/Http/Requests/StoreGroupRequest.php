@@ -29,4 +29,15 @@ class StoreGroupRequest extends FormRequest
             'external_communication_link' => ['nullable', 'string', 'url', 'max:2048'],
         ];
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'title' => __('groups.create.attribute.title'),
+            'external_communication_link' => __('groups.create.attribute.external_communication_link'),
+        ];
+    }
 }

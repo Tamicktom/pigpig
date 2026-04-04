@@ -1,25 +1,39 @@
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+
+//* Components imports
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { store } from '@/routes/password/confirm';
 
 export default function ConfirmPassword() {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Confirm password" />
+            <Head title={t('auth.confirm_password.head_title')} />
 
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">
+                                {t('auth.common.password')}
+                            </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder={t(
+                                    'auth.common.password_placeholder',
+                                )}
                                 autoComplete="current-password"
                                 autoFocus
                             />
@@ -29,12 +43,14 @@ export default function ConfirmPassword() {
 
                         <div className="flex items-center">
                             <Button
-                                className="w-full"
+                                id="confirm-password-submit-button"
+                                type="submit"
+                                className="landing-primary-cta h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                                 disabled={processing}
                                 data-test="confirm-password-button"
                             >
                                 {processing && <Spinner />}
-                                Confirm password
+                                {t('auth.confirm_password.submit')}
                             </Button>
                         </div>
                     </div>
@@ -45,7 +61,6 @@ export default function ConfirmPassword() {
 }
 
 ConfirmPassword.layout = {
-    title: 'Confirm your password',
-    description:
-        'This is a secure area of the application. Please confirm your password before continuing.',
+    titleKey: 'auth.confirm_password.layout_title',
+    descriptionKey: 'auth.confirm_password.layout_description',
 };

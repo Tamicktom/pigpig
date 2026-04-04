@@ -3,7 +3,11 @@ import { Head, Link, router } from '@inertiajs/react';
 
 //* Components imports
 import { GroupsPublicShell } from '@/components/groups-public-shell';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
 
 //* Routes imports
 import { index as groupsIndex, show as groupsShow } from '@/routes/groups';
@@ -42,7 +46,9 @@ type GroupsIndexPageProps = {
     drpOptions: PublicDrpOption[];
 };
 
-export default function GroupsIndex(groupsIndexPageProps: GroupsIndexPageProps) {
+export default function GroupsIndex(props: GroupsIndexPageProps) {
+    const { t } = useTranslations();
+
     function handleDrpFilterChange(
         event: React.ChangeEvent<HTMLSelectElement>,
     ): void {
@@ -62,32 +68,38 @@ export default function GroupsIndex(groupsIndexPageProps: GroupsIndexPageProps) 
 
     return (
         <>
-            <Head title="Groups" />
+            <Head title={t('groups.public.head_title')} />
             <GroupsPublicShell>
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col gap-2">
-                        <h1 className="text-2xl font-semibold tracking-tight">
-                            Project groups
+                <div className="flex flex-col gap-10 md:gap-12">
+                    <div className="flex max-w-3xl flex-col gap-4">
+                        <h1 className="font-headline text-4xl font-black tracking-tight text-on-background md:text-5xl">
+                            {t('groups.public.heading')}
                         </h1>
-                        <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                            Browse groups by DRP. Member contact details stay
-                            private on these pages.
+                        <p className="text-lg leading-relaxed text-on-surface-variant">
+                            {t('groups.public.description')}
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="groups-index-drp-filter">DRP</Label>
+                    <div className="flex max-w-md flex-col gap-2">
+                        <Label
+                            className="text-on-surface"
+                            htmlFor="groups-index-drp-filter"
+                        >
+                            {t('groups.public.filter_label')}
+                        </Label>
                         <select
                             id="groups-index-drp-filter"
-                            className="h-9 max-w-md rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:bg-[#161615]"
+                            className="h-10 w-full rounded-lg bg-surface-container-highest px-3 text-sm text-on-surface outline-none transition-[box-shadow] duration-200 ease-out focus-visible:ring-[3px] focus-visible:ring-secondary/80 focus-visible:ring-offset-0"
                             value={
-                                groupsIndexPageProps.filters.drp_id ?? ''
+                                props.filters.drp_id ?? ''
                             }
                             onChange={handleDrpFilterChange}
-                            aria-label="Filter groups by DRP"
+                            aria-label={t('groups.public.filter_aria')}
                         >
-                            <option value="">All DRPs</option>
-                            {groupsIndexPageProps.drpOptions.map((option) => (
+                            <option value="">
+                                {t('groups.public.filter_all')}
+                            </option>
+                            {props.drpOptions.map((option) => (
                                 <option key={option.id} value={option.id}>
                                     {option.name}
                                 </option>
@@ -95,49 +107,65 @@ export default function GroupsIndex(groupsIndexPageProps: GroupsIndexPageProps) 
                         </select>
                     </div>
 
-                    {groupsIndexPageProps.groups.data.length === 0 ? (
-                        <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                            No groups match this filter.
+                    {props.groups.data.length === 0 ? (
+                        <p className="text-base text-on-surface-variant">
+                            {t('groups.public.empty')}
                         </p>
                     ) : (
-                        <ul className="flex flex-col gap-3">
-                            {groupsIndexPageProps.groups.data.map((row) => (
-                                <li
-                                    key={row.id}
-                                    className="rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]"
-                                >
-                                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                        <div className="flex flex-col gap-1">
-                                            <Link
-                                                href={groupsShow.url(row.id)}
-                                                className="text-base font-medium text-[#1b1b18] underline-offset-4 hover:underline dark:text-[#EDEDEC]"
+                        <section
+                            className="rounded-2xl bg-surface-container-low p-8 md:p-10"
+                            aria-label={t('groups.public.list_aria')}
+                        >
+                            <ul className="flex flex-col gap-8 md:gap-12">
+                                {props.groups.data.map((row) => (
+                                    <li
+                                        key={row.id}
+                                        className="rounded-xl bg-surface-container-lowest p-6 md:p-8"
+                                    >
+                                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                                            <div className="flex min-w-0 flex-col gap-2">
+                                                <Link
+                                                    href={groupsShow.url(
+                                                        row.id,
+                                                    )}
+                                                    className="text-lg font-semibold text-on-surface transition-colors duration-200 ease-out hover:text-primary"
+                                                >
+                                                    {row.title}
+                                                </Link>
+                                                {row.drp ? (
+                                                    <p className="text-sm text-on-surface-variant">
+                                                        {row.drp.name}
+                                                    </p>
+                                                ) : null}
+                                            </div>
+                                            <Button
+                                                id={`groups-index-view-${row.id}`}
+                                                type="button"
+                                                size="sm"
+                                                className="landing-primary-cta shrink-0 rounded-xl font-bold tracking-tight text-primary-foreground shadow-none"
+                                                asChild
                                             >
-                                                {row.title}
-                                            </Link>
-                                            {row.drp ? (
-                                                <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                                    {row.drp.name}
-                                                </p>
-                                            ) : null}
+                                                <Link
+                                                    href={groupsShow.url(
+                                                        row.id,
+                                                    )}
+                                                >
+                                                    {t('groups.my.view')}
+                                                </Link>
+                                            </Button>
                                         </div>
-                                        <Link
-                                            href={groupsShow.url(row.id)}
-                                            className="shrink-0 text-sm font-medium text-[#f53003] underline-offset-4 hover:underline dark:text-[#FF4433]"
-                                        >
-                                            View
-                                        </Link>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
                     )}
 
-                    {groupsIndexPageProps.groups.last_page > 1 ? (
+                    {props.groups.last_page > 1 ? (
                         <nav
-                            className="flex flex-wrap items-center gap-2 pt-4"
-                            aria-label="Pagination"
+                            className="flex flex-wrap items-center gap-2 pt-2"
+                            aria-label={t('groups.my.pagination_aria')}
                         >
-                            {groupsIndexPageProps.groups.links.map(
+                            {props.groups.links.map(
                                 (link, index) => {
                                     const key = `pagination-${index}`;
 
@@ -145,7 +173,7 @@ export default function GroupsIndex(groupsIndexPageProps: GroupsIndexPageProps) 
                                         return (
                                             <span
                                                 key={key}
-                                                className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-transparent px-2 text-sm text-[#706f6c] dark:text-[#A1A09A]"
+                                                className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm text-on-surface-variant"
                                             >
                                                 <span
                                                     dangerouslySetInnerHTML={{
@@ -164,8 +192,8 @@ export default function GroupsIndex(groupsIndexPageProps: GroupsIndexPageProps) 
                                             preserveScroll
                                             className={
                                                 link.active
-                                                    ? 'inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-[#19140035] bg-[#19140012] px-2 text-sm font-medium dark:border-[#3E3E3A] dark:bg-[#3E3E3A]/30'
-                                                    : 'inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-transparent px-2 text-sm text-[#1b1b18] hover:bg-[#19140012] dark:text-[#EDEDEC] dark:hover:bg-[#3E3E3A]/30'
+                                                    ? 'inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg bg-surface-container-high px-2 text-sm font-medium text-on-surface transition-colors duration-200 ease-out'
+                                                    : 'inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm text-on-surface transition-colors duration-200 ease-out hover:bg-surface-container-low'
                                             }
                                         >
                                             <span

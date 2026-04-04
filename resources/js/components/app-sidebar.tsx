@@ -1,5 +1,14 @@
+//* Libraries imports
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, List, UsersRound } from 'lucide-react';
+import {
+    BookOpen,
+    FolderGit2,
+    LayoutGrid,
+    List,
+    UsersRound,
+} from 'lucide-react';
+
+//* Components imports
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,43 +22,52 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { dashboard } from '@/routes';
 import { create as groupsCreate } from '@/routes/groups';
 import { index as myGroupsIndex } from '@/routes/my-groups';
+
+//* Types imports
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'My DRP groups',
-        href: myGroupsIndex(),
-        icon: List,
-    },
-    {
-        title: 'Create group',
-        href: groupsCreate(),
-        icon: UsersRound,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar() {
+    const { t } = useTranslations();
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: t('app.shell.nav.dashboard'),
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+        {
+            title: t('app.shell.nav.my_drp_groups'),
+            href: myGroupsIndex(),
+            icon: List,
+        },
+        {
+            title: t('app.shell.nav.create_group'),
+            href: groupsCreate(),
+            icon: UsersRound,
+        },
+    ];
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: t('app.shell.footer.repository'),
+            href: 'https://github.com/laravel/react-starter-kit',
+            icon: FolderGit2,
+        },
+        {
+            title: t('app.shell.footer.documentation'),
+            href: 'https://laravel.com/docs/starter-kits#react',
+            icon: BookOpen,
+        },
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

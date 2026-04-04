@@ -1,8 +1,13 @@
+//* Libraries imports
 import { Transition } from '@headlessui/react';
 import { Form, Head } from '@inertiajs/react';
 import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+
+//* Actions imports
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
+
+//* Components imports
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -10,7 +15,14 @@ import TwoFactorRecoveryCodes from '@/components/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/two-factor-setup-modal';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+
+//* Hooks imports
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { edit } from '@/routes/security';
 import { disable, enable } from '@/routes/two-factor';
 
@@ -25,6 +37,7 @@ export default function Security({
     requiresConfirmation = false,
     twoFactorEnabled = false,
 }: Props) {
+    const { t } = useTranslations();
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
@@ -52,15 +65,17 @@ export default function Security({
 
     return (
         <>
-            <Head title="Security settings" />
+            <Head title={t('settings.security.head_title')} />
 
-            <h1 className="sr-only">Security settings</h1>
+            <h1 className="sr-only">{t('settings.security.head_title')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
+                    title={t('settings.security.password.heading_title')}
+                    description={t(
+                        'settings.security.password.heading_description',
+                    )}
                 />
 
                 <Form
@@ -89,7 +104,9 @@ export default function Security({
                         <>
                             <div className="grid gap-2">
                                 <Label htmlFor="current_password">
-                                    Current password
+                                    {t(
+                                        'settings.security.password.label_current',
+                                    )}
                                 </Label>
 
                                 <PasswordInput
@@ -98,14 +115,18 @@ export default function Security({
                                     name="current_password"
                                     className="mt-1 block w-full"
                                     autoComplete="current-password"
-                                    placeholder="Current password"
+                                    placeholder={t(
+                                        'settings.security.password.placeholder_current',
+                                    )}
                                 />
 
                                 <InputError message={errors.current_password} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">New password</Label>
+                                <Label htmlFor="password">
+                                    {t('settings.security.password.label_new')}
+                                </Label>
 
                                 <PasswordInput
                                     id="password"
@@ -113,7 +134,9 @@ export default function Security({
                                     name="password"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder="New password"
+                                    placeholder={t(
+                                        'settings.security.password.placeholder_new',
+                                    )}
                                 />
 
                                 <InputError message={errors.password} />
@@ -121,7 +144,9 @@ export default function Security({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    {t(
+                                        'settings.security.password.label_confirm',
+                                    )}
                                 </Label>
 
                                 <PasswordInput
@@ -129,7 +154,9 @@ export default function Security({
                                     name="password_confirmation"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder="Confirm password"
+                                    placeholder={t(
+                                        'settings.security.password.placeholder_confirm',
+                                    )}
                                 />
 
                                 <InputError
@@ -139,10 +166,12 @@ export default function Security({
 
                             <div className="flex items-center gap-4">
                                 <Button
+                                    id="settings-security-save-password"
+                                    type="submit"
                                     disabled={processing}
                                     data-test="update-password-button"
                                 >
-                                    Save password
+                                    {t('settings.security.password.submit')}
                                 </Button>
 
                                 <Transition
@@ -153,7 +182,7 @@ export default function Security({
                                     leaveTo="opacity-0"
                                 >
                                     <p className="text-sm text-neutral-600">
-                                        Saved
+                                        {t('settings.common.saved')}
                                     </p>
                                 </Transition>
                             </div>
@@ -166,26 +195,31 @@ export default function Security({
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Two-factor authentication"
-                        description="Manage your two-factor authentication settings"
+                        title={t('settings.security.two_factor.heading_title')}
+                        description={t(
+                            'settings.security.two_factor.heading_description',
+                        )}
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                You will be prompted for a secure, random pin
-                                during login, which you can retrieve from the
-                                TOTP-supported application on your phone.
+                                {t(
+                                    'settings.security.two_factor.enabled_description',
+                                )}
                             </p>
 
                             <div className="relative inline">
                                 <Form {...disable.form()}>
                                     {({ processing }) => (
                                         <Button
+                                            id="settings-security-disable-2fa"
                                             variant="destructive"
                                             type="submit"
                                             disabled={processing}
                                         >
-                                            Disable 2FA
+                                            {t(
+                                                'settings.security.two_factor.disable',
+                                            )}
                                         </Button>
                                     )}
                                 </Form>
@@ -200,19 +234,22 @@ export default function Security({
                     ) : (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                When you enable two-factor authentication, you
-                                will be prompted for a secure pin during login.
-                                This pin can be retrieved from a TOTP-supported
-                                application on your phone.
+                                {t(
+                                    'settings.security.two_factor.disabled_description',
+                                )}
                             </p>
 
                             <div>
                                 {hasSetupData ? (
                                     <Button
+                                        id="settings-security-continue-2fa-setup"
+                                        type="button"
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        Continue setup
+                                        {t(
+                                            'settings.security.two_factor.continue_setup',
+                                        )}
                                     </Button>
                                 ) : (
                                     <Form
@@ -223,10 +260,13 @@ export default function Security({
                                     >
                                         {({ processing }) => (
                                             <Button
+                                                id="settings-security-enable-2fa"
                                                 type="submit"
                                                 disabled={processing}
                                             >
-                                                Enable 2FA
+                                                {t(
+                                                    'settings.security.two_factor.enable',
+                                                )}
                                             </Button>
                                         )}
                                     </Form>
@@ -256,6 +296,7 @@ Security.layout = {
     breadcrumbs: [
         {
             title: 'Security settings',
+            titleKey: 'app.shell.breadcrumb.security_settings',
             href: edit(),
         },
     ],

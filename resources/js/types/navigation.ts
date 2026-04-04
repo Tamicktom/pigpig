@@ -2,7 +2,11 @@ import type { InertiaLinkProps } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
 
 export type BreadcrumbItem = {
+    /**
+     * Fallback label when `titleKey` is missing or the key is not in the catalog.
+     */
     title: string;
+    titleKey?: string;
     href: NonNullable<InertiaLinkProps['href']>;
 };
 

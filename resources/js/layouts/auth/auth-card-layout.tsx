@@ -1,5 +1,8 @@
+//* Libraries imports
 import { Link } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
+
+//* Components imports
 import AppLogoIcon from '@/components/app-logo-icon';
 import {
     Card,
@@ -8,17 +11,28 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { home } from '@/routes';
 
-export default function AuthCardLayout({
-    children,
-    title,
-    description,
-}: PropsWithChildren<{
+type AuthCardLayoutProps = PropsWithChildren<{
     name?: string;
     title?: string;
     description?: string;
-}>) {
+    titleKey?: string;
+    descriptionKey?: string;
+}>;
+
+export default function AuthCardLayout(props: AuthCardLayoutProps) {
+    const { t } = useTranslations();
+    const title = props.titleKey ? t(props.titleKey) : (props.title ?? '');
+    const description = props.descriptionKey
+        ? t(props.descriptionKey)
+        : (props.description ?? '');
+
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
             <div className="flex w-full max-w-md flex-col gap-6">
@@ -38,7 +52,7 @@ export default function AuthCardLayout({
                             <CardDescription>{description}</CardDescription>
                         </CardHeader>
                         <CardContent className="px-10 py-8">
-                            {children}
+                            {props.children}
                         </CardContent>
                     </Card>
                 </div>

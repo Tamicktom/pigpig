@@ -8,6 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { dashboard } from '@/routes';
 import { create as groupsCreate, store as groupsStore } from '@/routes/groups';
@@ -18,21 +21,25 @@ type GroupsCreatePageProps = {
     };
 };
 
-export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProps) {
+export default function GroupsCreate(
+    groupsCreatePageProps: GroupsCreatePageProps,
+) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Create group" />
+            <Head title={t('groups.create.head_title')} />
             <div className="flex max-w-xl flex-col gap-8">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-2xl font-semibold tracking-tight">
-                        Create group
+                        {t('groups.create.heading')}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Your group will be created in{' '}
+                        {t('groups.create.intro_before_drp')}{' '}
                         <span className="font-medium text-foreground">
                             {groupsCreatePageProps.drp.name}
                         </span>
-                        . You cannot assign a different DRP.
+                        {t('groups.create.intro_after_drp')}
                     </p>
                 </div>
 
@@ -44,7 +51,9 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                     {(formRenderProps) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="groups-create-title">Title</Label>
+                                <Label htmlFor="groups-create-title">
+                                    {t('groups.create.label.title')}
+                                </Label>
                                 <Input
                                     id="groups-create-title"
                                     type="text"
@@ -52,7 +61,9 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                                     required
                                     maxLength={255}
                                     autoComplete="off"
-                                    placeholder="Project integrator topic"
+                                    placeholder={t(
+                                        'groups.create.placeholder.title',
+                                    )}
                                 />
                                 <InputError
                                     message={formRenderProps.errors.title}
@@ -61,7 +72,7 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
 
                             <div className="grid gap-2">
                                 <Label htmlFor="groups-create-external-link">
-                                    External communication link (optional)
+                                    {t('groups.create.label.external_link')}
                                 </Label>
                                 <Input
                                     id="groups-create-external-link"
@@ -69,7 +80,9 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                                     name="external_communication_link"
                                     maxLength={2048}
                                     autoComplete="off"
-                                    placeholder="https://chat.example.com/invite"
+                                    placeholder={t(
+                                        'groups.create.placeholder.external_link',
+                                    )}
                                 />
                                 <InputError
                                     message={
@@ -88,7 +101,7 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                                     {formRenderProps.processing && (
                                         <Spinner className="size-4" />
                                     )}
-                                    Create group
+                                    {t('groups.create.submit')}
                                 </Button>
                                 <Button
                                     id="groups-create-cancel"
@@ -98,7 +111,7 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                                         router.visit(dashboard.url());
                                     }}
                                 >
-                                    Cancel
+                                    {t('groups.create.cancel')}
                                 </Button>
                             </div>
                         </>
@@ -113,10 +126,12 @@ GroupsCreate.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
+            titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },
         {
             title: 'Create group',
+            titleKey: 'app.shell.breadcrumb.create_group',
             href: groupsCreate.url(),
         },
     ],

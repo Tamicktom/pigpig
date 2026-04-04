@@ -14,7 +14,8 @@ export type User = {
 };
 
 export type Auth = {
-    user: User;
+    user: User | null;
+    needsEmailVerification: boolean;
 };
 
 export type TwoFactorSetupData = {

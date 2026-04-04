@@ -1,36 +1,53 @@
-// Components
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+
+//* Components imports
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
-export default function VerifyEmail({ status }: { status?: string }) {
+type VerifyEmailPageProps = {
+    status?: string;
+};
+
+export default function VerifyEmail(props: VerifyEmailPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Email verification" />
+            <Head title={t('auth.verify_email.head_title')} />
 
-            {status === 'verification-link-sent' && (
+            {props.status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                    {t('auth.verify_email.link_sent_message')}
                 </div>
             )}
 
             <Form {...send.form()} className="space-y-6 text-center">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
+                        <Button
+                            id="auth-verify-email-resend"
+                            type="submit"
+                            disabled={processing}
+                            variant="secondary"
+                        >
                             {processing && <Spinner />}
-                            Resend verification email
+                            {t('auth.verify_email.resend')}
                         </Button>
 
                         <TextLink
                             href={logout()}
-                            className="mx-auto block text-sm"
+                            className="mx-auto block text-sm font-medium text-primary hover:text-primary"
                         >
-                            Log out
+                            {t('auth.verify_email.sign_out')}
                         </TextLink>
                     </>
                 )}
@@ -40,7 +57,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
 }
 
 VerifyEmail.layout = {
-    title: 'Verify email',
-    description:
-        'Please verify your email address by clicking on the link we just emailed to you.',
+    titleKey: 'auth.verify_email.layout_title',
+    descriptionKey: 'auth.verify_email.layout_description',
 };

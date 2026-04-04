@@ -38,6 +38,21 @@ This project has domain-specific skills available. You MUST activate the relevan
 - `tailwindcss-development` — Always invoke when the user's message includes 'tailwind' in any form. Also invoke for: building responsive grid layouts (multi-column card grids, product grids), flex/grid page structures (dashboards with sidebars, fixed topbars, mobile-toggle navs), styling UI components (cards, tables, navbars, pricing sections, forms, inputs, badges), adding dark mode variants, fixing spacing or typography, and Tailwind v3/v4 work. The core use case: writing or fixing Tailwind utility classes in HTML templates (Blade, JSX, Vue). Skip for backend PHP logic, database queries, API routes, JavaScript with no HTML/CSS component, CSS file audits, build tool configuration, and vanilla CSS.
 - `fortify-development` — ACTIVATE when the user works on authentication in Laravel. This includes login, registration, password reset, email verification, two-factor authentication (2FA/TOTP/QR codes/recovery codes), profile updates, password confirmation, or any auth-related routes and controllers. Activate when the user mentions Fortify, auth, authentication, login, register, signup, forgot password, verify email, 2FA, or references app/Actions/Fortify/, CreateNewUser, UpdateUserProfileInformation, FortifyServiceProvider, config/fortify.php, or auth guards. Fortify is the frontend-agnostic authentication backend for Laravel that registers all auth routes and controllers. Also activate when building SPA or headless authentication, customizing login redirects, overriding response contracts like LoginResponse, or configuring login throttling. Do NOT activate for Laravel Passport (OAuth2 API tokens), Socialite (OAuth social login), or non-auth Laravel features.
 
+## Docker Compose (local development)
+
+When this project runs via Docker Compose, execute **Composer, Artisan, tests (`php artisan test`), and Pint inside the `app` service** so PHP, extensions, and environment match the application:
+
+`docker compose exec app <command>`
+
+Examples: `docker compose exec app php artisan test --compact`, `docker compose exec app vendor/bin/pint --dirty --format agent`. GitHub Actions and other CI continue to run commands on the runner without Docker. See `docs/email-migration.md` for mail-related examples.
+
+## Email (transactional)
+
+- **Staging and production:** Outbound mail uses **[Resend](https://resend.com)** through Laravel’s built-in `resend` mail transport. Configure `MAIL_MAILER=resend`, `RESEND_API_KEY`, and `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` on a **verified sending domain** in the Resend dashboard. The PHP client is `resend/resend-php` (declared in `composer.json`). See `docs/email-migration.md` and `docs/COOLIFY.md` for the full matrix and deployment notes.
+- **Local development:** Use **Mailpit** over SMTP (`MAIL_MAILER=smtp`, Mailpit host/port in `.env.example`) so messages are captured locally without calling Resend. Do not use placeholder domains such as `hello@example.com` with Resend in real environments.
+- **Queue workers:** Any process that runs `queue:work` and sends mail or notifications must receive the **same** mail-related environment variables as the web application.
+- **Tests:** Default PHPUnit uses `MAIL_MAILER=array` (`phpunit.xml`). Feature tests use fakes (for example `Notification::fake()`). Optional live Resend send: `tests/Unit/Resend/ResendLiveSendTest.php` (group `resend-live`, opt-in via env — see `.env.example`).
+
 ## Conventions
 
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
@@ -93,15 +108,15 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 ## Artisan
 
-- Run Artisan commands directly via the command line (e.g., `php artisan route:list`). Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
-- Inspect routes with `php artisan route:list`. Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
+- Run Artisan via the command line. **With Docker Compose, prefer** `docker compose exec app php artisan …` (see **Docker Compose (local development)** above). Examples without Docker: `php artisan route:list`. Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
+- Inspect routes with `php artisan route:list` (or `docker compose exec app php artisan route:list` under Compose). Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
 - Read configuration values using dot notation: `php artisan config:show app.name`, `php artisan config:show database.default`. Or read config files directly from the `config/` directory.
 - To check environment variables, read the `.env` file directly.
 
 ## Tinker
 
 - Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
-- Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
+- Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'` (with Docker Compose: `docker compose exec app php artisan tinker --execute '…'`).
   - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
 
 === php rules ===
@@ -120,7 +135,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 # Test Enforcement
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter. **With Docker Compose, run tests via** `docker compose exec app php artisan test --compact …`.
 
 === inertia-laravel/core rules ===
 
@@ -185,7 +200,7 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 
 # Laravel Pint Code Formatter
 
-- If you have modified any PHP files, you must run `vendor/bin/pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
+- If you have modified any PHP files, you must run Pint before finalizing changes to ensure your code matches the project's expected style: `vendor/bin/pint --dirty --format agent`, or **with Docker Compose** `docker compose exec app vendor/bin/pint --dirty --format agent`.
 - Do not run `vendor/bin/pint --test --format agent`, simply run `vendor/bin/pint --format agent` to fix any formatting issues.
 
 === phpunit/core rules ===
@@ -201,9 +216,9 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 
 ## Running Tests
 
-- Run the minimal number of tests, using an appropriate filter, before finalizing.
-- To run all tests: `php artisan test --compact`.
-- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
+- Run the minimal number of tests, using an appropriate filter, before finalizing. **With Docker Compose, prefix commands with** `docker compose exec app` (see **Docker Compose (local development)** above).
+- To run all tests: `php artisan test --compact` (or `docker compose exec app php artisan test --compact`).
+- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php` (same pattern with `docker compose exec app`).
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 
 === inertia-react/core rules ===
