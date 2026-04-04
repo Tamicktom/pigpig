@@ -28,6 +28,7 @@
             into $_SERVER, so mirroring critical vars here keeps config('app.env') and other env()-backed config correct.
         -->
         <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_LOCALE" value="pt_BR" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
         <env name="BROADCAST_CONNECTION" value="null" force="true"/>
@@ -43,6 +44,7 @@
         <env name="NIGHTWATCH_ENABLED" value="false" force="true"/>
 
         <server name="APP_ENV" value="testing"/>
+        <server name="APP_LOCALE" value="pt_BR"/>
         <server name="APP_MAINTENANCE_DRIVER" value="file"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="BROADCAST_CONNECTION" value="null"/>

@@ -86,6 +86,16 @@ class RegistrationTest extends TestCase
         ]);
     }
 
+    public function test_registration_validation_error_messages_are_in_portuguese(): void
+    {
+        $response = $this->from(route('register'))->post(route('register.store'), []);
+
+        $response->assertSessionHasErrors('name');
+        $errors = session('errors');
+        $this->assertNotNull($errors);
+        $this->assertStringContainsString('obrigatório', $errors->first('name'));
+    }
+
     public function test_registration_sends_email_verification_notification(): void
     {
         $this->skipUnlessFortifyHas(Features::emailVerification());

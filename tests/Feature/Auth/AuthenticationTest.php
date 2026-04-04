@@ -71,6 +71,21 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_invalid_login_shows_portuguese_error_message(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->from(route('login'))->post(route('login.store'), [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $errors = session('errors');
+        $this->assertNotNull($errors);
+        $this->assertStringContainsStringIgnoringCase('credenciais', $errors->first('email'));
+    }
+
     public function test_users_can_logout()
     {
         $user = User::factory()->create();
