@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/react';
 
 //* Components imports
+import { LocaleSwitcher } from '@/components/locale-switcher';
 import { Button } from '@/components/ui/button';
 
 //* Routes imports
@@ -66,6 +67,7 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                     </Link>
                 </div>
                 <div className="flex items-center gap-3">
+                    <LocaleSwitcher className="border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20" />
                     {isAuthenticated ? (
                         <>
                             <Button

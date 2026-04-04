@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
 use Laravel\Fortify\Features;
 
@@ -39,6 +40,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'locale' => App::getLocale(),
             'name' => config('app.name'),
             'canRegister' => Features::enabled(Features::registration()),
             'auth' => [

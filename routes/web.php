@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupJoinRequestController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PublicGroupController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+
+Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
