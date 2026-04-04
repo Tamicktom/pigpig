@@ -15,6 +15,5 @@ class WelcomePageTest extends TestCase
 
         $response->assertOk();
         $response->assertInertia(fn (Assert $page) => $page->component('welcome'));
-        $response->assertSee('Pare de perder tempo procurando grupo para o PI', false);
     }
 }

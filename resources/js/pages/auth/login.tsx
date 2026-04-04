@@ -11,20 +11,16 @@ import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
-type Props = {
+type LoginPageProps = {
     status?: string;
     canResetPassword: boolean;
     canRegister: boolean;
 };
 
-export default function Login({
-    status,
-    canResetPassword,
-    canRegister,
-}: Props) {
+export default function Login(props: LoginPageProps) {
     return (
         <>
-            <Head title="Log in" />
+            <Head title="Entrar" />
 
             <Form
                 {...store.form()}
@@ -35,7 +31,7 @@ export default function Login({
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -51,14 +47,14 @@ export default function Login({
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                    {canResetPassword && (
+                                    <Label htmlFor="password">Senha</Label>
+                                    {props.canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="ml-auto text-sm font-medium text-primary hover:text-primary"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            Esqueceu a senha?
                                         </TextLink>
                                     )}
                                 </div>
@@ -68,7 +64,7 @@ export default function Login({
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Senha"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -79,27 +75,31 @@ export default function Login({
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">Lembrar-me</Label>
                             </div>
 
                             <Button
                                 id="login-submit-button"
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="landing-primary-cta mt-4 h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Entrar
                             </Button>
                         </div>
 
-                        {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register.url()} tabIndex={5}>
-                                    Sign up
+                        {props.canRegister && (
+                            <div className="text-center text-sm text-on-surface-variant">
+                                Não tem uma conta?{' '}
+                                <TextLink
+                                    href={register.url()}
+                                    tabIndex={5}
+                                    className="font-medium text-primary hover:text-primary"
+                                >
+                                    Cadastrar
                                 </TextLink>
                             </div>
                         )}
@@ -107,9 +107,9 @@ export default function Login({
                 )}
             </Form>
 
-            {status && (
+            {props.status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
+                    {props.status}
                 </div>
             )}
         </>
@@ -117,6 +117,6 @@ export default function Login({
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+    title: 'Entrar na sua conta',
+    description: 'Informe seu e-mail e senha para entrar',
 };

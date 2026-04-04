@@ -7,31 +7,31 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { update } from '@/routes/password';
 
-type Props = {
+type ResetPasswordPageProps = {
     token: string;
     email: string;
 };
 
-export default function ResetPassword({ token, email }: Props) {
+export default function ResetPassword(props: ResetPasswordPageProps) {
     return (
         <>
-            <Head title="Reset password" />
+            <Head title="Redefinir senha" />
 
             <Form
                 {...update.form()}
-                transform={(data) => ({ ...data, token, email })}
+                transform={(data) => ({ ...data, token: props.token, email: props.email })}
                 resetOnSuccess={['password', 'password_confirmation']}
             >
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">E-mail</Label>
                             <Input
                                 id="email"
                                 type="email"
                                 name="email"
                                 autoComplete="email"
-                                value={email}
+                                value={props.email}
                                 className="mt-1 block w-full"
                                 readOnly
                             />
@@ -42,28 +42,28 @@ export default function ResetPassword({ token, email }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Senha</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
                                 autoFocus
-                                placeholder="Password"
+                                placeholder="Senha"
                             />
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                Confirm password
+                                Confirmar senha
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder="Confirm password"
+                                placeholder="Confirmar senha"
                             />
                             <InputError
                                 message={errors.password_confirmation}
@@ -72,13 +72,14 @@ export default function ResetPassword({ token, email }: Props) {
                         </div>
 
                         <Button
+                            id="reset-password-submit-button"
                             type="submit"
-                            className="mt-4 w-full"
+                            className="landing-primary-cta mt-4 h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                             disabled={processing}
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Reset password
+                            Redefinir senha
                         </Button>
                     </div>
                 )}
@@ -88,6 +89,6 @@ export default function ResetPassword({ token, email }: Props) {
 }
 
 ResetPassword.layout = {
-    title: 'Reset password',
-    description: 'Please enter your new password below',
+    title: 'Redefinir senha',
+    description: 'Digite sua nova senha abaixo',
 };

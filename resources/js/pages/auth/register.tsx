@@ -20,10 +20,10 @@ type RegisterPageProps = {
     polos: PoloDrpOption[];
 };
 
-export default function Register(registerPageProps: RegisterPageProps) {
+export default function Register(props: RegisterPageProps) {
     return (
         <>
-            <Head title="Register" />
+            <Head title="Cadastrar" />
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -34,7 +34,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Nome</Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -43,7 +43,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Nome completo"
                                 />
                                 <InputError
                                     message={formRenderProps.errors.name}
@@ -52,7 +52,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -68,7 +68,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">Phone</Label>
+                                <Label htmlFor="phone">Telefone</Label>
                                 <Input
                                     id="phone"
                                     type="tel"
@@ -84,20 +84,20 @@ export default function Register(registerPageProps: RegisterPageProps) {
                             </div>
 
                             <DrpByPoloSelect
-                                poloOptions={registerPageProps.polos}
+                                poloOptions={props.polos}
                                 errorMessage={formRenderProps.errors.drp_id}
                                 tabIndex={4}
                             />
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Senha</Label>
                                 <PasswordInput
                                     id="password"
                                     required
                                     tabIndex={5}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Senha"
                                 />
                                 <InputError
                                     message={formRenderProps.errors.password}
@@ -106,7 +106,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    Confirmar senha
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -114,7 +114,7 @@ export default function Register(registerPageProps: RegisterPageProps) {
                                     tabIndex={6}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Confirmar senha"
                                 />
                                 <InputError
                                     message={
@@ -127,19 +127,23 @@ export default function Register(registerPageProps: RegisterPageProps) {
                             <Button
                                 id="register-submit-button"
                                 type="submit"
-                                className="w-full"
+                                className="landing-primary-cta h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                                 tabIndex={7}
                                 data-test="register-user-button"
                             >
                                 {formRenderProps.processing && <Spinner />}
-                                Create account
+                                Criar conta
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login.url()} tabIndex={8}>
-                                Log in
+                        <div className="text-center text-sm text-on-surface-variant">
+                            Já tem uma conta?{' '}
+                            <TextLink
+                                href={login.url()}
+                                tabIndex={8}
+                                className="font-medium text-primary hover:text-primary"
+                            >
+                                Entrar
                             </TextLink>
                         </div>
                     </>
@@ -150,6 +154,6 @@ export default function Register(registerPageProps: RegisterPageProps) {
 }
 
 Register.layout = {
-    title: 'Create an account',
-    description: 'Enter your details below to create your account',
+    title: 'Criar uma conta',
+    description: 'Preencha os dados abaixo para criar sua conta',
 };

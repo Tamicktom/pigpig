@@ -51,6 +51,7 @@ class RegistrationTest extends TestCase
 
         $response->assertInertia(fn (Assert $page) => $page
             ->component('auth/register')
+            ->where('canRegister', Features::enabled(Features::registration()))
             ->has('polos', 2)
             ->where('polos.0.id', $poloA->id)
             ->where('polos.0.name', 'Alpha Polo')

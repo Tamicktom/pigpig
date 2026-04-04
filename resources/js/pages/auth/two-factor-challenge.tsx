@@ -23,18 +23,18 @@ export default function TwoFactorChallenge() {
     }>(() => {
         if (showRecoveryInput) {
             return {
-                title: 'Recovery code',
+                title: 'Código de recuperação',
                 description:
-                    'Please confirm access to your account by entering one of your emergency recovery codes.',
-                toggleText: 'login using an authentication code',
+                    'Confirme o acesso à sua conta informando um dos seus códigos de recuperação de emergência.',
+                toggleText: 'entrar com o código do autenticador',
             };
         }
 
         return {
-            title: 'Authentication code',
+            title: 'Código de autenticação',
             description:
-                'Enter the authentication code provided by your authenticator application.',
-            toggleText: 'login using a recovery code',
+                'Digite o código gerado pelo seu aplicativo autenticador.',
+            toggleText: 'entrar com um código de recuperação',
         };
     }, [showRecoveryInput]);
 
@@ -51,7 +51,7 @@ export default function TwoFactorChallenge() {
 
     return (
         <>
-            <Head title="Two-factor authentication" />
+            <Head title="Autenticação em duas etapas" />
 
             <div className="space-y-6">
                 <Form
@@ -67,7 +67,7 @@ export default function TwoFactorChallenge() {
                                     <Input
                                         name="recovery_code"
                                         type="text"
-                                        placeholder="Enter recovery code"
+                                        placeholder="Código de recuperação"
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
@@ -104,18 +104,20 @@ export default function TwoFactorChallenge() {
                             )}
 
                             <Button
+                                id="two-factor-challenge-submit-button"
                                 type="submit"
-                                className="w-full"
+                                className="landing-primary-cta h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                                 disabled={processing}
                             >
-                                Continue
+                                Continuar
                             </Button>
 
-                            <div className="text-center text-sm text-muted-foreground">
-                                <span>or you can </span>
+                            <div className="text-center text-sm text-on-surface-variant">
+                                <span>ou você pode </span>
                                 <button
+                                    id="two-factor-challenge-toggle-mode-button"
                                     type="button"
-                                    className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                    className="cursor-pointer text-primary underline decoration-primary/30 underline-offset-4 transition-colors duration-200 ease-out hover:decoration-primary dark:decoration-primary/40"
                                     onClick={() =>
                                         toggleRecoveryMode(clearErrors)
                                     }

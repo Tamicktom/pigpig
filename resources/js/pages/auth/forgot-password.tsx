@@ -9,14 +9,18 @@ import { Label } from '@/components/ui/label';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
-export default function ForgotPassword({ status }: { status?: string }) {
+type ForgotPasswordPageProps = {
+    status?: string;
+};
+
+export default function ForgotPassword(props: ForgotPasswordPageProps) {
     return (
         <>
-            <Head title="Forgot password" />
+            <Head title="Esqueci a senha" />
 
-            {status && (
+            {props.status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
+                    {props.status}
                 </div>
             )}
 
@@ -25,7 +29,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -38,25 +42,32 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="my-6 flex items-center justify-start">
+                            <div className="flex items-center justify-start pt-6">
                                 <Button
-                                    className="w-full"
+                                    id="forgot-password-submit-button"
+                                    type="submit"
+                                    className="landing-primary-cta h-auto w-full rounded-xl py-3 font-bold tracking-wide text-primary-foreground shadow-none"
                                     disabled={processing}
                                     data-test="email-password-reset-link-button"
                                 >
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Email password reset link
+                                    Enviar link de redefinição
                                 </Button>
                             </div>
                         </>
                     )}
                 </Form>
 
-                <div className="space-x-1 text-center text-sm text-muted-foreground">
-                    <span>Or, return to</span>
-                    <TextLink href={login()}>log in</TextLink>
+                <div className="text-center text-sm text-on-surface-variant">
+                    <span>Voltar para </span>
+                    <TextLink
+                        href={login.url()}
+                        className="font-medium text-primary hover:text-primary"
+                    >
+                        entrar
+                    </TextLink>
                 </div>
             </div>
         </>
@@ -64,6 +75,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
 }
 
 ForgotPassword.layout = {
-    title: 'Forgot password',
-    description: 'Enter your email to receive a password reset link',
+    title: 'Esqueci a senha',
+    description:
+        'Informe seu e-mail para receber o link de redefinição de senha',
 };

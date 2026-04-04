@@ -274,6 +274,43 @@
     }
 }
 
+@layer components {
+    /**
+     * Auth forms: DESIGN.md minimal inputs (tonal fill + bottom ghost border, secondary focus).
+     */
+    .auth-editorial-fields [data-slot='input'],
+    .auth-editorial-fields select {
+        border-width: 0;
+        border-bottom-width: 1px;
+        border-style: solid;
+        border-color: color-mix(in oklch, var(--outline-variant) 15%, transparent);
+        border-radius: 0.5rem 0.5rem 0 0;
+        background-color: var(--surface-container-highest);
+        box-shadow: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .auth-editorial-fields [data-slot='input'],
+        .auth-editorial-fields select {
+            transition:
+                border-color 200ms ease,
+                box-shadow 200ms ease;
+        }
+    }
+
+    .auth-editorial-fields [data-slot='input']:focus-visible,
+    .auth-editorial-fields select:focus-visible {
+        border-bottom-color: var(--secondary);
+        --tw-ring-shadow: 0 0 #0000;
+        box-shadow: none;
+        outline: none;
+    }
+
+    .auth-editorial-fields [data-slot='input']:focus-visible {
+        --tw-ring-offset-shadow: 0 0 #0000;
+    }
+}
+
 @layer utilities {
     .ghost-border {
         border: 1px solid

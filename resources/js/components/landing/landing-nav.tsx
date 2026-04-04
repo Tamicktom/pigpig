@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 
 //* Routes imports
-import { dashboard, login, register } from '@/routes';
+import { dashboard, home, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
 
 type LandingNavProps = {
@@ -22,25 +22,48 @@ export function LandingNav(landingNavProps: LandingNavProps) {
     const linkClassName =
         'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand-foreground dark:hover:text-primary';
 
+    const brandClassName =
+        'font-headline text-2xl font-black text-landing-brand dark:text-landing-brand-foreground';
+
     return (
         <nav className="fixed top-0 z-50 w-full bg-landing-nav-glass backdrop-blur-[20px]">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4">
-                <div className="font-headline text-2xl font-black text-landing-brand dark:text-landing-brand-foreground">
+                <Link
+                    id="landing-nav-brand"
+                    href={home.url()}
+                    className={brandClassName}
+                >
                     {appName}
-                </div>
+                </Link>
                 <div className="hidden items-center gap-8 md:flex">
-                    <a href="#sobre" className={linkClassName}>
+                    <Link
+                        id="landing-nav-section-sobre"
+                        href={`${home.url()}#sobre`}
+                        className={linkClassName}
+                    >
                         Sobre
-                    </a>
-                    <a href="#como-funciona" className={linkClassName}>
+                    </Link>
+                    <Link
+                        id="landing-nav-section-como-funciona"
+                        href={`${home.url()}#como-funciona`}
+                        className={linkClassName}
+                    >
                         Como Funciona
-                    </a>
-                    <a href="#equipe" className={linkClassName}>
+                    </Link>
+                    <Link
+                        id="landing-nav-section-equipe"
+                        href={`${home.url()}#equipe`}
+                        className={linkClassName}
+                    >
                         Equipe
-                    </a>
-                    <a href="#contato" className={linkClassName}>
+                    </Link>
+                    <Link
+                        id="landing-nav-section-contato"
+                        href={`${home.url()}#contato`}
+                        className={linkClassName}
+                    >
                         Contato
-                    </a>
+                    </Link>
                 </div>
                 <div className="flex items-center gap-3">
                     {isAuthenticated ? (

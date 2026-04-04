@@ -6,15 +6,19 @@ import { Spinner } from '@/components/ui/spinner';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
-export default function VerifyEmail({ status }: { status?: string }) {
+type VerifyEmailPageProps = {
+    status?: string;
+};
+
+export default function VerifyEmail(props: VerifyEmailPageProps) {
     return (
         <>
-            <Head title="Email verification" />
+            <Head title="Verificação de e-mail" />
 
-            {status === 'verification-link-sent' && (
+            {props.status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                    Um novo link de verificação foi enviado para o e-mail que você
+                    informou no cadastro.
                 </div>
             )}
 
@@ -28,14 +32,14 @@ export default function VerifyEmail({ status }: { status?: string }) {
                             variant="secondary"
                         >
                             {processing && <Spinner />}
-                            Resend verification email
+                            Reenviar e-mail de verificação
                         </Button>
 
                         <TextLink
                             href={logout()}
-                            className="mx-auto block text-sm"
+                            className="mx-auto block text-sm font-medium text-primary hover:text-primary"
                         >
-                            Log out
+                            Sair
                         </TextLink>
                     </>
                 )}
@@ -45,7 +49,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
 }
 
 VerifyEmail.layout = {
-    title: 'Verify email',
+    title: 'Verificar e-mail',
     description:
-        'Please verify your email address by clicking on the link we just emailed to you.',
+        'Confirme seu endereço de e-mail clicando no link que acabamos de enviar.',
 };

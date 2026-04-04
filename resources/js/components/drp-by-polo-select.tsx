@@ -16,36 +16,37 @@ type DrpByPoloSelectProps = {
     poloOptions: PoloDrpOption[];
     errorMessage?: string;
     tabIndex?: number;
+    selectClassName?: string;
 };
 
 /**
  * Registration control: user picks their polo by name; the form submits `drp_id`.
  */
-export function DrpByPoloSelect(drpByPoloSelectProps: DrpByPoloSelectProps) {
+export function DrpByPoloSelect(props: DrpByPoloSelectProps) {
     const selectClassName = cn(
-        'border-input text-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm',
-        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+        'text-foreground flex h-9 w-full min-w-0 px-3 py-1 text-base outline-none md:text-sm',
+        'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+        props.selectClassName,
     );
 
     return (
         <div className="grid gap-2">
-            <Label htmlFor="drp_id">Polo (your regional unit)</Label>
+            <Label htmlFor="drp_id">Polo (unidade regional)</Label>
             <select
                 id="drp_id"
                 name="drp_id"
                 required
-                tabIndex={drpByPoloSelectProps.tabIndex}
+                tabIndex={props.tabIndex}
                 defaultValue=""
                 className={selectClassName}
                 aria-invalid={
-                    drpByPoloSelectProps.errorMessage ? true : undefined
+                    props.errorMessage ? true : undefined
                 }
             >
                 <option value="" disabled>
-                    Select your polo
+                    Selecione seu polo
                 </option>
-                {drpByPoloSelectProps.poloOptions.map((poloOption) => (
+                {props.poloOptions.map((poloOption) => (
                     <option
                         key={poloOption.id}
                         value={poloOption.drp_id}
@@ -54,7 +55,7 @@ export function DrpByPoloSelect(drpByPoloSelectProps: DrpByPoloSelectProps) {
                     </option>
                 ))}
             </select>
-            <InputError message={drpByPoloSelectProps.errorMessage} />
+            <InputError message={props.errorMessage} />
         </div>
     );
 }
