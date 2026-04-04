@@ -1,10 +1,18 @@
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+
+//* Components imports
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { update } from '@/routes/password';
 
 type ResetPasswordPageProps = {
@@ -13,19 +21,27 @@ type ResetPasswordPageProps = {
 };
 
 export default function ResetPassword(props: ResetPasswordPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Redefinir senha" />
+            <Head title={t('auth.reset_password.head_title')} />
 
             <Form
                 {...update.form()}
-                transform={(data) => ({ ...data, token: props.token, email: props.email })}
+                transform={(data) => ({
+                    ...data,
+                    token: props.token,
+                    email: props.email,
+                })}
                 resetOnSuccess={['password', 'password_confirmation']}
             >
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">E-mail</Label>
+                            <Label htmlFor="email">
+                                {t('auth.common.email')}
+                            </Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -42,28 +58,34 @@ export default function ResetPassword(props: ResetPasswordPageProps) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Senha</Label>
+                            <Label htmlFor="password">
+                                {t('auth.common.password')}
+                            </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
                                 autoFocus
-                                placeholder="Senha"
+                                placeholder={t(
+                                    'auth.common.password_placeholder',
+                                )}
                             />
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                Confirmar senha
+                                {t('auth.register.confirm_password')}
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder="Confirmar senha"
+                                placeholder={t(
+                                    'auth.register.confirm_password_placeholder',
+                                )}
                             />
                             <InputError
                                 message={errors.password_confirmation}
@@ -79,7 +101,7 @@ export default function ResetPassword(props: ResetPasswordPageProps) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Redefinir senha
+                            {t('auth.reset_password.submit')}
                         </Button>
                     </div>
                 )}
@@ -89,6 +111,6 @@ export default function ResetPassword(props: ResetPasswordPageProps) {
 }
 
 ResetPassword.layout = {
-    title: 'Redefinir senha',
-    description: 'Digite sua nova senha abaixo',
+    titleKey: 'auth.reset_password.layout_title',
+    descriptionKey: 'auth.reset_password.layout_description',
 };

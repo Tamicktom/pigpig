@@ -105,36 +105,36 @@ php artisan test --compact
 
 **Auth pages**
 
-- [ ] [`resources/js/pages/auth/login.tsx`](../resources/js/pages/auth/login.tsx)
-- [ ] [`resources/js/pages/auth/register.tsx`](../resources/js/pages/auth/register.tsx)
-- [ ] [`resources/js/pages/auth/forgot-password.tsx`](../resources/js/pages/auth/forgot-password.tsx)
-- [ ] [`resources/js/pages/auth/reset-password.tsx`](../resources/js/pages/auth/reset-password.tsx)
-- [ ] [`resources/js/pages/auth/verify-email.tsx`](../resources/js/pages/auth/verify-email.tsx)
-- [ ] [`resources/js/pages/auth/confirm-password.tsx`](../resources/js/pages/auth/confirm-password.tsx)
-- [ ] [`resources/js/pages/auth/two-factor-challenge.tsx`](../resources/js/pages/auth/two-factor-challenge.tsx)
+- [x] [`resources/js/pages/auth/login.tsx`](../resources/js/pages/auth/login.tsx)
+- [x] [`resources/js/pages/auth/register.tsx`](../resources/js/pages/auth/register.tsx)
+- [x] [`resources/js/pages/auth/forgot-password.tsx`](../resources/js/pages/auth/forgot-password.tsx)
+- [x] [`resources/js/pages/auth/reset-password.tsx`](../resources/js/pages/auth/reset-password.tsx)
+- [x] [`resources/js/pages/auth/verify-email.tsx`](../resources/js/pages/auth/verify-email.tsx)
+- [x] [`resources/js/pages/auth/confirm-password.tsx`](../resources/js/pages/auth/confirm-password.tsx)
+- [x] [`resources/js/pages/auth/two-factor-challenge.tsx`](../resources/js/pages/auth/two-factor-challenge.tsx)
 
 **Auth layouts**
 
-- [ ] [`resources/js/layouts/auth-layout.tsx`](../resources/js/layouts/auth-layout.tsx)
-- [ ] [`resources/js/layouts/auth/auth-card-layout.tsx`](../resources/js/layouts/auth/auth-card-layout.tsx)
-- [ ] [`resources/js/layouts/auth/auth-split-layout.tsx`](../resources/js/layouts/auth/auth-split-layout.tsx)
-- [ ] [`resources/js/layouts/auth/auth-simple-layout.tsx`](../resources/js/layouts/auth/auth-simple-layout.tsx)
+- [x] [`resources/js/layouts/auth-layout.tsx`](../resources/js/layouts/auth-layout.tsx)
+- [x] [`resources/js/layouts/auth/auth-card-layout.tsx`](../resources/js/layouts/auth/auth-card-layout.tsx)
+- [x] [`resources/js/layouts/auth/auth-split-layout.tsx`](../resources/js/layouts/auth/auth-split-layout.tsx)
+- [x] [`resources/js/layouts/auth/auth-simple-layout.tsx`](../resources/js/layouts/auth/auth-simple-layout.tsx) — no user-facing copy (titles come from parent)
 
 **Related components**
 
-- [ ] [`resources/js/components/delete-user.tsx`](../resources/js/components/delete-user.tsx)
-- [ ] [`resources/js/components/email-verification-banner.tsx`](../resources/js/components/email-verification-banner.tsx)
-- [ ] [`resources/js/components/two-factor-setup-modal.tsx`](../resources/js/components/two-factor-setup-modal.tsx)
-- [ ] [`resources/js/components/two-factor-recovery-codes.tsx`](../resources/js/components/two-factor-recovery-codes.tsx)
+- [x] [`resources/js/components/delete-user.tsx`](../resources/js/components/delete-user.tsx)
+- [x] [`resources/js/components/email-verification-banner.tsx`](../resources/js/components/email-verification-banner.tsx)
+- [x] [`resources/js/components/two-factor-setup-modal.tsx`](../resources/js/components/two-factor-setup-modal.tsx)
+- [x] [`resources/js/components/two-factor-recovery-codes.tsx`](../resources/js/components/two-factor-recovery-codes.tsx)
 
 **Backend / lang**
 
-- [ ] Keep [`lang/en.json`](../lang/en.json) and [`lang/pt_BR.json`](../lang/pt_BR.json) in sync for Fortify-related strings and any new keys introduced when moving copy out of TSX.
+- [x] Keep [`lang/en.json`](../lang/en.json) and [`lang/pt_BR.json`](../lang/pt_BR.json) in sync for Fortify-related strings and any new keys introduced when moving copy out of TSX.
 
 ### Definition of done
 
-- [ ] No user-visible hardcoded strings remain in the files above (labels, buttons, headings, `Head` titles, validation-related hints where applicable).
-- [ ] Keys exist in both `en` and `pt_BR` JSON (or documented fallback).
+- [x] No user-visible hardcoded strings remain in the files above (labels, buttons, headings, `Head` titles, validation-related hints where applicable).
+- [x] Keys exist in both `en` and `pt_BR` JSON (or documented fallback).
 
 ### Validation
 
@@ -143,8 +143,8 @@ php artisan test --compact
 
 ### Suggested tests
 
-- [ ] Inertia assertions on 1–2 representative pages (e.g. login + register) with `locale` cookie set to `en` and `pt_BR`.
-- [ ] Run: `php artisan test --compact --filter=…` for those tests, then `php artisan test --compact`.
+- [x] Inertia assertions on 1–2 representative pages (e.g. login + register) with `locale` cookie set to `en` and `pt_BR` — see [`tests/Feature/Auth/AuthTranslationPropsTest.php`](../tests/Feature/Auth/AuthTranslationPropsTest.php).
+- [x] Run: `php artisan test --compact --filter=…` for those tests, then `php artisan test --compact`.
 
 ---
 
@@ -325,4 +325,5 @@ php artisan test --compact
 
 | Date | Note |
 |------|------|
+| 2026-04-04 | Phase 1 (auth) implemented: namespaced `auth.*` keys in `lang/en.json` / `lang/pt_BR.json`, `useTranslations()` on auth pages and related components, `AuthTranslationPropsTest`. |
 | (add rows as this roadmap is updated) | |

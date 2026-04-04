@@ -1,14 +1,31 @@
+//* Libraries imports
 import { Link, usePage } from '@inertiajs/react';
+
+//* Components imports
 import AppLogoIcon from '@/components/app-logo-icon';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { home } from '@/routes';
+
+//* Types imports
 import type { AuthLayoutProps } from '@/types';
 
-export default function AuthSplitLayout({
-    children,
-    title,
-    description,
-}: AuthLayoutProps) {
-    const { name } = usePage().props;
+type AuthSplitLayoutProps = AuthLayoutProps & {
+    titleKey?: string;
+    descriptionKey?: string;
+};
+
+export default function AuthSplitLayout(props: AuthSplitLayoutProps) {
+    const { t } = useTranslations();
+    const page = usePage();
+    const appName = page.props.name;
+    const title = props.titleKey ? t(props.titleKey) : (props.title ?? '');
+    const description = props.descriptionKey
+        ? t(props.descriptionKey)
+        : (props.description ?? '');
 
     return (
         <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -19,7 +36,7 @@ export default function AuthSplitLayout({
                     className="relative z-20 flex items-center text-lg font-medium"
                 >
                     <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
-                    {name}
+                    {appName}
                 </Link>
             </div>
             <div className="w-full lg:p-8">
@@ -36,7 +53,7 @@ export default function AuthSplitLayout({
                             {description}
                         </p>
                     </div>
-                    {children}
+                    {props.children}
                 </div>
             </div>
         </div>

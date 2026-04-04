@@ -1,8 +1,15 @@
-// Components
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+
+//* Components imports
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
@@ -11,14 +18,15 @@ type VerifyEmailPageProps = {
 };
 
 export default function VerifyEmail(props: VerifyEmailPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Verificação de e-mail" />
+            <Head title={t('auth.verify_email.head_title')} />
 
             {props.status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    Um novo link de verificação foi enviado para o e-mail que você
-                    informou no cadastro.
+                    {t('auth.verify_email.link_sent_message')}
                 </div>
             )}
 
@@ -32,14 +40,14 @@ export default function VerifyEmail(props: VerifyEmailPageProps) {
                             variant="secondary"
                         >
                             {processing && <Spinner />}
-                            Reenviar e-mail de verificação
+                            {t('auth.verify_email.resend')}
                         </Button>
 
                         <TextLink
                             href={logout()}
                             className="mx-auto block text-sm font-medium text-primary hover:text-primary"
                         >
-                            Sair
+                            {t('auth.verify_email.sign_out')}
                         </TextLink>
                     </>
                 )}
@@ -49,7 +57,6 @@ export default function VerifyEmail(props: VerifyEmailPageProps) {
 }
 
 VerifyEmail.layout = {
-    title: 'Verificar e-mail',
-    description:
-        'Confirme seu endereço de e-mail clicando no link que acabamos de enviar.',
+    titleKey: 'auth.verify_email.layout_title',
+    descriptionKey: 'auth.verify_email.layout_description',
 };

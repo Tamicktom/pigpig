@@ -5,6 +5,9 @@ import { Form, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { send } from '@/routes/verification';
 
@@ -15,16 +18,14 @@ type EmailVerificationBannerProps = {
 export function EmailVerificationBanner(
     emailVerificationBannerProps: EmailVerificationBannerProps,
 ) {
+    const { t } = useTranslations();
     const page = usePage<{
         auth: { user: unknown; needsEmailVerification: boolean };
         status?: string;
     }>();
     const variant = emailVerificationBannerProps.variant ?? 'app';
 
-    if (
-        !page.props.auth.user ||
-        !page.props.auth.needsEmailVerification
-    ) {
+    if (!page.props.auth.user || !page.props.auth.needsEmailVerification) {
         return null;
     }
 
@@ -39,7 +40,7 @@ export function EmailVerificationBanner(
                     : 'border-b border-amber-500/40 bg-amber-50 px-4 py-3 text-foreground dark:border-amber-500/30 dark:bg-amber-950/40'
             }
             role="region"
-            aria-label="Email verification required"
+            aria-label={t('auth.email_banner.aria_label')}
         >
             <div
                 className={
@@ -50,16 +51,14 @@ export function EmailVerificationBanner(
             >
                 <div className="flex min-w-0 flex-col gap-1">
                     <p className="text-sm font-medium">
-                        Verify your email to use groups
+                        {t('auth.email_banner.title')}
                     </p>
                     <p className="text-sm text-muted-foreground dark:text-[#A1A09A]">
-                        You need to confirm your email address before you can
-                        create a group or join one.
+                        {t('auth.email_banner.description')}
                     </p>
                     {status === 'verification-link-sent' ? (
                         <p className="text-sm font-medium text-green-600 dark:text-green-500">
-                            A new verification link has been sent to your
-                            email address.
+                            {t('auth.email_banner.link_sent')}
                         </p>
                     ) : null}
                 </div>
@@ -81,7 +80,7 @@ export function EmailVerificationBanner(
                             }
                         >
                             {formProps.processing ? <Spinner /> : null}
-                            Resend verification email
+                            {t('auth.email_banner.resend')}
                         </Button>
                     )}
                 </Form>

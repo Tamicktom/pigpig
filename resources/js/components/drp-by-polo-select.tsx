@@ -3,6 +3,7 @@ import InputError from '@/components/input-error';
 import { Label } from '@/components/ui/label';
 
 //* Lib imports
+import { useTranslations } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 export type PoloDrpOption = {
@@ -23,15 +24,16 @@ type DrpByPoloSelectProps = {
  * Registration control: user picks their polo by name; the form submits `drp_id`.
  */
 export function DrpByPoloSelect(props: DrpByPoloSelectProps) {
+    const { t } = useTranslations();
     const selectClassName = cn(
-        'text-foreground flex h-9 w-full min-w-0 px-3 py-1 text-base outline-none md:text-sm',
+        'flex h-9 w-full min-w-0 px-3 py-1 text-base text-foreground outline-none md:text-sm',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
         props.selectClassName,
     );
 
     return (
         <div className="grid gap-2">
-            <Label htmlFor="drp_id">Polo (unidade regional)</Label>
+            <Label htmlFor="drp_id">{t('auth.register.polo_label')}</Label>
             <select
                 id="drp_id"
                 name="drp_id"
@@ -39,18 +41,13 @@ export function DrpByPoloSelect(props: DrpByPoloSelectProps) {
                 tabIndex={props.tabIndex}
                 defaultValue=""
                 className={selectClassName}
-                aria-invalid={
-                    props.errorMessage ? true : undefined
-                }
+                aria-invalid={props.errorMessage ? true : undefined}
             >
                 <option value="" disabled>
-                    Selecione seu polo
+                    {t('auth.register.polo_placeholder')}
                 </option>
                 {props.poloOptions.map((poloOption) => (
-                    <option
-                        key={poloOption.id}
-                        value={poloOption.drp_id}
-                    >
+                    <option key={poloOption.id} value={poloOption.drp_id}>
                         {poloOption.name} — {poloOption.drp_name}
                     </option>
                 ))}

@@ -1,11 +1,18 @@
-// Components
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+
+//* Components imports
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
@@ -14,9 +21,11 @@ type ForgotPasswordPageProps = {
 };
 
 export default function ForgotPassword(props: ForgotPasswordPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Esqueci a senha" />
+            <Head title={t('auth.forgot_password.head_title')} />
 
             {props.status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
@@ -29,14 +38,18 @@ export default function ForgotPassword(props: ForgotPasswordPageProps) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-mail</Label>
+                                <Label htmlFor="email">
+                                    {t('auth.common.email')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     name="email"
                                     autoComplete="off"
                                     autoFocus
-                                    placeholder="email@example.com"
+                                    placeholder={t(
+                                        'auth.common.email_placeholder',
+                                    )}
                                 />
 
                                 <InputError message={errors.email} />
@@ -53,7 +66,7 @@ export default function ForgotPassword(props: ForgotPasswordPageProps) {
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Enviar link de redefinição
+                                    {t('auth.forgot_password.submit')}
                                 </Button>
                             </div>
                         </>
@@ -61,12 +74,12 @@ export default function ForgotPassword(props: ForgotPasswordPageProps) {
                 </Form>
 
                 <div className="text-center text-sm text-on-surface-variant">
-                    <span>Voltar para </span>
+                    <span>{t('auth.forgot_password.back_to_prefix')}</span>
                     <TextLink
                         href={login.url()}
                         className="font-medium text-primary hover:text-primary"
                     >
-                        entrar
+                        {t('auth.forgot_password.back_to_login')}
                     </TextLink>
                 </div>
             </div>
@@ -75,7 +88,6 @@ export default function ForgotPassword(props: ForgotPasswordPageProps) {
 }
 
 ForgotPassword.layout = {
-    title: 'Esqueci a senha',
-    description:
-        'Informe seu e-mail para receber o link de redefinição de senha',
+    titleKey: 'auth.forgot_password.layout_title',
+    descriptionKey: 'auth.forgot_password.layout_description',
 };

@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type { Auth } from '@/types/auth';
 
 declare module '@inertiajs/core' {
@@ -11,6 +13,13 @@ declare module '@inertiajs/core' {
             status?: string;
             success?: string;
             [key: string]: unknown;
+        };
+        layoutProps: {
+            titleKey?: string;
+            descriptionKey?: string;
+            title?: string;
+            description?: string;
+            children?: ReactNode;
         };
     }
 }

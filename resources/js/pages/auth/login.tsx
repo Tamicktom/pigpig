@@ -1,4 +1,7 @@
+//* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+
+//* Components imports
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -7,6 +10,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
+//* Routes imports
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -18,9 +26,11 @@ type LoginPageProps = {
 };
 
 export default function Login(props: LoginPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Entrar" />
+            <Head title={t('auth.login.head_title')} />
 
             <Form
                 {...store.form()}
@@ -31,7 +41,9 @@ export default function Login(props: LoginPageProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-mail</Label>
+                                <Label htmlFor="email">
+                                    {t('auth.common.email')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -40,21 +52,25 @@ export default function Login(props: LoginPageProps) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder={t(
+                                        'auth.common.email_placeholder',
+                                    )}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Senha</Label>
+                                    <Label htmlFor="password">
+                                        {t('auth.common.password')}
+                                    </Label>
                                     {props.canResetPassword && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm font-medium text-primary hover:text-primary"
                                             tabIndex={5}
                                         >
-                                            Esqueceu a senha?
+                                            {t('auth.login.forgot_password')}
                                         </TextLink>
                                     )}
                                 </div>
@@ -64,7 +80,9 @@ export default function Login(props: LoginPageProps) {
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Senha"
+                                    placeholder={t(
+                                        'auth.common.password_placeholder',
+                                    )}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -75,7 +93,9 @@ export default function Login(props: LoginPageProps) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Lembrar-me</Label>
+                                <Label htmlFor="remember">
+                                    {t('auth.login.remember_me')}
+                                </Label>
                             </div>
 
                             <Button
@@ -87,19 +107,19 @@ export default function Login(props: LoginPageProps) {
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Entrar
+                                {t('auth.login.submit')}
                             </Button>
                         </div>
 
                         {props.canRegister && (
                             <div className="text-center text-sm text-on-surface-variant">
-                                Não tem uma conta?{' '}
+                                {t('auth.login.no_account')}{' '}
                                 <TextLink
                                     href={register.url()}
                                     tabIndex={5}
                                     className="font-medium text-primary hover:text-primary"
                                 >
-                                    Cadastrar
+                                    {t('auth.login.sign_up')}
                                 </TextLink>
                             </div>
                         )}
@@ -117,6 +137,6 @@ export default function Login(props: LoginPageProps) {
 }
 
 Login.layout = {
-    title: 'Entrar na sua conta',
-    description: 'Informe seu e-mail e senha para entrar',
+    titleKey: 'auth.login.layout_title',
+    descriptionKey: 'auth.login.layout_description',
 };

@@ -12,6 +12,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { login } from '@/routes';
 import { store } from '@/routes/register';
@@ -21,9 +24,11 @@ type RegisterPageProps = {
 };
 
 export default function Register(props: RegisterPageProps) {
+    const { t } = useTranslations();
+
     return (
         <>
-            <Head title="Cadastrar" />
+            <Head title={t('auth.register.head_title')} />
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -34,7 +39,9 @@ export default function Register(props: RegisterPageProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Nome</Label>
+                                <Label htmlFor="name">
+                                    {t('auth.register.name')}
+                                </Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -43,7 +50,9 @@ export default function Register(props: RegisterPageProps) {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Nome completo"
+                                    placeholder={t(
+                                        'auth.register.name_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={formRenderProps.errors.name}
@@ -52,7 +61,9 @@ export default function Register(props: RegisterPageProps) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-mail</Label>
+                                <Label htmlFor="email">
+                                    {t('auth.common.email')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -60,7 +71,9 @@ export default function Register(props: RegisterPageProps) {
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder={t(
+                                        'auth.common.email_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={formRenderProps.errors.email}
@@ -68,7 +81,9 @@ export default function Register(props: RegisterPageProps) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">Telefone</Label>
+                                <Label htmlFor="phone">
+                                    {t('auth.register.phone')}
+                                </Label>
                                 <Input
                                     id="phone"
                                     type="tel"
@@ -76,7 +91,9 @@ export default function Register(props: RegisterPageProps) {
                                     tabIndex={3}
                                     autoComplete="tel"
                                     name="phone"
-                                    placeholder="+55 11 98765-4321"
+                                    placeholder={t(
+                                        'auth.register.phone_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={formRenderProps.errors.phone}
@@ -90,14 +107,18 @@ export default function Register(props: RegisterPageProps) {
                             />
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Senha</Label>
+                                <Label htmlFor="password">
+                                    {t('auth.common.password')}
+                                </Label>
                                 <PasswordInput
                                     id="password"
                                     required
                                     tabIndex={5}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Senha"
+                                    placeholder={t(
+                                        'auth.common.password_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={formRenderProps.errors.password}
@@ -106,7 +127,7 @@ export default function Register(props: RegisterPageProps) {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirmar senha
+                                    {t('auth.register.confirm_password')}
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -114,7 +135,9 @@ export default function Register(props: RegisterPageProps) {
                                     tabIndex={6}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirmar senha"
+                                    placeholder={t(
+                                        'auth.register.confirm_password_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={
@@ -132,18 +155,18 @@ export default function Register(props: RegisterPageProps) {
                                 data-test="register-user-button"
                             >
                                 {formRenderProps.processing && <Spinner />}
-                                Criar conta
+                                {t('auth.register.submit')}
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-on-surface-variant">
-                            Já tem uma conta?{' '}
+                            {t('auth.register.have_account')}{' '}
                             <TextLink
                                 href={login.url()}
                                 tabIndex={8}
                                 className="font-medium text-primary hover:text-primary"
                             >
-                                Entrar
+                                {t('auth.register.sign_in')}
                             </TextLink>
                         </div>
                     </>
@@ -154,6 +177,6 @@ export default function Register(props: RegisterPageProps) {
 }
 
 Register.layout = {
-    title: 'Criar uma conta',
-    description: 'Preencha os dados abaixo para criar sua conta',
+    titleKey: 'auth.register.layout_title',
+    descriptionKey: 'auth.register.layout_description',
 };
