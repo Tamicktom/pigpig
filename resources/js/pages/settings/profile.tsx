@@ -228,6 +228,7 @@ Profile.layout = {
     breadcrumbs: [
         {
             title: 'Profile settings',
+            titleKey: 'app.shell.breadcrumb.profile_settings',
             href: edit(),
         },
     ],

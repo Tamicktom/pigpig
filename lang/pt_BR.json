@@ -94,5 +94,22 @@
     "auth.two_factor.recovery_codes.loading_aria_label": "Carregando códigos de recuperação",
     "auth.two_factor.recovery_codes.warning_prefix": "Cada código de recuperação pode ser usado uma vez para acessar sua conta e será removido após o uso. Se precisar de mais, clique em ",
     "auth.two_factor.recovery_codes.warning_regenerate_label": "Gerar novos códigos",
-    "auth.two_factor.recovery_codes.warning_suffix": " acima."
+    "auth.two_factor.recovery_codes.warning_suffix": " acima.",
+    "app.shell.nav.dashboard": "Painel",
+    "app.shell.nav.my_drp_groups": "Meus grupos DRP",
+    "app.shell.nav.create_group": "Criar grupo",
+    "app.shell.footer.repository": "Repositório",
+    "app.shell.footer.documentation": "Documentação",
+    "app.shell.section.platform": "Plataforma",
+    "app.shell.user.settings": "Configurações",
+    "app.shell.user.log_out": "Sair",
+    "app.shell.mobile.sheet_title": "Menu de navegação",
+    "app.shell.mobile.open_menu_aria": "Abrir menu de navegação",
+    "app.shell.search.aria_label": "Buscar",
+    "app.shell.breadcrumb.dashboard": "Painel",
+    "app.shell.breadcrumb.my_drp_groups": "Meus grupos DRP",
+    "app.shell.breadcrumb.create_group": "Criar grupo",
+    "app.shell.breadcrumb.profile_settings": "Configurações do perfil",
+    "app.shell.breadcrumb.security_settings": "Configurações de segurança",
+    "app.shell.breadcrumb.appearance_settings": "Aparência"
 }

@@ -156,33 +156,33 @@ php artisan test --compact
 
 **Sidebar / nav**
 
-- [ ] [`resources/js/components/app-sidebar.tsx`](../resources/js/components/app-sidebar.tsx)
-- [ ] [`resources/js/components/nav-main.tsx`](../resources/js/components/nav-main.tsx)
-- [ ] [`resources/js/components/nav-footer.tsx`](../resources/js/components/nav-footer.tsx)
-- [ ] [`resources/js/components/nav-user.tsx`](../resources/js/components/nav-user.tsx)
-- [ ] [`resources/js/components/user-menu-content.tsx`](../resources/js/components/user-menu-content.tsx)
+- [x] [`resources/js/components/app-sidebar.tsx`](../resources/js/components/app-sidebar.tsx)
+- [x] [`resources/js/components/nav-main.tsx`](../resources/js/components/nav-main.tsx)
+- [x] [`resources/js/components/nav-footer.tsx`](../resources/js/components/nav-footer.tsx) — keys only (`href`-stable list items)
+- [x] [`resources/js/components/nav-user.tsx`](../resources/js/components/nav-user.tsx) — no user-facing copy
+- [x] [`resources/js/components/user-menu-content.tsx`](../resources/js/components/user-menu-content.tsx)
 
 **Headers / shell**
 
-- [ ] [`resources/js/components/app-header.tsx`](../resources/js/components/app-header.tsx)
-- [ ] [`resources/js/components/app-sidebar-header.tsx`](../resources/js/components/app-sidebar-header.tsx)
-- [ ] [`resources/js/components/app-shell.tsx`](../resources/js/components/app-shell.tsx)
-- [ ] [`resources/js/components/app-content.tsx`](../resources/js/components/app-content.tsx)
-- [ ] [`resources/js/components/breadcrumbs.tsx`](../resources/js/components/breadcrumbs.tsx)
+- [x] [`resources/js/components/app-header.tsx`](../resources/js/components/app-header.tsx)
+- [x] [`resources/js/components/app-sidebar-header.tsx`](../resources/js/components/app-sidebar-header.tsx) — no copy (locale switcher text in Phase 6)
+- [x] [`resources/js/components/app-shell.tsx`](../resources/js/components/app-shell.tsx) — no copy
+- [x] [`resources/js/components/app-content.tsx`](../resources/js/components/app-content.tsx) — no copy
+- [x] [`resources/js/components/breadcrumbs.tsx`](../resources/js/components/breadcrumbs.tsx)
 
 **Layouts**
 
-- [ ] [`resources/js/layouts/app/app-sidebar-layout.tsx`](../resources/js/layouts/app/app-sidebar-layout.tsx)
-- [ ] [`resources/js/layouts/app/app-header-layout.tsx`](../resources/js/layouts/app/app-header-layout.tsx)
+- [x] [`resources/js/layouts/app/app-sidebar-layout.tsx`](../resources/js/layouts/app/app-sidebar-layout.tsx) — no copy changes
+- [x] [`resources/js/layouts/app/app-header-layout.tsx`](../resources/js/layouts/app/app-header-layout.tsx) — no copy changes
 
 **Product decision (record your choice)**
 
-- [ ] External link titles (e.g. “Repository”, “Documentation” in the sidebar footer): **translate** / **keep English** — decision: _______________
+- [x] External link titles (e.g. “Repository”, “Documentation” in the sidebar footer): **translate** / **keep English** — decision: **translate** (keys `app.shell.footer.*`).
 
 ### Definition of done
 
-- [ ] Nav labels, section labels (e.g. sidebar group titles), and shell UI strings in scope use translation keys.
-- [ ] Breadcrumbs and header chrome consistent with locale.
+- [x] Nav labels, section labels (e.g. sidebar group titles), and shell UI strings in scope use translation keys.
+- [x] Breadcrumbs and header chrome consistent with locale.
 
 ### Validation
 
@@ -190,7 +190,7 @@ php artisan test --compact
 
 ### Suggested tests
 
-- [ ] Add or extend feature tests if any copy is asserted server-side; otherwise rely on manual checklist for this phase.
+- [x] [`tests/Feature/AppShellTranslationPropsTest.php`](../tests/Feature/AppShellTranslationPropsTest.php) — dashboard Inertia `translations` for `en` / `pt_BR`.
 
 ---
 
@@ -326,4 +326,5 @@ php artisan test --compact
 | Date | Note |
 |------|------|
 | 2026-04-04 | Phase 1 (auth) implemented: namespaced `auth.*` keys in `lang/en.json` / `lang/pt_BR.json`, `useTranslations()` on auth pages and related components, `AuthTranslationPropsTest`. |
+| 2026-04-04 | Phase 2 (app shell): `app.shell.*` keys, sidebar/header/user menu/breadcrumbs via `titleKey`, `AppShellTranslationPropsTest`. |
 | (add rows as this roadmap is updated) | |

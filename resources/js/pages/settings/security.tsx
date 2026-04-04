@@ -256,6 +256,7 @@ Security.layout = {
     breadcrumbs: [
         {
             title: 'Security settings',
+            titleKey: 'app.shell.breadcrumb.security_settings',
             href: edit(),
         },
     ],

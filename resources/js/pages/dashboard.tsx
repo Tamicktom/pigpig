@@ -30,6 +30,7 @@ Dashboard.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
+            titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard(),
         },
     ],

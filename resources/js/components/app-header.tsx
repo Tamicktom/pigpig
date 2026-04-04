@@ -1,5 +1,8 @@
+//* Libraries imports
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+
+//* Components imports
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -29,45 +32,55 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
+
+//* Hooks imports
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
+
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
 import { cn, toUrl } from '@/lib/utils';
+
+//* Routes imports
 import { dashboard } from '@/routes';
+
+//* Types imports
 import type { BreadcrumbItem, NavItem } from '@/types';
 
-type Props = {
+type AppHeaderProps = {
     breadcrumbs?: BreadcrumbItem[];
 };
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
-
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
 
 const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
-export function AppHeader({ breadcrumbs = [] }: Props) {
-    const page = usePage();
-    const { auth } = page.props;
+export function AppHeader(props: AppHeaderProps) {
+    const breadcrumbs = props.breadcrumbs ?? [];
+    const { t } = useTranslations();
+    const auth = usePage().props.auth;
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: t('app.shell.nav.dashboard'),
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+    ];
+
+    const rightNavItems: NavItem[] = [
+        {
+            title: t('app.shell.footer.repository'),
+            href: 'https://github.com/laravel/react-starter-kit',
+            icon: Folder,
+        },
+        {
+            title: t('app.shell.footer.documentation'),
+            href: 'https://laravel.com/docs/starter-kits#react',
+            icon: BookOpen,
+        },
+    ];
 
     return (
         <>
@@ -78,9 +91,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button
+                                    id="app-header-mobile-menu-trigger"
+                                    type="button"
                                     variant="ghost"
                                     size="icon"
                                     className="mr-2 h-[34px] w-[34px]"
+                                    aria-label={t(
+                                        'app.shell.mobile.open_menu_aria',
+                                    )}
                                 >
                                     <Menu className="h-5 w-5" />
                                 </Button>
@@ -90,7 +108,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar"
                             >
                                 <SheetTitle className="sr-only">
-                                    Navigation menu
+                                    {t('app.shell.mobile.sheet_title')}
                                 </SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
                                     <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
@@ -100,7 +118,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         <div className="flex flex-col space-y-4">
                                             {mainNavItems.map((item) => (
                                                 <Link
-                                                    key={item.title}
+                                                    key={String(item.href)}
                                                     href={item.href}
                                                     className="flex items-center space-x-2 font-medium"
                                                 >
@@ -115,7 +133,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         <div className="flex flex-col space-y-4">
                                             {rightNavItems.map((item) => (
                                                 <a
-                                                    key={item.title}
+                                                    key={String(item.href)}
                                                     href={toUrl(item.href)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -179,15 +197,18 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     <div className="ml-auto flex items-center space-x-2">
                         <div className="relative flex items-center space-x-1">
                             <Button
+                                id="app-header-search"
+                                type="button"
                                 variant="ghost"
                                 size="icon"
                                 className="group h-9 w-9 cursor-pointer"
+                                aria-label={t('app.shell.search.aria_label')}
                             >
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="ml-1 hidden gap-1 lg:flex">
                                 {rightNavItems.map((item) => (
-                                    <Tooltip key={item.title}>
+                                    <Tooltip key={String(item.href)}>
                                         <TooltipTrigger>
                                             <a
                                                 href={toUrl(item.href)}
@@ -213,6 +234,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
+                                    id="app-header-user-menu-trigger"
+                                    type="button"
                                     variant="ghost"
                                     className="size-10 rounded-full p-1"
                                 >

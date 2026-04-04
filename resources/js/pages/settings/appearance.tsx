@@ -26,6 +26,7 @@ Appearance.layout = {
     breadcrumbs: [
         {
             title: 'Appearance settings',
+            titleKey: 'app.shell.breadcrumb.appearance_settings',
             href: editAppearance(),
         },
     ],

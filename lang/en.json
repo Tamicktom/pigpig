@@ -95,5 +95,22 @@
     "auth.two_factor.recovery_codes.loading_aria_label": "Loading recovery codes",
     "auth.two_factor.recovery_codes.warning_prefix": "Each recovery code can be used once to access your account and will be removed after use. If you need more, click ",
     "auth.two_factor.recovery_codes.warning_regenerate_label": "Regenerate codes",
-    "auth.two_factor.recovery_codes.warning_suffix": " above."
+    "auth.two_factor.recovery_codes.warning_suffix": " above.",
+    "app.shell.nav.dashboard": "Dashboard",
+    "app.shell.nav.my_drp_groups": "My DRP groups",
+    "app.shell.nav.create_group": "Create group",
+    "app.shell.footer.repository": "Repository",
+    "app.shell.footer.documentation": "Documentation",
+    "app.shell.section.platform": "Platform",
+    "app.shell.user.settings": "Settings",
+    "app.shell.user.log_out": "Log out",
+    "app.shell.mobile.sheet_title": "Navigation menu",
+    "app.shell.mobile.open_menu_aria": "Open navigation menu",
+    "app.shell.search.aria_label": "Search",
+    "app.shell.breadcrumb.dashboard": "Dashboard",
+    "app.shell.breadcrumb.my_drp_groups": "My DRP groups",
+    "app.shell.breadcrumb.create_group": "Create group",
+    "app.shell.breadcrumb.profile_settings": "Profile settings",
+    "app.shell.breadcrumb.security_settings": "Security settings",
+    "app.shell.breadcrumb.appearance_settings": "Appearance settings"
 }

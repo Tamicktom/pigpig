@@ -18,7 +18,9 @@ type GroupsCreatePageProps = {
     };
 };
 
-export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProps) {
+export default function GroupsCreate(
+    groupsCreatePageProps: GroupsCreatePageProps,
+) {
     return (
         <>
             <Head title="Create group" />
@@ -44,7 +46,9 @@ export default function GroupsCreate(groupsCreatePageProps: GroupsCreatePageProp
                     {(formRenderProps) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="groups-create-title">Title</Label>
+                                <Label htmlFor="groups-create-title">
+                                    Title
+                                </Label>
                                 <Input
                                     id="groups-create-title"
                                     type="text"
@@ -113,10 +117,12 @@ GroupsCreate.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
+            titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },
         {
             title: 'Create group',
+            titleKey: 'app.shell.breadcrumb.create_group',
             href: groupsCreate.url(),
         },
     ],

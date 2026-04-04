@@ -44,7 +44,9 @@ type MyGroupsIndexPageProps = {
     };
 };
 
-export default function MyGroupsIndex(myGroupsIndexPageProps: MyGroupsIndexPageProps) {
+export default function MyGroupsIndex(
+    myGroupsIndexPageProps: MyGroupsIndexPageProps,
+) {
     return (
         <>
             <Head title="My DRP groups" />
@@ -175,10 +177,12 @@ MyGroupsIndex.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
+            titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },
         {
             title: 'My DRP groups',
+            titleKey: 'app.shell.breadcrumb.my_drp_groups',
             href: myGroupsIndex.url(),
         },
     ],
