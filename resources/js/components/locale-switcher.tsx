@@ -5,6 +5,7 @@ import { router, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 
 //* Lib imports
+import { useTranslations } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 //* Routes imports
@@ -14,6 +15,7 @@ export function LocaleSwitcher(props: { className?: string }) {
     const page = usePage();
     const locale = page.props.locale;
     const rootClass = props.className;
+    const { t } = useTranslations();
 
     const submitLocale = (nextLocale: 'pt_BR' | 'en') => {
         if (nextLocale === locale) {
@@ -34,7 +36,7 @@ export function LocaleSwitcher(props: { className?: string }) {
                 rootClass,
             )}
             role="group"
-            aria-label="Language"
+            aria-label={t('app.locale_switcher.aria_group_label')}
         >
             <Button
                 id="locale-switcher-pt-br"

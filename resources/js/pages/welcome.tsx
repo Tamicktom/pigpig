@@ -28,9 +28,7 @@ export default function Welcome() {
 
     return (
         <>
-            <Head
-                title={`${appName} — ${t('landing.head_title_suffix')}`}
-            />
+            <Head title={t('landing.head_title_suffix')} />
             <div className="overflow-x-hidden bg-background">
                 <div className="w-full self-stretch">
                     <EmailVerificationBanner variant="public" />

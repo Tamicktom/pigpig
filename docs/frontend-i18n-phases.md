@@ -294,10 +294,10 @@ php artisan test --compact
 
 ### File checklist
 
-- [ ] [`resources/js/components/locale-switcher.tsx`](../resources/js/components/locale-switcher.tsx) — `aria-label` / `role="group"` label via translation keys.
-- [ ] [`resources/js/components/alert-error.tsx`](../resources/js/components/alert-error.tsx) — if it contains default user-facing text.
-- [ ] [`resources/js/components/input-error.tsx`](../resources/js/components/input-error.tsx) — if it contains default user-facing text.
-- [ ] [`resources/js/app.tsx`](../resources/js/app.tsx) — document title pattern: align `<Head title>` (and global title callback) with translated strings or server-provided titles.
+- [x] [`resources/js/components/locale-switcher.tsx`](../resources/js/components/locale-switcher.tsx) — `aria-label` / `role="group"` label via translation keys.
+- [x] [`resources/js/components/alert-error.tsx`](../resources/js/components/alert-error.tsx) — if it contains default user-facing text.
+- [x] [`resources/js/components/input-error.tsx`](../resources/js/components/input-error.tsx) — no default user-facing copy (message prop only); no change.
+- [x] [`resources/js/app.tsx`](../resources/js/app.tsx) — document title pattern: align `<Head title>` (and global title callback) with translated strings or server-provided titles.
 
 **Optional**
 
@@ -305,8 +305,8 @@ php artisan test --compact
 
 ### Definition of done
 
-- [ ] Accessibility strings for the locale control are localized.
-- [ ] Page titles behave consistently across locales.
+- [x] Accessibility strings for the locale control are localized.
+- [x] Page titles behave consistently across locales.
 
 ### Validation
 
@@ -331,4 +331,5 @@ php artisan test --compact
 | 2026-04-04 | Phase 3 (settings): `settings.*` keys, settings layout/pages/appearance tabs via `useTranslations()`, `SettingsTranslationPropsTest`. |
 | 2026-04-04 | Phase 4 (dashboard & groups): `app.dashboard.*`, `groups.my.*`, `groups.create.*`, `app.groups_public.nav.*`, `groups.join.*` keys; `GroupsAppTranslationPropsTest`; join flash locale tests. |
 | 2026-04-04 | Phase 5 (marketing & public groups): `landing.*`, `groups.public.*` keys; landing components + `welcome`, `groups/index`, `groups/show` via `useTranslations()`; `PublicMarketingTranslationPropsTest`; `LocaleUpdateTest` asserts `landing.nav.about`. |
+| 2026-04-04 | Phase 6 (global polish): `app.locale_switcher.aria_group_label`, `app.alert_error.default_title`, `app.meta.document_title`; locale switcher + alert default title via `useTranslations()`; `app.tsx` title callback uses `translate()` and shared `name`; welcome `<Head>` uses short title only (avoids duplicate app name). `GlobalPolishTranslationPropsTest`. |
 | (add rows as this roadmap is updated) | |

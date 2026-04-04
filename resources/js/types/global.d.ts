@@ -1,8 +1,14 @@
+//* Libraries imports
+import type { Page } from '@inertiajs/core';
 import type { ReactNode } from 'react';
 
+//* Types imports
 import type { Auth } from '@/types/auth';
 
 declare module '@inertiajs/core' {
+    interface Router {
+        page: Page;
+    }
     export interface InertiaConfig {
         sharedPageProps: {
             locale: string;
