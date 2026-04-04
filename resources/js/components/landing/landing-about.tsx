@@ -1,4 +1,9 @@
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 export function LandingAbout() {
+    const { t } = useTranslations();
+
     const teamMembers = [
         'Henrique Angelo Vieira Fonseca',
         'Joel Pereira Ramos',
@@ -16,32 +21,28 @@ export function LandingAbout() {
                 <div className="grid gap-20 md:grid-cols-2">
                     <div>
                         <span className="text-xs font-bold tracking-widest text-primary uppercase">
-                            A Iniciativa
+                            {t('landing.about.initiative_badge')}
                         </span>
                         <h2 className="font-headline mt-4 mb-8 text-4xl font-bold text-on-surface">
-                            Projeto Integrador em Computação 1
+                            {t('landing.about.title')}
                         </h2>
                         <p className="mb-6 leading-relaxed text-on-surface-variant">
-                            Este projeto nasce da necessidade real vivenciada
-                            pelos alunos da UNIVESP. Atendendo aos polos de{' '}
-                            <span className="font-bold text-on-surface">
-                                Jales, Catanduva e Fernandópolis
-                            </span>
-                            , buscamos criar uma ponte tecnológica que facilite a
-                            jornada acadêmica.
+                            {t('landing.about.body', {
+                                cities: t('landing.about.cities'),
+                            })}
                         </p>
                         <div className="rounded-2xl border-l-4 border-primary bg-surface-container p-6">
                             <p className="mb-2 text-xs font-bold tracking-widest text-primary uppercase">
-                                Orientação
+                                {t('landing.about.guidance_badge')}
                             </p>
                             <p className="font-headline text-xl font-bold text-on-surface">
-                                Prof. Angelo Moretti
+                                {t('landing.about.advisor_name')}
                             </p>
                         </div>
                     </div>
                     <div id="equipe">
                         <h3 className="font-headline mb-8 text-2xl font-bold text-on-surface">
-                            Nossa Equipe
+                            {t('landing.about.team_title')}
                         </h3>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {teamMembers.map((memberName) => (

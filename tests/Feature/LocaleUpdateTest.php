@@ -55,7 +55,8 @@ class LocaleUpdateTest extends TestCase
             ->component('welcome')
             ->where('translations', function (Collection $translations) {
                 return $translations->get('i18n.phase0.marker') === 'Phase 0 EN'
-                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string';
+                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string'
+                    && $translations->get('landing.nav.about') === 'About';
             }));
     }
 
@@ -68,7 +69,8 @@ class LocaleUpdateTest extends TestCase
             ->component('welcome')
             ->where('translations', function (Collection $translations) {
                 return $translations->get('i18n.phase0.marker') === 'Fase 0 PT'
-                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string';
+                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string'
+                    && $translations->get('landing.nav.about') === 'Sobre';
             }));
     }
 }

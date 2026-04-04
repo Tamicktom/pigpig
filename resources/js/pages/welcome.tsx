@@ -12,6 +12,9 @@ import { LandingHowItWorks } from '@/components/landing/landing-how-it-works';
 import { LandingNav } from '@/components/landing/landing-nav';
 import { LandingProblem } from '@/components/landing/landing-problem';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 type WelcomeProps = {
     canRegister?: boolean;
 };
@@ -21,10 +24,13 @@ export default function Welcome() {
     const appName = page.props.name;
     const canRegister = page.props.canRegister ?? false;
     const isAuthenticated = page.props.auth.user !== null;
+    const { t } = useTranslations();
 
     return (
         <>
-            <Head title={`${appName} — Projeto Integrador`} />
+            <Head
+                title={`${appName} — ${t('landing.head_title_suffix')}`}
+            />
             <div className="overflow-x-hidden bg-background">
                 <div className="w-full self-stretch">
                     <EmailVerificationBanner variant="public" />

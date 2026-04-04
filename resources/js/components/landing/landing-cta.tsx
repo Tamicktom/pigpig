@@ -4,10 +4,15 @@ import { Link } from '@inertiajs/react';
 //* Components imports
 import { Button } from '@/components/ui/button';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { index as groupsIndex } from '@/routes/groups';
 
 export function LandingCta() {
+    const { t } = useTranslations();
+
     return (
         <section className="py-24">
             <div className="mx-auto max-w-5xl px-8">
@@ -15,11 +20,10 @@ export function LandingCta() {
                     <div className="absolute inset-0 bg-linear-to-br from-primary to-primary-container opacity-50" />
                     <div className="relative z-10">
                         <h2 className="font-headline mb-6 text-4xl font-bold text-primary-foreground md:text-5xl">
-                            Pronto para começar seu PI de forma organizada?
+                            {t('landing.cta.title')}
                         </h2>
                         <p className="mx-auto mb-10 max-w-2xl text-lg text-primary-foreground/80">
-                            Junte-se aos seus colegas de polo agora mesmo e
-                            inicie seu projeto com o pé direito.
+                            {t('landing.cta.subtitle')}
                         </p>
                         <Button
                             id="landing-final-cta-polo"
@@ -28,7 +32,7 @@ export function LandingCta() {
                             asChild
                         >
                             <Link href={groupsIndex.url()}>
-                                Selecionar meu Polo
+                                {t('landing.hero.cta_polo')}
                             </Link>
                         </Button>
                     </div>

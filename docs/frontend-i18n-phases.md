@@ -260,22 +260,22 @@ php artisan test --compact
 
 ### File checklist
 
-- [ ] [`resources/js/pages/welcome.tsx`](../resources/js/pages/welcome.tsx)
-- [ ] [`resources/js/components/landing/landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx)
-- [ ] [`resources/js/components/landing/landing-hero.tsx`](../resources/js/components/landing/landing-hero.tsx)
-- [ ] [`resources/js/components/landing/landing-problem.tsx`](../resources/js/components/landing/landing-problem.tsx)
-- [ ] [`resources/js/components/landing/landing-how-it-works.tsx`](../resources/js/components/landing/landing-how-it-works.tsx)
-- [ ] [`resources/js/components/landing/landing-benefits.tsx`](../resources/js/components/landing/landing-benefits.tsx)
-- [ ] [`resources/js/components/landing/landing-about.tsx`](../resources/js/components/landing/landing-about.tsx)
-- [ ] [`resources/js/components/landing/landing-cta.tsx`](../resources/js/components/landing/landing-cta.tsx)
-- [ ] [`resources/js/components/landing/landing-footer.tsx`](../resources/js/components/landing/landing-footer.tsx)
-- [ ] [`resources/js/pages/groups/index.tsx`](../resources/js/pages/groups/index.tsx)
-- [ ] [`resources/js/pages/groups/show.tsx`](../resources/js/pages/groups/show.tsx)
-- [ ] [`app/Http/Controllers/PublicGroupController.php`](../app/Http/Controllers/PublicGroupController.php) — audit props for server-built copy; add lang entries if needed.
+- [x] [`resources/js/pages/welcome.tsx`](../resources/js/pages/welcome.tsx)
+- [x] [`resources/js/components/landing/landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx)
+- [x] [`resources/js/components/landing/landing-hero.tsx`](../resources/js/components/landing/landing-hero.tsx)
+- [x] [`resources/js/components/landing/landing-problem.tsx`](../resources/js/components/landing/landing-problem.tsx)
+- [x] [`resources/js/components/landing/landing-how-it-works.tsx`](../resources/js/components/landing/landing-how-it-works.tsx)
+- [x] [`resources/js/components/landing/landing-benefits.tsx`](../resources/js/components/landing/landing-benefits.tsx)
+- [x] [`resources/js/components/landing/landing-about.tsx`](../resources/js/components/landing/landing-about.tsx)
+- [x] [`resources/js/components/landing/landing-cta.tsx`](../resources/js/components/landing/landing-cta.tsx)
+- [x] [`resources/js/components/landing/landing-footer.tsx`](../resources/js/components/landing/landing-footer.tsx)
+- [x] [`resources/js/pages/groups/index.tsx`](../resources/js/pages/groups/index.tsx)
+- [x] [`resources/js/pages/groups/show.tsx`](../resources/js/pages/groups/show.tsx)
+- [x] [`app/Http/Controllers/PublicGroupController.php`](../app/Http/Controllers/PublicGroupController.php) — audited: no user-facing server-built copy in props (only data and flags).
 
 ### Definition of done
 
-- [ ] Home and public group pages read correctly in both locales; CTAs and nav consistent.
+- [x] Home and public group pages read correctly in both locales; CTAs and nav consistent.
 
 ### Validation
 
@@ -283,7 +283,8 @@ php artisan test --compact
 
 ### Suggested tests
 
-- [ ] Extend [`tests/Feature/LocaleUpdateTest.php`](../tests/Feature/LocaleUpdateTest.php) patterns or add tests that assert Inertia props / DOM-safe strings where practical.
+- [x] [`tests/Feature/LocaleUpdateTest.php`](../tests/Feature/LocaleUpdateTest.php) — extended translation assertions on home.
+- [x] [`tests/Feature/PublicMarketingTranslationPropsTest.php`](../tests/Feature/PublicMarketingTranslationPropsTest.php) — welcome, public groups index/show with `en` / `pt_BR` cookies.
 
 ---
 
@@ -329,4 +330,5 @@ php artisan test --compact
 | 2026-04-04 | Phase 2 (app shell): `app.shell.*` keys, sidebar/header/user menu/breadcrumbs via `titleKey`, `AppShellTranslationPropsTest`. |
 | 2026-04-04 | Phase 3 (settings): `settings.*` keys, settings layout/pages/appearance tabs via `useTranslations()`, `SettingsTranslationPropsTest`. |
 | 2026-04-04 | Phase 4 (dashboard & groups): `app.dashboard.*`, `groups.my.*`, `groups.create.*`, `app.groups_public.nav.*`, `groups.join.*` keys; `GroupsAppTranslationPropsTest`; join flash locale tests. |
+| 2026-04-04 | Phase 5 (marketing & public groups): `landing.*`, `groups.public.*` keys; landing components + `welcome`, `groups/index`, `groups/show` via `useTranslations()`; `PublicMarketingTranslationPropsTest`; `LocaleUpdateTest` asserts `landing.nav.about`. |
 | (add rows as this roadmap is updated) | |

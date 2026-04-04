@@ -1,9 +1,13 @@
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 type LandingFooterProps = {
     appName: string;
 };
 
 export function LandingFooter(landingFooterProps: LandingFooterProps) {
     const appName = landingFooterProps.appName;
+    const { t } = useTranslations();
 
     return (
         <footer
@@ -19,24 +23,25 @@ export function LandingFooter(landingFooterProps: LandingFooterProps) {
                         href="#"
                         className="text-sm tracking-wide text-landing-footer-foreground/60 transition-colors duration-200 ease-out hover:text-landing-footer-foreground"
                     >
-                        Privacidade
+                        {t('landing.footer.privacy')}
                     </a>
                     <a
                         href="#"
                         className="text-sm tracking-wide text-landing-footer-foreground/60 transition-colors duration-200 ease-out hover:text-landing-footer-foreground"
                     >
-                        Termos de Uso
+                        {t('landing.footer.terms')}
                     </a>
                     <a
                         href="#"
                         className="text-sm tracking-wide text-landing-footer-foreground/60 transition-colors duration-200 ease-out hover:text-landing-footer-foreground"
                     >
-                        Documentação
+                        {t('landing.footer.documentation')}
                     </a>
                 </div>
                 <p className="text-center text-sm tracking-wide text-landing-footer-foreground/80 md:text-right">
-                    © {new Date().getFullYear()} Projeto Integrador UNIVESP.
-                    Todos os direitos reservados.
+                    {t('landing.footer.copyright', {
+                        year: new Date().getFullYear(),
+                    })}
                 </p>
             </div>
         </footer>

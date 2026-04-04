@@ -5,6 +5,9 @@ import { Link } from '@inertiajs/react';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { Button } from '@/components/ui/button';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { dashboard, home, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
@@ -19,6 +22,7 @@ export function LandingNav(landingNavProps: LandingNavProps) {
     const appName = landingNavProps.appName;
     const canRegister = landingNavProps.canRegister;
     const isAuthenticated = landingNavProps.isAuthenticated;
+    const { t } = useTranslations();
 
     const linkClassName =
         'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand-foreground dark:hover:text-primary';
@@ -42,28 +46,28 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                         href={`${home.url()}#sobre`}
                         className={linkClassName}
                     >
-                        Sobre
+                        {t('landing.nav.about')}
                     </Link>
                     <Link
                         id="landing-nav-section-como-funciona"
                         href={`${home.url()}#como-funciona`}
                         className={linkClassName}
                     >
-                        Como Funciona
+                        {t('landing.nav.how_it_works')}
                     </Link>
                     <Link
                         id="landing-nav-section-equipe"
                         href={`${home.url()}#equipe`}
                         className={linkClassName}
                     >
-                        Equipe
+                        {t('landing.nav.team')}
                     </Link>
                     <Link
                         id="landing-nav-section-contato"
                         href={`${home.url()}#contato`}
                         className={linkClassName}
                     >
-                        Contato
+                        {t('landing.nav.contact')}
                     </Link>
                 </div>
                 <div className="flex items-center gap-3">
@@ -77,7 +81,9 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                                 className="hidden sm:inline-flex"
                                 asChild
                             >
-                                <Link href={dashboard.url()}>Dashboard</Link>
+                                <Link href={dashboard.url()}>
+                                    {t('app.shell.nav.dashboard')}
+                                </Link>
                             </Button>
                             <Button
                                 id="landing-nav-groups-auth"
@@ -85,7 +91,9 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                                 className="landing-primary-cta rounded-xl font-bold tracking-tight text-primary-foreground shadow-none"
                                 asChild
                             >
-                                <Link href={groupsIndex.url()}>Grupos</Link>
+                                <Link href={groupsIndex.url()}>
+                                    {t('app.groups_public.nav.groups')}
+                                </Link>
                             </Button>
                         </>
                     ) : (
@@ -97,7 +105,9 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                                 className="hidden sm:inline-flex"
                                 asChild
                             >
-                                <Link href={login.url()}>Entrar</Link>
+                                <Link href={login.url()}>
+                                    {t('auth.login.submit')}
+                                </Link>
                             </Button>
                             {canRegister ? (
                                 <Button
@@ -108,7 +118,7 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                                     asChild
                                 >
                                     <Link href={register.url()}>
-                                        Cadastrar
+                                        {t('auth.login.sign_up')}
                                     </Link>
                                 </Button>
                             ) : null}
@@ -119,7 +129,7 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                                 asChild
                             >
                                 <Link href={groupsIndex.url()}>
-                                    Começar Agora
+                                    {t('landing.nav.start_now')}
                                 </Link>
                             </Button>
                         </>

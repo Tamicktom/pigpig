@@ -6,14 +6,19 @@ import {
     Smile,
 } from 'lucide-react';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 export function LandingBenefits() {
+    const { t } = useTranslations();
+
     return (
         <section className="overflow-hidden bg-editorial-contrast-bg py-24 text-editorial-contrast-fg">
             <div className="mx-auto max-w-7xl px-8">
                 <div className="editorial-grid gap-12">
                     <div className="col-span-12 md:col-span-4">
                         <h2 className="font-headline mb-8 text-5xl leading-tight font-bold">
-                            Por que usar nossa rede?
+                            {t('landing.benefits.title')}
                         </h2>
                         <div className="h-1 w-20 rounded-full bg-primary" />
                     </div>
@@ -24,11 +29,10 @@ export function LandingBenefits() {
                                 className="mb-4 size-9 text-secondary"
                             />
                             <h4 className="mb-2 text-xl font-bold">
-                                Formação Instantânea
+                                {t('landing.benefits.instant_title')}
                             </h4>
                             <p className="text-editorial-muted">
-                                Elimine dias de espera. Encontre seu grupo em
-                                segundos com automação inteligente.
+                                {t('landing.benefits.instant_body')}
                             </p>
                         </div>
                         <div className="ghost-border rounded-2xl p-6 transition-colors duration-200 ease-out hover:bg-white/5">
@@ -37,11 +41,10 @@ export function LandingBenefits() {
                                 className="mb-4 size-9 text-secondary"
                             />
                             <h4 className="mb-2 text-xl font-bold">
-                                Comunicação Centralizada
+                                {t('landing.benefits.central_title')}
                             </h4>
                             <p className="text-editorial-muted">
-                                Um único ponto de verdade. Chega de navegar por
-                                15 grupos diferentes.
+                                {t('landing.benefits.central_body')}
                             </p>
                         </div>
                         <div className="ghost-border rounded-2xl p-6 transition-colors duration-200 ease-out hover:bg-white/5">
@@ -50,11 +53,10 @@ export function LandingBenefits() {
                                 className="mb-4 size-9 text-secondary"
                             />
                             <h4 className="mb-2 text-xl font-bold">
-                                Redução de Estresse
+                                {t('landing.benefits.stress_title')}
                             </h4>
                             <p className="text-editorial-muted">
-                                Foque no que importa. Nós resolvemos a logística
-                                para você focar no estudo.
+                                {t('landing.benefits.stress_body')}
                             </p>
                         </div>
                         <div className="ghost-border rounded-2xl p-6 transition-colors duration-200 ease-out hover:bg-white/5">
@@ -63,11 +65,10 @@ export function LandingBenefits() {
                                 className="mb-4 size-9 text-secondary"
                             />
                             <h4 className="mb-2 text-xl font-bold">
-                                Foco no Acadêmico
+                                {t('landing.benefits.academic_title')}
                             </h4>
                             <p className="text-editorial-muted">
-                                Maximize seu tempo desenvolvendo o projeto, não
-                                procurando pessoas.
+                                {t('landing.benefits.academic_body')}
                             </p>
                         </div>
                     </div>

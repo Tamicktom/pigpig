@@ -6,6 +6,9 @@ import { GroupsPublicShell } from '@/components/groups-public-shell';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { index as groupsIndex, show as groupsShow } from '@/routes/groups';
 
@@ -44,6 +47,8 @@ type GroupsIndexPageProps = {
 };
 
 export default function GroupsIndex(props: GroupsIndexPageProps) {
+    const { t } = useTranslations();
+
     function handleDrpFilterChange(
         event: React.ChangeEvent<HTMLSelectElement>,
     ): void {
@@ -63,16 +68,15 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
 
     return (
         <>
-            <Head title="Grupos" />
+            <Head title={t('groups.public.head_title')} />
             <GroupsPublicShell>
                 <div className="flex flex-col gap-10 md:gap-12">
                     <div className="flex max-w-3xl flex-col gap-4">
                         <h1 className="font-headline text-4xl font-black tracking-tight text-on-background md:text-5xl">
-                            Grupos do projeto
+                            {t('groups.public.heading')}
                         </h1>
                         <p className="text-lg leading-relaxed text-on-surface-variant">
-                            Navegue pelos grupos por DRP. Os dados de contato dos
-                            membros permanecem privados nestas páginas.
+                            {t('groups.public.description')}
                         </p>
                     </div>
 
@@ -81,7 +85,7 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                             className="text-on-surface"
                             htmlFor="groups-index-drp-filter"
                         >
-                            DRP
+                            {t('groups.public.filter_label')}
                         </Label>
                         <select
                             id="groups-index-drp-filter"
@@ -90,9 +94,11 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                                 props.filters.drp_id ?? ''
                             }
                             onChange={handleDrpFilterChange}
-                            aria-label="Filtrar grupos por DRP"
+                            aria-label={t('groups.public.filter_aria')}
                         >
-                            <option value="">Todas as DRPs</option>
+                            <option value="">
+                                {t('groups.public.filter_all')}
+                            </option>
                             {props.drpOptions.map((option) => (
                                 <option key={option.id} value={option.id}>
                                     {option.name}
@@ -103,12 +109,12 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
 
                     {props.groups.data.length === 0 ? (
                         <p className="text-base text-on-surface-variant">
-                            Nenhum grupo corresponde a este filtro.
+                            {t('groups.public.empty')}
                         </p>
                     ) : (
                         <section
                             className="rounded-2xl bg-surface-container-low p-8 md:p-10"
-                            aria-label="Lista de grupos"
+                            aria-label={t('groups.public.list_aria')}
                         >
                             <ul className="flex flex-col gap-8 md:gap-12">
                                 {props.groups.data.map((row) => (
@@ -144,7 +150,7 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                                                         row.id,
                                                     )}
                                                 >
-                                                    Ver
+                                                    {t('groups.my.view')}
                                                 </Link>
                                             </Button>
                                         </div>
@@ -157,7 +163,7 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                     {props.groups.last_page > 1 ? (
                         <nav
                             className="flex flex-wrap items-center gap-2 pt-2"
-                            aria-label="Paginação"
+                            aria-label={t('groups.my.pagination_aria')}
                         >
                             {props.groups.links.map(
                                 (link, index) => {

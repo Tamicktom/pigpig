@@ -12,6 +12,9 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { index as groupsIndex } from '@/routes/groups';
 
@@ -61,6 +64,7 @@ type GroupsShowSharedPageProps = GroupsShowPageProps & {
 
 export default function GroupsShow(props: GroupsShowPageProps) {
     const page = usePage<GroupsShowSharedPageProps>();
+    const { t } = useTranslations();
     const group = props.group;
     const viewer = props.viewer;
     const successMessage = page.props.success ?? null;
@@ -77,7 +81,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                             href={groupsIndex.url()}
                             className="w-fit text-sm text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
                         >
-                            Voltar aos grupos
+                            {t('groups.public.show.back')}
                         </Link>
                         <div className="flex flex-col gap-2">
                             <h1 className="text-2xl font-semibold tracking-tight">
@@ -107,36 +111,33 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                 id="groups-show-join-heading"
                                 className="text-lg font-medium"
                             >
-                                Entrar neste grupo
+                                {t('groups.public.show.join_section_title')}
                             </h2>
                             <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                {viewer.member_count} / {viewer.max_members}{' '}
-                                membros
+                                {t('groups.public.show.members_progress', {
+                                    current: viewer.member_count,
+                                    max: viewer.max_members,
+                                })}
                             </p>
                             {viewer.is_member ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    Você faz parte deste grupo.
+                                    {t('groups.public.show.status_member')}
                                 </p>
                             ) : null}
                             {viewer.is_owner ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    Você é o dono do grupo. As solicitações
-                                    pendentes aparecem abaixo.
+                                    {t('groups.public.show.status_owner')}
                                 </p>
                             ) : null}
                             {viewer.has_pending_request ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    Sua solicitação de entrada está aguardando
-                                    análise.
+                                    {t('groups.public.show.status_pending')}
                                 </p>
                             ) : null}
                             {viewer.can_request_join ? (
                                 needsEmailVerification ? (
                                     <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                        Confirme seu e-mail antes de solicitar
-                                        entrada neste grupo. Use o banner no
-                                        topo da página para reenviar o link de
-                                        verificação.
+                                        {t('groups.public.show.verify_email_hint')}
                                     </p>
                                 ) : (
                                     <Form
@@ -165,7 +166,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                         {formRenderProps.processing ? (
                                                             <Spinner />
                                                         ) : null}
-                                                        Solicitar entrada
+                                                        {t(
+                                                            'groups.public.show.request_join',
+                                                        )}
                                                     </Button>
                                                 </div>
                                             </>
@@ -177,8 +180,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                             !viewer.is_member &&
                             !viewer.is_owner ? (
                                 <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                    Você só pode solicitar entrada em grupos da
-                                    sua DRP.
+                                    {t('groups.join.error.same_drp_only')}
                                 </p>
                             ) : null}
                         </section>
@@ -195,7 +197,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                 id="groups-show-pending-heading"
                                 className="text-lg font-medium"
                             >
-                                Solicitações de entrada pendentes
+                                {t('groups.public.show.pending_heading')}
                             </h2>
                             <ul className="flex flex-col gap-4">
                                 {viewer.pending_join_requests.map(
@@ -236,7 +238,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                                 {acceptFormProps.processing ? (
                                                                     <Spinner />
                                                                 ) : null}
-                                                                Aceitar
+                                                                {t(
+                                                                    'groups.public.show.accept',
+                                                                )}
                                                             </Button>
                                                         </>
                                                     )}
@@ -270,7 +274,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                                 {declineFormProps.processing ? (
                                                                     <Spinner />
                                                                 ) : null}
-                                                                Recusar
+                                                                {t(
+                                                                    'groups.public.show.decline',
+                                                                )}
                                                             </Button>
                                                         </>
                                                     )}
@@ -291,11 +297,11 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                             id="groups-show-members-heading"
                             className="text-lg font-medium"
                         >
-                            Membros
+                            {t('groups.public.show.members_heading')}
                         </h2>
                         {group.members.length === 0 ? (
                             <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                Nenhum membro listado.
+                                {t('groups.public.show.no_members')}
                             </p>
                         ) : (
                             <ul className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]">
@@ -322,7 +328,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                             rel="noopener noreferrer"
                                                             className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
                                                         >
-                                                            Instagram
+                                                            {t(
+                                                                'groups.public.show.social_instagram',
+                                                            )}
                                                         </a>
                                                     </li>
                                                 ) : null}
@@ -337,7 +345,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                             rel="noopener noreferrer"
                                                             className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
                                                         >
-                                                            LinkedIn
+                                                            {t(
+                                                                'groups.public.show.social_linkedin',
+                                                            )}
                                                         </a>
                                                     </li>
                                                 ) : null}
@@ -352,7 +362,9 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                             rel="noopener noreferrer"
                                                             className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
                                                         >
-                                                            X / Twitter
+                                                            {t(
+                                                                'groups.public.show.social_twitter',
+                                                            )}
                                                         </a>
                                                     </li>
                                                 ) : null}

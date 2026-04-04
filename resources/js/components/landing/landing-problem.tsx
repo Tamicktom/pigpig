@@ -1,29 +1,23 @@
 //* Libraries imports
 import { MapPinOff, MessagesSquare } from 'lucide-react';
 
+//* Hooks imports
+import { useTranslations } from '@/lib/i18n';
+
 export function LandingProblem() {
+    const { t } = useTranslations();
+
     return (
         <section className="bg-surface-container-low py-24">
             <div className="mx-auto max-w-7xl px-8">
                 <div className="grid items-center gap-16 md:grid-cols-2">
                     <div>
                         <h2 className="font-headline mb-6 text-4xl font-bold text-primary">
-                            O Desafio da Formação de Grupos
+                            {t('landing.problem.title')}
                         </h2>
                         <div className="space-y-6 leading-relaxed text-on-surface-variant">
-                            <p>
-                                A fragmentação digital é o maior obstáculo para
-                                os alunos da UNIVESP. Atualmente, a busca por
-                                colegas de curso depende de dezenas de grupos de
-                                WhatsApp informais, onde mensagens importantes se
-                                perdem em segundos.
-                            </p>
-                            <p>
-                                Encontrar colegas da mesma região (DRP)
-                                torna-se uma tarefa exaustiva, gerando ansiedade
-                                e atrasos no início das atividades acadêmicas
-                                cruciais para o Projeto Integrador.
-                            </p>
+                            <p>{t('landing.problem.p1')}</p>
+                            <p>{t('landing.problem.p2')}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -33,7 +27,7 @@ export function LandingProblem() {
                                 className="size-9 text-primary"
                             />
                             <p className="font-bold text-on-surface">
-                                Fragmentação no WhatsApp
+                                {t('landing.problem.card_whatsapp')}
                             </p>
                         </div>
                         <div className="pt-8">
@@ -43,7 +37,7 @@ export function LandingProblem() {
                                     className="size-9 text-primary"
                                 />
                                 <p className="font-bold text-on-surface">
-                                    Dificuldade com DRPs
+                                    {t('landing.problem.card_drp')}
                                 </p>
                             </div>
                         </div>
