@@ -3,79 +3,118 @@ import { Link, usePage } from '@inertiajs/react';
 
 //* Components imports
 import { EmailVerificationBanner } from '@/components/email-verification-banner';
+import { Button } from '@/components/ui/button';
 
 //* Routes imports
 import { dashboard, home, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
 
+type GroupsPublicShellSharedProps = {
+    name: string;
+    canRegister?: boolean;
+    auth: {
+        user: unknown;
+    };
+};
+
 type GroupsPublicShellProps = {
     children: React.ReactNode;
 };
 
+const navLinkClassName =
+    'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand-foreground dark:hover:text-primary';
+
 export function GroupsPublicShell(
-    groupsPublicShellProps: GroupsPublicShellProps,
+    props: GroupsPublicShellProps,
 ) {
-    const page = usePage();
+    const page = usePage<GroupsPublicShellSharedProps>();
     const auth = page.props.auth;
-    const canRegister =
-        (page.props as { canRegister?: boolean }).canRegister ?? false;
+    const appName = page.props.name;
+    const canRegister = page.props.canRegister ?? false;
 
     return (
-        <div className="min-h-screen bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC]">
-            <EmailVerificationBanner variant="public" />
-            <header className="border-b border-[#19140035] dark:border-[#3E3E3A]">
-                <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-                    <nav
-                        className="flex flex-wrap items-center gap-4 text-sm"
-                        aria-label="Primary"
-                    >
+        <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+            <div className="w-full self-stretch">
+                <EmailVerificationBanner variant="public" />
+            </div>
+            <header className="fixed top-0 z-50 w-full bg-landing-nav-glass backdrop-blur-[20px]">
+                <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-8 py-4">
+                    <div className="flex min-w-0 flex-1 flex-wrap items-center gap-6">
                         <Link
+                            id="groups-shell-brand"
                             href={home.url()}
-                            className="rounded-sm px-2 py-1.5 text-[#1b1b18] hover:bg-[#19140012] dark:text-[#EDEDEC] dark:hover:bg-[#3E3E3A]/40"
+                            className="font-headline shrink-0 text-2xl font-black text-landing-brand dark:text-landing-brand-foreground"
                         >
-                            Home
+                            {appName}
                         </Link>
-                        <Link
-                            href={groupsIndex.url()}
-                            className="rounded-sm px-2 py-1.5 text-[#1b1b18] hover:bg-[#19140012] dark:text-[#EDEDEC] dark:hover:bg-[#3E3E3A]/40"
+                        <nav
+                            className="flex flex-wrap items-center gap-2 md:gap-4"
+                            aria-label="Principal"
                         >
-                            Groups
-                        </Link>
-                    </nav>
+                            <Button
+                                id="groups-shell-nav-home"
+                                type="button"
+                                variant="ghost"
+                                className={navLinkClassName}
+                                asChild
+                            >
+                                <Link href={home.url()}>Início</Link>
+                            </Button>
+                            <Button
+                                id="groups-shell-nav-groups"
+                                type="button"
+                                variant="ghost"
+                                className={navLinkClassName}
+                                asChild
+                            >
+                                <Link href={groupsIndex.url()}>Grupos</Link>
+                            </Button>
+                        </nav>
+                    </div>
                     <nav
-                        className="flex flex-wrap items-center gap-4 text-sm"
-                        aria-label="Account"
+                        className="flex flex-wrap items-center gap-2 md:gap-3"
+                        aria-label="Conta"
                     >
                         {auth.user ? (
-                            <Link
-                                href={dashboard.url()}
-                                className="rounded-sm px-2 py-1.5 text-[#1b1b18] hover:bg-[#19140012] dark:text-[#EDEDEC] dark:hover:bg-[#3E3E3A]/40"
+                            <Button
+                                id="groups-shell-dashboard"
+                                type="button"
+                                variant="ghost"
+                                className={navLinkClassName}
+                                asChild
                             >
-                                Dashboard
-                            </Link>
+                                <Link href={dashboard.url()}>Dashboard</Link>
+                            </Button>
                         ) : (
                             <>
-                                <Link
-                                    href={login.url()}
-                                    className="rounded-sm px-2 py-1.5 text-[#1b1b18] hover:bg-[#19140012] dark:text-[#EDEDEC] dark:hover:bg-[#3E3E3A]/40"
+                                <Button
+                                    id="groups-shell-login"
+                                    type="button"
+                                    variant="ghost"
+                                    className={navLinkClassName}
+                                    asChild
                                 >
-                                    Log in
-                                </Link>
+                                    <Link href={login.url()}>Entrar</Link>
+                                </Button>
                                 {canRegister ? (
-                                    <Link
-                                        href={register.url()}
-                                        className="rounded-sm border border-[#19140035] px-3 py-1.5 text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                    <Button
+                                        id="groups-shell-register"
+                                        type="button"
+                                        className="landing-primary-cta rounded-xl font-bold tracking-tight text-primary-foreground shadow-none"
+                                        asChild
                                     >
-                                        Register
-                                    </Link>
+                                        <Link href={register.url()}>
+                                            Cadastrar
+                                        </Link>
+                                    </Button>
                                 ) : null}
                             </>
                         )}
                     </nav>
                 </div>
             </header>
-            <main className="mx-auto max-w-4xl px-6 py-8">
-                {groupsPublicShellProps.children}
+            <main className="mx-auto max-w-7xl px-8 pb-12 pt-20">
+                {props.children}
             </main>
         </div>
     );

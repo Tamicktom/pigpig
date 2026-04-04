@@ -59,10 +59,10 @@ type GroupsShowSharedPageProps = GroupsShowPageProps & {
     success?: string | null;
 };
 
-export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
+export default function GroupsShow(props: GroupsShowPageProps) {
     const page = usePage<GroupsShowSharedPageProps>();
-    const group = groupsShowPageProps.group;
-    const viewer = groupsShowPageProps.viewer;
+    const group = props.group;
+    const viewer = props.viewer;
     const successMessage = page.props.success ?? null;
     const needsEmailVerification =
         page.props.auth.needsEmailVerification;
@@ -77,7 +77,7 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                             href={groupsIndex.url()}
                             className="w-fit text-sm text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
                         >
-                            Back to groups
+                            Voltar aos grupos
                         </Link>
                         <div className="flex flex-col gap-2">
                             <h1 className="text-2xl font-semibold tracking-tight">
@@ -107,34 +107,36 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                 id="groups-show-join-heading"
                                 className="text-lg font-medium"
                             >
-                                Join this group
+                                Entrar neste grupo
                             </h2>
                             <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                {viewer.member_count} / {viewer.max_members} members
+                                {viewer.member_count} / {viewer.max_members}{' '}
+                                membros
                             </p>
                             {viewer.is_member ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    You are a member of this group.
+                                    Você faz parte deste grupo.
                                 </p>
                             ) : null}
                             {viewer.is_owner ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    You are the group owner. Pending requests
-                                    appear below.
+                                    Você é o dono do grupo. As solicitações
+                                    pendentes aparecem abaixo.
                                 </p>
                             ) : null}
                             {viewer.has_pending_request ? (
                                 <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
-                                    Your join request is pending review.
+                                    Sua solicitação de entrada está aguardando
+                                    análise.
                                 </p>
                             ) : null}
                             {viewer.can_request_join ? (
                                 needsEmailVerification ? (
                                     <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                        Verify your email address before you
-                                        can request to join this group. Use the
-                                        banner at the top of the page to resend
-                                        the verification link.
+                                        Confirme seu e-mail antes de solicitar
+                                        entrada neste grupo. Use o banner no
+                                        topo da página para reenviar o link de
+                                        verificação.
                                     </p>
                                 ) : (
                                     <Form
@@ -163,7 +165,7 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                                         {formRenderProps.processing ? (
                                                             <Spinner />
                                                         ) : null}
-                                                        Request to join
+                                                        Solicitar entrada
                                                     </Button>
                                                 </div>
                                             </>
@@ -175,8 +177,8 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                             !viewer.is_member &&
                             !viewer.is_owner ? (
                                 <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                    You can only request to join groups in your
-                                    DRP.
+                                    Você só pode solicitar entrada em grupos da
+                                    sua DRP.
                                 </p>
                             ) : null}
                         </section>
@@ -193,7 +195,7 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                 id="groups-show-pending-heading"
                                 className="text-lg font-medium"
                             >
-                                Pending join requests
+                                Solicitações de entrada pendentes
                             </h2>
                             <ul className="flex flex-col gap-4">
                                 {viewer.pending_join_requests.map(
@@ -234,7 +236,7 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                                                 {acceptFormProps.processing ? (
                                                                     <Spinner />
                                                                 ) : null}
-                                                                Accept
+                                                                Aceitar
                                                             </Button>
                                                         </>
                                                     )}
@@ -268,7 +270,7 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                                                                 {declineFormProps.processing ? (
                                                                     <Spinner />
                                                                 ) : null}
-                                                                Decline
+                                                                Recusar
                                                             </Button>
                                                         </>
                                                     )}
@@ -289,11 +291,11 @@ export default function GroupsShow(groupsShowPageProps: GroupsShowPageProps) {
                             id="groups-show-members-heading"
                             className="text-lg font-medium"
                         >
-                            Members
+                            Membros
                         </h2>
                         {group.members.length === 0 ? (
                             <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                No members listed.
+                                Nenhum membro listado.
                             </p>
                         ) : (
                             <ul className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]">
