@@ -1,4 +1,6 @@
 {
+    "i18n.phase0.fallback_only": "Fallback locale string",
+    "i18n.phase0.marker": "Phase 0 EN",
     "The provided password was incorrect.": "The provided password was incorrect.",
     "The provided two factor authentication code was invalid.": "The provided two factor authentication code was invalid.",
     "The provided two factor recovery code was invalid.": "The provided two factor recovery code was invalid."

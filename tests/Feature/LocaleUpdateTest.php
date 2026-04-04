@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 // * Libraries imports
+use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 // * Tests imports
 use Tests\TestCase;
@@ -43,5 +44,31 @@ class LocaleUpdateTest extends TestCase
         $response->assertInertia(fn (Assert $page) => $page
             ->component('welcome')
             ->where('locale', 'pt_BR'));
+    }
+
+    public function test_home_inertia_shared_translations_reflect_english_locale_cookie(): void
+    {
+        $response = $this->call('GET', '/', [], ['locale' => 'en']);
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('translations', function (Collection $translations) {
+                return $translations->get('i18n.phase0.marker') === 'Phase 0 EN'
+                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string';
+            }));
+    }
+
+    public function test_home_inertia_shared_translations_reflect_portuguese_locale_cookie(): void
+    {
+        $response = $this->call('GET', '/', [], ['locale' => 'pt_BR']);
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('translations', function (Collection $translations) {
+                return $translations->get('i18n.phase0.marker') === 'Fase 0 PT'
+                    && $translations->get('i18n.phase0.fallback_only') === 'Fallback locale string';
+            }));
     }
 }

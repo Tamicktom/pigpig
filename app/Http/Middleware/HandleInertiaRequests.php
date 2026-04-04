@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Inertia\Middleware;
 use Laravel\Fortify\Features;
 
@@ -41,6 +42,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'locale' => App::getLocale(),
+            'translations' => $this->sharedJsonTranslations(),
             'name' => config('app.name'),
             'canRegister' => Features::enabled(Features::registration()),
             'auth' => [
@@ -52,5 +54,52 @@ class HandleInertiaRequests extends Middleware
             'status' => $request->session()->get('status'),
             'success' => $request->session()->get('success'),
         ];
+    }
+
+    /**
+     * Load `lang/{locale}.json` as a flat associative array for the frontend.
+     *
+     * @return array<string, string>
+     */
+    private function loadLocaleJsonTranslations(string $locale): array
+    {
+        $path = lang_path("{$locale}.json");
+
+        if (! File::isFile($path)) {
+            return [];
+        }
+
+        $decoded = json_decode(File::get($path), true);
+
+        if (! is_array($decoded)) {
+            return [];
+        }
+
+        /** @var array<string, string> $strings */
+        $strings = [];
+
+        foreach ($decoded as $key => $value) {
+            if (is_string($key) && is_string($value)) {
+                $strings[$key] = $value;
+            }
+        }
+
+        return $strings;
+    }
+
+    /**
+     * Merge fallback locale JSON with the active locale so missing keys still resolve.
+     *
+     * @return array<string, string>
+     */
+    private function sharedJsonTranslations(): array
+    {
+        $fallbackLocale = (string) config('app.fallback_locale', 'en');
+        $currentLocale = App::getLocale();
+
+        $fallback = $this->loadLocaleJsonTranslations($fallbackLocale);
+        $current = $this->loadLocaleJsonTranslations($currentLocale);
+
+        return array_merge($fallback, $current);
     }
 }
