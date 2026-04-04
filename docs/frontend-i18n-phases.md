@@ -226,22 +226,22 @@ php artisan test --compact
 
 ### File checklist
 
-- [ ] [`resources/js/pages/dashboard.tsx`](../resources/js/pages/dashboard.tsx)
-- [ ] [`resources/js/pages/my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx)
-- [ ] [`resources/js/pages/groups/create.tsx`](../resources/js/pages/groups/create.tsx)
-- [ ] [`resources/js/components/drp-by-polo-select.tsx`](../resources/js/components/drp-by-polo-select.tsx)
-- [ ] [`resources/js/components/groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx) (if used in authenticated flows)
+- [x] [`resources/js/pages/dashboard.tsx`](../resources/js/pages/dashboard.tsx)
+- [x] [`resources/js/pages/my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx)
+- [x] [`resources/js/pages/groups/create.tsx`](../resources/js/pages/groups/create.tsx)
+- [x] [`resources/js/components/drp-by-polo-select.tsx`](../resources/js/components/drp-by-polo-select.tsx) — already used `auth.register.*` keys (Phase 1); no change.
+- [x] [`resources/js/components/groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx) (if used in authenticated flows)
 
 **Backend / lang alignment**
 
-- [ ] Every user-visible string passed through `__()` in [`app/Services/GroupJoinRequestService.php`](../app/Services/GroupJoinRequestService.php) has entries in `lang/en.json` and `lang/pt_BR.json`.
-- [ ] Same for [`app/Http/Controllers/GroupJoinRequestController.php`](../app/Http/Controllers/GroupJoinRequestController.php) flash messages.
-- [ ] Form request validation messages users see — ensure they are translated for both locales (PHP lang files or JSON, per project convention).
+- [x] Every user-visible string passed through `__()` in [`app/Services/GroupJoinRequestService.php`](../app/Services/GroupJoinRequestService.php) has entries in `lang/en.json` and `lang/pt_BR.json`.
+- [x] Same for [`app/Http/Controllers/GroupJoinRequestController.php`](../app/Http/Controllers/GroupJoinRequestController.php) flash messages.
+- [x] Form request validation messages users see — [`StoreGroupRequest`](../app/Http/Requests/StoreGroupRequest.php) `attributes()` uses `groups.create.attribute.*` (EN + pt_BR JSON); rule text uses Laravel `en` defaults and [`lang/pt_BR/validation.php`](../lang/pt_BR/validation.php).
 
 ### Definition of done
 
-- [ ] Dashboard and group flows show no hardcoded mixed-language UI in scope.
-- [ ] Join-request success/error/flash strings respect the active locale.
+- [x] Dashboard and group flows show no hardcoded mixed-language UI in scope.
+- [x] Join-request success/error/flash strings respect the active locale.
 
 ### Validation
 
@@ -250,7 +250,7 @@ php artisan test --compact
 
 ### Suggested tests
 
-- [ ] Feature tests posting with `locale` cookie; assert session flash or JSON error text where strings are stable.
+- [x] Feature tests posting with `locale` cookie; assert session flash or JSON error text where strings are stable — [`GroupsAppTranslationPropsTest.php`](../tests/Feature/GroupsAppTranslationPropsTest.php) and flash assertions in [`GroupJoinRequestTest.php`](../tests/Feature/GroupJoinRequestTest.php).
 
 ---
 
@@ -328,4 +328,5 @@ php artisan test --compact
 | 2026-04-04 | Phase 1 (auth) implemented: namespaced `auth.*` keys in `lang/en.json` / `lang/pt_BR.json`, `useTranslations()` on auth pages and related components, `AuthTranslationPropsTest`. |
 | 2026-04-04 | Phase 2 (app shell): `app.shell.*` keys, sidebar/header/user menu/breadcrumbs via `titleKey`, `AppShellTranslationPropsTest`. |
 | 2026-04-04 | Phase 3 (settings): `settings.*` keys, settings layout/pages/appearance tabs via `useTranslations()`, `SettingsTranslationPropsTest`. |
+| 2026-04-04 | Phase 4 (dashboard & groups): `app.dashboard.*`, `groups.my.*`, `groups.create.*`, `app.groups_public.nav.*`, `groups.join.*` keys; `GroupsAppTranslationPropsTest`; join flash locale tests. |
 | (add rows as this roadmap is updated) | |

@@ -5,6 +5,9 @@ import { Link, usePage } from '@inertiajs/react';
 import { EmailVerificationBanner } from '@/components/email-verification-banner';
 import { Button } from '@/components/ui/button';
 
+//* Lib imports
+import { useTranslations } from '@/lib/i18n';
+
 //* Routes imports
 import { dashboard, home, login, register } from '@/routes';
 import { index as groupsIndex } from '@/routes/groups';
@@ -27,6 +30,7 @@ const navLinkClassName =
 export function GroupsPublicShell(
     props: GroupsPublicShellProps,
 ) {
+    const { t } = useTranslations();
     const page = usePage<GroupsPublicShellSharedProps>();
     const auth = page.props.auth;
     const appName = page.props.name;
@@ -49,7 +53,7 @@ export function GroupsPublicShell(
                         </Link>
                         <nav
                             className="flex flex-wrap items-center gap-2 md:gap-4"
-                            aria-label="Principal"
+                            aria-label={t('app.groups_public.nav.main_aria')}
                         >
                             <Button
                                 id="groups-shell-nav-home"
@@ -58,7 +62,9 @@ export function GroupsPublicShell(
                                 className={navLinkClassName}
                                 asChild
                             >
-                                <Link href={home.url()}>Início</Link>
+                                <Link href={home.url()}>
+                                    {t('app.groups_public.nav.home')}
+                                </Link>
                             </Button>
                             <Button
                                 id="groups-shell-nav-groups"
@@ -67,13 +73,15 @@ export function GroupsPublicShell(
                                 className={navLinkClassName}
                                 asChild
                             >
-                                <Link href={groupsIndex.url()}>Grupos</Link>
+                                <Link href={groupsIndex.url()}>
+                                    {t('app.groups_public.nav.groups')}
+                                </Link>
                             </Button>
                         </nav>
                     </div>
                     <nav
                         className="flex flex-wrap items-center gap-2 md:gap-3"
-                        aria-label="Conta"
+                        aria-label={t('app.groups_public.nav.account_aria')}
                     >
                         {auth.user ? (
                             <Button
@@ -83,7 +91,9 @@ export function GroupsPublicShell(
                                 className={navLinkClassName}
                                 asChild
                             >
-                                <Link href={dashboard.url()}>Dashboard</Link>
+                                <Link href={dashboard.url()}>
+                                    {t('app.shell.nav.dashboard')}
+                                </Link>
                             </Button>
                         ) : (
                             <>
@@ -94,7 +104,9 @@ export function GroupsPublicShell(
                                     className={navLinkClassName}
                                     asChild
                                 >
-                                    <Link href={login.url()}>Entrar</Link>
+                                    <Link href={login.url()}>
+                                        {t('auth.login.submit')}
+                                    </Link>
                                 </Button>
                                 {canRegister ? (
                                     <Button
@@ -104,7 +116,7 @@ export function GroupsPublicShell(
                                         asChild
                                     >
                                         <Link href={register.url()}>
-                                            Cadastrar
+                                            {t('auth.login.sign_up')}
                                         </Link>
                                     </Button>
                                 ) : null}
