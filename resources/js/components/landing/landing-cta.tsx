@@ -28,7 +28,7 @@ export function LandingCta() {
                         <Button
                             id="landing-final-cta-polo"
                             type="button"
-                            className="rounded-full bg-surface-container-lowest px-10 py-5 font-black text-lg text-primary shadow-xl motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:scale-105 motion-safe:active:scale-95"
+                            className="rounded-full bg-surface-container-lowest px-10 py-5 font-black text-lg text-primary shadow-xl transition-[background-color,color,box-shadow,transform] duration-200 ease hover:bg-surface-container-low hover:text-primary dark:hover:bg-surface-container-high motion-safe:hover:scale-105 motion-safe:active:scale-95"
                             asChild
                         >
                             <Link href={groupsIndex.url()}>
