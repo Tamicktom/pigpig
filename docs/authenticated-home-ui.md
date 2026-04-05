@@ -131,7 +131,9 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Acrescentar em [`arquitetura.md`](../arquitetura.md) (por exemplo na secção 2.1, Camada de Apresentação) uma frase curta sobre o **shell** da primeira página após login: **sem sidebar** na rota `/dashboard` (Opção A), ou **redirect** para `/my/groups` (Opção B), para o documento refletir a UX real.
+- [x] Acrescentar em [`arquitetura.md`](../arquitetura.md) (por exemplo na secção 2.1, Camada de Apresentação) uma frase curta sobre o **shell** da primeira página após login: **sem sidebar** na rota `/dashboard` (Opção A), ou **redirect** para `/my/groups` (Opção B), para o documento refletir a UX real.
+
+**Registo:** Secção 2.1 inclui bullet **Shell da primeira página após login** (Opção A: `/dashboard` com cabeçalho superior, sem sidebar; resto da área autenticada de grupos com sidebar), com referência a `docs/authenticated-home-ui.md`.
 
 ---
 
