@@ -49,6 +49,8 @@ createInertiaApp({
                 return null;
             case name === 'groups/index' || name === 'groups/show':
                 return null;
+            case name === "groups/create" || name === "my/groups":
+                return AppHeaderLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
