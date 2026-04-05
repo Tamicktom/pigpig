@@ -96,8 +96,10 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Rever chaves em ficheiros de tradução (`app.dashboard.*`, `app.shell.nav.*`, `app.shell.breadcrumb.dashboard`) conforme o novo papel da página.
-- [ ] Se a rota ou o rótulo mudarem: atualizar [`landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx), [`groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx), e breadcrumbs em [`my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx) e [`groups/create.tsx`](../resources/js/pages/groups/create.tsx).
+- [x] Rever chaves em ficheiros de tradução (`app.dashboard.*`, `app.shell.nav.*`, `app.shell.breadcrumb.dashboard`) conforme o novo papel da página.
+- [x] Se a rota ou o rótulo mudarem: atualizar [`landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx), [`groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx), e breadcrumbs em [`my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx) e [`groups/create.tsx`](../resources/js/pages/groups/create.tsx).
+
+**Registo:** Rota `/dashboard` mantida. Rótulo do primeiro item de navegação e breadcrumbs alinhados a **Home** / **Início** (hub pós-login); `landing-nav` e `groups-public-shell` usam `app.shell.nav.dashboard` (sem alteração de código). Fallbacks de breadcrumb em `my-groups` e `groups/create` atualizados para `Home`.
 
 ---
 

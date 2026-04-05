@@ -125,7 +125,7 @@ export default function GroupsCreate(
 GroupsCreate.layout = {
     breadcrumbs: [
         {
-            title: 'Dashboard',
+            title: 'Home',
             titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },
