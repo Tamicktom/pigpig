@@ -24,7 +24,9 @@ class GroupsAppTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.dashboard.head_title') === 'Dashboard';
+                    return $translations->get('app.dashboard.head_title') === 'Dashboard'
+                        && $translations->get('app.dashboard.heading') === 'Your DRP hub'
+                        && $translations->get('app.dashboard.card_browse') === 'Explore published groups and request to join.';
                 }));
     }
 
@@ -38,7 +40,9 @@ class GroupsAppTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.dashboard.head_title') === 'Painel';
+                    return $translations->get('app.dashboard.head_title') === 'Painel'
+                        && $translations->get('app.dashboard.heading') === 'Seu espaço no DRP'
+                        && $translations->get('app.dashboard.card_browse') === 'Navegue pelos grupos publicados e solicite entrada.';
                 }));
     }
 
