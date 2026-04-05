@@ -2,6 +2,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 
 //* Components imports
+import { GroupsPublicDrpFilterSelect } from '@/components/groups-public-drp-filter-select';
 import { GroupsPublicShell } from '@/components/groups-public-shell';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -49,15 +50,11 @@ type GroupsIndexPageProps = {
 export default function GroupsIndex(props: GroupsIndexPageProps) {
     const { t } = useTranslations();
 
-    function handleDrpFilterChange(
-        event: React.ChangeEvent<HTMLSelectElement>,
-    ): void {
-        const raw = event.target.value;
+    function handleSelectDrpId(drpId: number | null): void {
         router.get(
             groupsIndex.url({
                 query: {
-                    drp_id:
-                        raw === '' ? undefined : Number.parseInt(raw, 10),
+                    drp_id: drpId === null ? undefined : drpId,
                     page: 1,
                 },
             }),
@@ -87,24 +84,13 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                         >
                             {t('groups.public.filter_label')}
                         </Label>
-                        <select
-                            id="groups-index-drp-filter"
-                            className="h-10 w-full rounded-lg bg-surface-container-highest px-3 text-sm text-on-surface outline-none transition-[box-shadow] duration-200 ease-out focus-visible:ring-[3px] focus-visible:ring-secondary/80 focus-visible:ring-offset-0"
-                            value={
-                                props.filters.drp_id ?? ''
-                            }
-                            onChange={handleDrpFilterChange}
-                            aria-label={t('groups.public.filter_aria')}
-                        >
-                            <option value="">
-                                {t('groups.public.filter_all')}
-                            </option>
-                            {props.drpOptions.map((option) => (
-                                <option key={option.id} value={option.id}>
-                                    {option.name}
-                                </option>
-                            ))}
-                        </select>
+                        <GroupsPublicDrpFilterSelect
+                            inputId="groups-index-drp-filter"
+                            toggleButtonId="groups-index-drp-filter-toggle"
+                            drpOptions={props.drpOptions}
+                            selectedDrpId={props.filters.drp_id}
+                            onSelectDrpId={handleSelectDrpId}
+                        />
                     </div>
 
                     {props.groups.data.length === 0 ? (

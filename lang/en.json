@@ -257,6 +257,8 @@
     "groups.public.filter_label": "DRP",
     "groups.public.filter_all": "All DRPs",
     "groups.public.filter_aria": "Filter groups by DRP",
+    "groups.public.filter_search_placeholder": "Search or choose a DRP…",
+    "groups.public.filter_open_list": "Open DRP list",
     "groups.public.empty": "No groups match this filter.",
     "groups.public.list_aria": "Group list",
     "groups.public.show.back": "Back to groups",
