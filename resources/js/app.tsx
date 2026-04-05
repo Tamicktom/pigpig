@@ -49,12 +49,12 @@ createInertiaApp({
                 return null;
             case name === 'groups/index' || name === 'groups/show':
                 return null;
-            case name === "groups/create" || name === "my/groups":
+            case name === 'groups/create' || name === 'my-groups/index':
                 return AppHeaderLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
+                return [AppHeaderLayout, SettingsLayout];
             case name === 'dashboard':
                 return AppHeaderLayout;
             default:
