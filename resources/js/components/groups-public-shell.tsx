@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/react';
 
 //* Components imports
+import { AppearanceMenuButton } from '@/components/appearance-menu-button';
 import { EmailVerificationBanner } from '@/components/email-verification-banner';
 import { Button } from '@/components/ui/button';
 
@@ -83,6 +84,10 @@ export function GroupsPublicShell(
                         className="flex flex-wrap items-center gap-2 md:gap-3"
                         aria-label={t('app.groups_public.nav.account_aria')}
                     >
+                        <AppearanceMenuButton
+                            triggerId="groups-shell-theme-menu-trigger"
+                            triggerClassName="border border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20"
+                        />
                         {auth.user ? (
                             <Button
                                 id="groups-shell-dashboard"

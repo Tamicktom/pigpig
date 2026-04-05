@@ -106,6 +106,7 @@
     "app.shell.mobile.sheet_title": "Menu de navegação",
     "app.shell.mobile.open_menu_aria": "Abrir menu de navegação",
     "app.shell.search.aria_label": "Buscar",
+    "app.shell.theme.menu_trigger_aria": "Tema",
     "app.shell.breadcrumb.dashboard": "Painel",
     "app.shell.breadcrumb.my_drp_groups": "Meus grupos DRP",
     "app.shell.breadcrumb.create_group": "Criar grupo",

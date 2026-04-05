@@ -5,6 +5,7 @@ import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 //* Components imports
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { AppearanceMenuButton } from '@/components/appearance-menu-button';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -147,6 +148,12 @@ export function AppHeader(props: AppHeaderProps) {
                                             ))}
                                         </div>
                                     </div>
+                                    <div className="flex shrink-0 items-center border-t border-sidebar-border pt-4">
+                                        <AppearanceMenuButton
+                                            triggerId="app-header-mobile-theme-menu-trigger"
+                                            align="start"
+                                        />
+                                    </div>
                                 </div>
                             </SheetContent>
                         </Sheet>
@@ -231,6 +238,7 @@ export function AppHeader(props: AppHeaderProps) {
                                 ))}
                             </div>
                         </div>
+                        <AppearanceMenuButton triggerId="app-header-theme-menu-trigger" />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button

@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/react';
 
 //* Components imports
+import { AppearanceMenuButton } from '@/components/appearance-menu-button';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { Button } from '@/components/ui/button';
 
@@ -71,6 +72,10 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                     </Link>
                 </div>
                 <div className="flex items-center gap-3">
+                    <AppearanceMenuButton
+                        triggerId="landing-nav-theme-menu-trigger"
+                        triggerClassName="border border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20"
+                    />
                     <LocaleSwitcher className="border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20" />
                     {isAuthenticated ? (
                         <>

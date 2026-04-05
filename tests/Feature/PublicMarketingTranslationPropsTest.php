@@ -22,7 +22,8 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('welcome')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('landing.head_title_suffix') === 'Integrative Project'
-                        && $translations->get('landing.hero.title') === 'Stop wasting time looking for an integrative project group';
+                        && $translations->get('landing.hero.title') === 'Stop wasting time looking for an integrative project group'
+                        && $translations->get('app.shell.theme.menu_trigger_aria') === 'Theme';
                 }));
     }
 
@@ -34,7 +35,8 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('welcome')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('landing.head_title_suffix') === 'Projeto Integrador'
-                        && $translations->get('landing.hero.title') === 'Pare de perder tempo procurando grupo para o PI';
+                        && $translations->get('landing.hero.title') === 'Pare de perder tempo procurando grupo para o PI'
+                        && $translations->get('app.shell.theme.menu_trigger_aria') === 'Tema';
                 }));
     }
 
@@ -46,7 +48,8 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.public.heading') === 'Project groups'
-                        && $translations->get('groups.public.filter_all') === 'All DRPs';
+                        && $translations->get('groups.public.filter_all') === 'All DRPs'
+                        && $translations->get('app.shell.theme.menu_trigger_aria') === 'Theme';
                 }));
     }
 
@@ -58,7 +61,8 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.public.heading') === 'Grupos do projeto'
-                        && $translations->get('groups.public.filter_all') === 'Todas as DRPs';
+                        && $translations->get('groups.public.filter_all') === 'Todas as DRPs'
+                        && $translations->get('app.shell.theme.menu_trigger_aria') === 'Tema';
                 }));
     }
 
