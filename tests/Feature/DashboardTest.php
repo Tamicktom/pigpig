@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+// * Libraries imports
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
+// * Tests imports
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -23,6 +26,10 @@ class DashboardTest extends TestCase
 
         $response = $this->get(route('dashboard'));
         $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('dashboard')
+            ->where('auth.user.id', $user->id)
+            ->has('translations'));
     }
 
     public function test_fortify_home_path_matches_named_dashboard_route(): void

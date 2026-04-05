@@ -118,10 +118,12 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] [`tests/Feature/DashboardTest.php`](../tests/Feature/DashboardTest.php) — garantir que utilizadores autenticados continuam a aceder; acrescentar asserts se o projeto passar a testar componente ou props relevantes.
-- [ ] Testes de auth com redirect para `route('dashboard')`: [`AuthenticationTest.php`](../tests/Feature/Auth/AuthenticationTest.php), [`RegistrationTest.php`](../tests/Feature/Auth/RegistrationTest.php), [`EmailVerificationTest.php`](../tests/Feature/Auth/EmailVerificationTest.php), [`VerificationNotificationTest.php`](../tests/Feature/Auth/VerificationNotificationTest.php).
-- [ ] Testes de tradução: [`GroupsAppTranslationPropsTest.php`](../tests/Feature/GroupsAppTranslationPropsTest.php), [`AppShellTranslationPropsTest.php`](../tests/Feature/AppShellTranslationPropsTest.php).
-- [ ] [`tests/Browser/LoginTest.php`](../tests/Browser/LoginTest.php) — path esperado após login se mudar na Opção B.
+- [x] [`tests/Feature/DashboardTest.php`](../tests/Feature/DashboardTest.php) — garantir que utilizadores autenticados continuam a aceder; acrescentar asserts se o projeto passar a testar componente ou props relevantes.
+- [x] Testes de auth com redirect para `route('dashboard')`: [`AuthenticationTest.php`](../tests/Feature/Auth/AuthenticationTest.php), [`RegistrationTest.php`](../tests/Feature/Auth/RegistrationTest.php), [`EmailVerificationTest.php`](../tests/Feature/Auth/EmailVerificationTest.php), [`VerificationNotificationTest.php`](../tests/Feature/Auth/VerificationNotificationTest.php).
+- [x] Testes de tradução: [`GroupsAppTranslationPropsTest.php`](../tests/Feature/GroupsAppTranslationPropsTest.php), [`AppShellTranslationPropsTest.php`](../tests/Feature/AppShellTranslationPropsTest.php).
+- [x] [`tests/Browser/LoginTest.php`](../tests/Browser/LoginTest.php) — path esperado após login se mudar na Opção B.
+
+**Registo:** `DashboardTest` valida Inertia `dashboard`, `auth.user` e `translations`. Traduções do hub e do shell no dashboard alinhadas a `dashboard.tsx` e `app-header`. Auth e Dusk já usam `route('dashboard')` / `/dashboard` (Opção A).
 
 ---
 

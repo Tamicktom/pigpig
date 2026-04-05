@@ -26,7 +26,12 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('app.dashboard.head_title') === 'Home'
                         && $translations->get('app.dashboard.heading') === 'Your DRP hub'
-                        && $translations->get('app.dashboard.card_browse') === 'Explore published groups and request to join.';
+                        && $translations->get('app.dashboard.description') === 'Open your groups, create a new one, or browse the public directory to find teams to join.'
+                        && $translations->get('app.dashboard.nav_aria') === 'Quick links'
+                        && $translations->get('app.dashboard.card_my_groups') === 'See groups you belong to and your DRP context.'
+                        && $translations->get('app.dashboard.card_create') === 'Set up a group and invite collaborators.'
+                        && $translations->get('app.dashboard.card_browse') === 'Explore published groups and request to join.'
+                        && $translations->get('groups.public.heading') === 'Project groups';
                 }));
     }
 
@@ -42,7 +47,12 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('app.dashboard.head_title') === 'Início'
                         && $translations->get('app.dashboard.heading') === 'Seu espaço no DRP'
-                        && $translations->get('app.dashboard.card_browse') === 'Navegue pelos grupos publicados e solicite entrada.';
+                        && $translations->get('app.dashboard.description') === 'Acesse seus grupos, crie um novo ou navegue na lista pública para encontrar equipes.'
+                        && $translations->get('app.dashboard.nav_aria') === 'Atalhos'
+                        && $translations->get('app.dashboard.card_my_groups') === 'Veja os grupos dos quais você participa e o contexto da sua DRP.'
+                        && $translations->get('app.dashboard.card_create') === 'Configure um grupo e convide colaboradores.'
+                        && $translations->get('app.dashboard.card_browse') === 'Navegue pelos grupos publicados e solicite entrada.'
+                        && $translations->get('groups.public.heading') === 'Grupos do projeto';
                 }));
     }
 
