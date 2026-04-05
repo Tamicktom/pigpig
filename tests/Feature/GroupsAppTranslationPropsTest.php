@@ -24,7 +24,14 @@ class GroupsAppTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.dashboard.head_title') === 'Dashboard';
+                    return $translations->get('app.dashboard.head_title') === 'Home'
+                        && $translations->get('app.dashboard.heading') === 'Your DRP hub'
+                        && $translations->get('app.dashboard.description') === 'Open your groups, create a new one, or browse the public directory to find teams to join.'
+                        && $translations->get('app.dashboard.nav_aria') === 'Quick links'
+                        && $translations->get('app.dashboard.card_my_groups') === 'See groups you belong to and your DRP context.'
+                        && $translations->get('app.dashboard.card_create') === 'Set up a group and invite collaborators.'
+                        && $translations->get('app.dashboard.card_browse') === 'Explore published groups and request to join.'
+                        && $translations->get('groups.public.heading') === 'Project groups';
                 }));
     }
 
@@ -38,7 +45,14 @@ class GroupsAppTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.dashboard.head_title') === 'Painel';
+                    return $translations->get('app.dashboard.head_title') === 'Início'
+                        && $translations->get('app.dashboard.heading') === 'Seu espaço no DRP'
+                        && $translations->get('app.dashboard.description') === 'Acesse seus grupos, crie um novo ou navegue na lista pública para encontrar equipes.'
+                        && $translations->get('app.dashboard.nav_aria') === 'Atalhos'
+                        && $translations->get('app.dashboard.card_my_groups') === 'Veja os grupos dos quais você participa e o contexto da sua DRP.'
+                        && $translations->get('app.dashboard.card_create') === 'Configure um grupo e convide colaboradores.'
+                        && $translations->get('app.dashboard.card_browse') === 'Navegue pelos grupos publicados e solicite entrada.'
+                        && $translations->get('groups.public.heading') === 'Grupos do projeto';
                 }));
     }
 
@@ -53,6 +67,7 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->component('my-groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.my.heading') === 'Groups in your DRP'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Home'
                         && $translations->get('app.shell.nav.create_group') === 'Create group';
                 }));
     }
@@ -68,6 +83,7 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->component('my-groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.my.heading') === 'Grupos no seu DRP'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Início'
                         && $translations->get('app.shell.nav.create_group') === 'Criar grupo';
                 }));
     }
@@ -83,6 +99,7 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->component('groups/create')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.create.label.title') === 'Title'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Home'
                         && $translations->get('groups.create.submit') === 'Create group';
                 }));
     }
@@ -98,6 +115,7 @@ class GroupsAppTranslationPropsTest extends TestCase
                 ->component('groups/create')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.create.label.title') === 'Título'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Início'
                         && $translations->get('groups.create.submit') === 'Criar grupo';
                 }));
     }

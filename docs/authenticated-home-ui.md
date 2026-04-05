@@ -4,8 +4,10 @@ Este documento descreve **em fases** o que alterar para que a rota `/dashboard` 
 
 **Decisão da Fase 0 (preencher antes de implementar):**
 
-- [ ] **Opção A** — Manter `/dashboard` como página de início **sem sidebar** (hub simples + `AppHeaderLayout`).
+- [x] **Opção A** — Manter `/dashboard` como página de início **sem sidebar** (hub simples + `AppHeaderLayout`).
 - [ ] **Opção B** — Redirecionar o pós-login para outra rota (ex.: `/my/groups`) e eventualmente remover ou aliasar `dashboard`.
+
+**Registo:** Opção A adotada em 2026-04-05. `Fortify::home` e a rota nomeada `dashboard` mantêm-se; o resolver Inertia passará a aplicar `AppHeaderLayout` apenas à página `dashboard` nas fases seguintes.
 
 ---
 
@@ -36,6 +38,8 @@ flowchart TB
 ## Fase 0 — Decisão de produto (obrigatória antes de codar)
 
 Escolher **uma** estratégia e registar acima marcando a opção.
+
+**Estado:** concluída — Opção A (ver caixas no topo do documento).
 
 ### Opção A — Manter `/dashboard` como início sem sidebar
 
@@ -92,8 +96,10 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Rever chaves em ficheiros de tradução (`app.dashboard.*`, `app.shell.nav.*`, `app.shell.breadcrumb.dashboard`) conforme o novo papel da página.
-- [ ] Se a rota ou o rótulo mudarem: atualizar [`landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx), [`groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx), e breadcrumbs em [`my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx) e [`groups/create.tsx`](../resources/js/pages/groups/create.tsx).
+- [x] Rever chaves em ficheiros de tradução (`app.dashboard.*`, `app.shell.nav.*`, `app.shell.breadcrumb.dashboard`) conforme o novo papel da página.
+- [x] Se a rota ou o rótulo mudarem: atualizar [`landing-nav.tsx`](../resources/js/components/landing/landing-nav.tsx), [`groups-public-shell.tsx`](../resources/js/components/groups-public-shell.tsx), e breadcrumbs em [`my-groups/index.tsx`](../resources/js/pages/my-groups/index.tsx) e [`groups/create.tsx`](../resources/js/pages/groups/create.tsx).
+
+**Registo:** Rota `/dashboard` mantida. Rótulo do primeiro item de navegação e breadcrumbs alinhados a **Home** / **Início** (hub pós-login); `landing-nav` e `groups-public-shell` usam `app.shell.nav.dashboard` (sem alteração de código). Fallbacks de breadcrumb em `my-groups` e `groups/create` atualizados para `Home`.
 
 ---
 
@@ -101,8 +107,10 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Se a URL de “home” mudar: atualizar [`config/fortify.php`](../config/fortify.php) e todas as referências `route('dashboard')` em PHP.
-- [ ] Se rotas forem renomeadas ou adicionadas: `php artisan wayfinder:generate` e corrigir imports em `@/routes` / `@/actions` no frontend.
+- [x] Se a URL de “home” mudar: atualizar [`config/fortify.php`](../config/fortify.php) e todas as referências `route('dashboard')` em PHP.
+- [x] Se rotas forem renomeadas ou adicionadas: `php artisan wayfinder:generate` e corrigir imports em `@/routes` / `@/actions` no frontend.
+
+**Registo:** Opção A — URL `/dashboard` inalterada; `config/fortify.php` mantém `'home' => '/dashboard'`, coerente com `routes/web.php` (`dashboard`). Referências PHP a `route('dashboard')` revistas (testes e fluxos de auth). Garantia adicional: [`DashboardTest::test_fortify_home_path_matches_named_dashboard_route`](../tests/Feature/DashboardTest.php). Após alterar rotas, correr `php artisan wayfinder:generate --no-interaction` (se ficheiros em `resources/js/routes` ou `resources/js/actions` forem geridos como root/Docker, corrigir permissões antes).
 
 ---
 
@@ -110,10 +118,12 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] [`tests/Feature/DashboardTest.php`](../tests/Feature/DashboardTest.php) — garantir que utilizadores autenticados continuam a aceder; acrescentar asserts se o projeto passar a testar componente ou props relevantes.
-- [ ] Testes de auth com redirect para `route('dashboard')`: [`AuthenticationTest.php`](../tests/Feature/Auth/AuthenticationTest.php), [`RegistrationTest.php`](../tests/Feature/Auth/RegistrationTest.php), [`EmailVerificationTest.php`](../tests/Feature/Auth/EmailVerificationTest.php), [`VerificationNotificationTest.php`](../tests/Feature/Auth/VerificationNotificationTest.php).
-- [ ] Testes de tradução: [`GroupsAppTranslationPropsTest.php`](../tests/Feature/GroupsAppTranslationPropsTest.php), [`AppShellTranslationPropsTest.php`](../tests/Feature/AppShellTranslationPropsTest.php).
-- [ ] [`tests/Browser/LoginTest.php`](../tests/Browser/LoginTest.php) — path esperado após login se mudar na Opção B.
+- [x] [`tests/Feature/DashboardTest.php`](../tests/Feature/DashboardTest.php) — garantir que utilizadores autenticados continuam a aceder; acrescentar asserts se o projeto passar a testar componente ou props relevantes.
+- [x] Testes de auth com redirect para `route('dashboard')`: [`AuthenticationTest.php`](../tests/Feature/Auth/AuthenticationTest.php), [`RegistrationTest.php`](../tests/Feature/Auth/RegistrationTest.php), [`EmailVerificationTest.php`](../tests/Feature/Auth/EmailVerificationTest.php), [`VerificationNotificationTest.php`](../tests/Feature/Auth/VerificationNotificationTest.php).
+- [x] Testes de tradução: [`GroupsAppTranslationPropsTest.php`](../tests/Feature/GroupsAppTranslationPropsTest.php), [`AppShellTranslationPropsTest.php`](../tests/Feature/AppShellTranslationPropsTest.php).
+- [x] [`tests/Browser/LoginTest.php`](../tests/Browser/LoginTest.php) — path esperado após login se mudar na Opção B.
+
+**Registo:** `DashboardTest` valida Inertia `dashboard`, `auth.user` e `translations`. Traduções do hub e do shell no dashboard alinhadas a `dashboard.tsx` e `app-header`. Auth e Dusk já usam `route('dashboard')` / `/dashboard` (Opção A).
 
 ---
 
@@ -121,7 +131,9 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Acrescentar em [`arquitetura.md`](../arquitetura.md) (por exemplo na secção 2.1, Camada de Apresentação) uma frase curta sobre o **shell** da primeira página após login: **sem sidebar** na rota `/dashboard` (Opção A), ou **redirect** para `/my/groups` (Opção B), para o documento refletir a UX real.
+- [x] Acrescentar em [`arquitetura.md`](../arquitetura.md) (por exemplo na secção 2.1, Camada de Apresentação) uma frase curta sobre o **shell** da primeira página após login: **sem sidebar** na rota `/dashboard` (Opção A), ou **redirect** para `/my/groups` (Opção B), para o documento refletir a UX real.
+
+**Registo:** Secção 2.1 inclui bullet **Shell da primeira página após login** (Opção A: `/dashboard` com cabeçalho superior, sem sidebar; resto da área autenticada de grupos com sidebar), com referência a `docs/authenticated-home-ui.md`.
 
 ---
 

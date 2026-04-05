@@ -180,7 +180,7 @@ export default function MyGroupsIndex(
 MyGroupsIndex.layout = {
     breadcrumbs: [
         {
-            title: 'Dashboard',
+            title: 'Home',
             titleKey: 'app.shell.breadcrumb.dashboard',
             href: dashboard.url(),
         },

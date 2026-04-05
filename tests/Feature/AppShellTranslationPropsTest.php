@@ -24,7 +24,10 @@ class AppShellTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.shell.nav.dashboard') === 'Dashboard'
+                    return $translations->get('app.shell.nav.dashboard') === 'Home'
+                        && $translations->get('app.shell.nav.my_drp_groups') === 'My DRP groups'
+                        && $translations->get('app.shell.nav.create_group') === 'Create group'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Home'
                         && $translations->get('app.shell.user.settings') === 'Settings';
                 }));
     }
@@ -39,7 +42,10 @@ class AppShellTranslationPropsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('dashboard')
                 ->where('translations', function (Collection $translations) {
-                    return $translations->get('app.shell.nav.dashboard') === 'Painel'
+                    return $translations->get('app.shell.nav.dashboard') === 'Início'
+                        && $translations->get('app.shell.nav.my_drp_groups') === 'Meus grupos DRP'
+                        && $translations->get('app.shell.nav.create_group') === 'Criar grupo'
+                        && $translations->get('app.shell.breadcrumb.dashboard') === 'Início'
                         && $translations->get('app.shell.user.settings') === 'Configurações';
                 }));
     }

@@ -19,6 +19,7 @@ A camada de apresentação atende **alunos autenticados** e **visitantes anônim
 - **Navegação:** Inertia gerencia as transições entre páginas sem recarregar a aplicação como um site tradicional multipágina, mantendo a experiência fluida.
 - **Estado:** Dados de servidor chegam principalmente via **props** das páginas Inertia; estado de interface e formulários usa estado local de componentes (e hooks do Inertia quando aplicável), sem impor bibliotecas de estado global que não façam parte do stack acordado.
 - **Integração com o backend:** Formulários e ações enviam requisições ao Laravel (Inertia visits, `router`, ou requisições HTTP pontuais quando necessário), com proteção **CSRF** nos fluxos web típicos do Laravel.
+- **Shell da primeira página após login:** A rota `/dashboard` (alinhada a `Fortify::home`) usa layout **só com cabeçalho superior**, **sem sidebar** lateral, como hub de entrada; as demais rotas autenticadas de grupos mantêm o shell com **sidebar** (decisão de produto documentada em `docs/authenticated-home-ui.md`).
 
 ### 2.2. Camada de Aplicação e Negócios (Backend - Laravel)
 
