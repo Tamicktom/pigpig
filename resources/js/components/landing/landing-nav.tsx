@@ -26,10 +26,10 @@ export function LandingNav(landingNavProps: LandingNavProps) {
     const { t } = useTranslations();
 
     const linkClassName =
-        'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand-foreground dark:hover:text-primary';
+        'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand dark:hover:text-primary';
 
     const brandClassName =
-        'font-headline text-2xl font-black text-landing-brand dark:text-landing-brand-foreground';
+        'font-headline text-2xl font-black text-landing-brand dark:text-landing-brand';
 
     return (
         <nav className="fixed top-0 z-50 w-full bg-landing-nav-glass backdrop-blur-[20px]">

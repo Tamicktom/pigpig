@@ -26,7 +26,7 @@ type GroupsPublicShellProps = {
 };
 
 const navLinkClassName =
-    'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand-foreground dark:hover:text-primary';
+    'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand dark:hover:text-primary';
 
 export function GroupsPublicShell(
     props: GroupsPublicShellProps,
@@ -48,7 +48,7 @@ export function GroupsPublicShell(
                         <Link
                             id="groups-shell-brand"
                             href={home.url()}
-                            className="font-headline shrink-0 text-2xl font-black text-landing-brand dark:text-landing-brand-foreground"
+                            className="font-headline shrink-0 text-2xl font-black text-landing-brand dark:text-landing-brand"
                         >
                             {appName}
                         </Link>
