@@ -1,6 +1,14 @@
 //* Libraries imports
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    List,
+    Menu,
+    Search,
+    UsersRound,
+} from 'lucide-react';
 
 //* Components imports
 import AppLogo from '@/components/app-logo';
@@ -44,6 +52,8 @@ import { cn, toUrl } from '@/lib/utils';
 
 //* Routes imports
 import { dashboard } from '@/routes';
+import { create as groupsCreate } from '@/routes/groups';
+import { index as myGroupsIndex } from '@/routes/my-groups';
 
 //* Types imports
 import type { BreadcrumbItem, NavItem } from '@/types';
@@ -67,6 +77,16 @@ export function AppHeader(props: AppHeaderProps) {
             title: t('app.shell.nav.dashboard'),
             href: dashboard(),
             icon: LayoutGrid,
+        },
+        {
+            title: t('app.shell.nav.my_drp_groups'),
+            href: myGroupsIndex(),
+            icon: List,
+        },
+        {
+            title: t('app.shell.nav.create_group'),
+            href: groupsCreate(),
+            icon: UsersRound,
         },
     ];
 
