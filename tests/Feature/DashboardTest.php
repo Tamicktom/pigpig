@@ -24,4 +24,12 @@ class DashboardTest extends TestCase
         $response = $this->get(route('dashboard'));
         $response->assertOk();
     }
+
+    public function test_fortify_home_path_matches_named_dashboard_route(): void
+    {
+        $this->assertSame(
+            route('dashboard', absolute: false),
+            config('fortify.home')
+        );
+    }
 }

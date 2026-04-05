@@ -107,8 +107,10 @@ Escolher **uma** estratégia e registar acima marcando a opção.
 
 **Checklist:**
 
-- [ ] Se a URL de “home” mudar: atualizar [`config/fortify.php`](../config/fortify.php) e todas as referências `route('dashboard')` em PHP.
-- [ ] Se rotas forem renomeadas ou adicionadas: `php artisan wayfinder:generate` e corrigir imports em `@/routes` / `@/actions` no frontend.
+- [x] Se a URL de “home” mudar: atualizar [`config/fortify.php`](../config/fortify.php) e todas as referências `route('dashboard')` em PHP.
+- [x] Se rotas forem renomeadas ou adicionadas: `php artisan wayfinder:generate` e corrigir imports em `@/routes` / `@/actions` no frontend.
+
+**Registo:** Opção A — URL `/dashboard` inalterada; `config/fortify.php` mantém `'home' => '/dashboard'`, coerente com `routes/web.php` (`dashboard`). Referências PHP a `route('dashboard')` revistas (testes e fluxos de auth). Garantia adicional: [`DashboardTest::test_fortify_home_path_matches_named_dashboard_route`](../tests/Feature/DashboardTest.php). Após alterar rotas, correr `php artisan wayfinder:generate --no-interaction` (se ficheiros em `resources/js/routes` ou `resources/js/actions` forem geridos como root/Docker, corrigir permissões antes).
 
 ---
 
