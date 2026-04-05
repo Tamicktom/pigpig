@@ -28,8 +28,8 @@ export function LandingNav(landingNavProps: LandingNavProps) {
     const linkClassName =
         'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand dark:hover:text-primary';
 
-    const brandClassName =
-        'font-headline text-2xl font-black text-landing-brand dark:text-landing-brand';
+    const brandLinkClassName =
+        'inline-flex shrink-0 items-center rounded-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
     return (
         <nav className="fixed top-0 z-50 w-full bg-landing-nav-glass backdrop-blur-[20px]">
@@ -37,9 +37,16 @@ export function LandingNav(landingNavProps: LandingNavProps) {
                 <Link
                     id="landing-nav-brand"
                     href={home.url()}
-                    className={brandClassName}
+                    className={brandLinkClassName}
                 >
-                    {appName}
+                    <img
+                        src="/favicon.svg"
+                        alt={appName}
+                        width={32}
+                        height={32}
+                        decoding="async"
+                        className="size-8"
+                    />
                 </Link>
                 <div className="hidden items-center gap-8 md:flex">
                     <Link
