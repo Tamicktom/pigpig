@@ -4,8 +4,10 @@ Este documento descreve **em fases** o que alterar para que a rota `/dashboard` 
 
 **Decisão da Fase 0 (preencher antes de implementar):**
 
-- [ ] **Opção A** — Manter `/dashboard` como página de início **sem sidebar** (hub simples + `AppHeaderLayout`).
+- [x] **Opção A** — Manter `/dashboard` como página de início **sem sidebar** (hub simples + `AppHeaderLayout`).
 - [ ] **Opção B** — Redirecionar o pós-login para outra rota (ex.: `/my/groups`) e eventualmente remover ou aliasar `dashboard`.
+
+**Registo:** Opção A adotada em 2026-04-05. `Fortify::home` e a rota nomeada `dashboard` mantêm-se; o resolver Inertia passará a aplicar `AppHeaderLayout` apenas à página `dashboard` nas fases seguintes.
 
 ---
 
@@ -36,6 +38,8 @@ flowchart TB
 ## Fase 0 — Decisão de produto (obrigatória antes de codar)
 
 Escolher **uma** estratégia e registar acima marcando a opção.
+
+**Estado:** concluída — Opção A (ver caixas no topo do documento).
 
 ### Opção A — Manter `/dashboard` como início sem sidebar
 
