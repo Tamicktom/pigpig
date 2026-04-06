@@ -29,7 +29,7 @@ export default function Welcome() {
     return (
         <>
             <Head title={t('landing.head_title_suffix')} />
-            <div className="overflow-x-hidden bg-background">
+            <div className="min-w-0 overflow-x-hidden bg-background">
                 <div className="w-full self-stretch">
                     <EmailVerificationBanner variant="public" />
                 </div>
@@ -38,7 +38,7 @@ export default function Welcome() {
                     canRegister={canRegister}
                     isAuthenticated={isAuthenticated}
                 />
-                <main className="pt-20">
+                <main className="min-w-0 pt-20">
                     <LandingHero />
                     <LandingProblem />
                     <LandingHowItWorks />
