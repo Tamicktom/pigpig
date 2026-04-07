@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/react';
 //* Components imports
 import { AppearanceMenuButton } from '@/components/appearance-menu-button';
 import { EmailVerificationBanner } from '@/components/email-verification-banner';
+import { LocaleSwitcher } from '@/components/locale-switcher';
 import { Button } from '@/components/ui/button';
 
 //* Lib imports
@@ -28,6 +29,9 @@ type GroupsPublicShellProps = {
 const navLinkClassName =
     'text-sm font-medium text-landing-brand transition-colors duration-200 ease-out hover:text-primary dark:text-landing-brand dark:hover:text-primary';
 
+const brandLinkClassName =
+    'inline-flex shrink-0 items-center rounded-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
+
 export function GroupsPublicShell(
     props: GroupsPublicShellProps,
 ) {
@@ -48,9 +52,16 @@ export function GroupsPublicShell(
                         <Link
                             id="groups-shell-brand"
                             href={home.url()}
-                            className="font-headline shrink-0 text-2xl font-black text-landing-brand dark:text-landing-brand"
+                            className={brandLinkClassName}
                         >
-                            {appName}
+                            <img
+                                src="/favicon.svg"
+                                alt={appName}
+                                width={32}
+                                height={32}
+                                decoding="async"
+                                className="size-8"
+                            />
                         </Link>
                         <nav
                             className="flex flex-wrap items-center gap-2 md:gap-4"
@@ -88,6 +99,7 @@ export function GroupsPublicShell(
                             triggerId="groups-shell-theme-menu-trigger"
                             triggerClassName="border border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20"
                         />
+                        <LocaleSwitcher className="border-landing-brand/20 bg-landing-nav-glass/80 dark:border-landing-brand-foreground/20" />
                         {auth.user ? (
                             <Button
                                 id="groups-shell-dashboard"
