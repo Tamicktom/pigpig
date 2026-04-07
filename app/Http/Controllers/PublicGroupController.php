@@ -9,6 +9,7 @@ use App\Models\Polo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
@@ -17,6 +18,7 @@ class PublicGroupController extends Controller
 {
     /**
      * Public group directory. Optional query: {@see drp_id} filters by DRP (non–soft-deleted only).
+     * Optional {@see polo_id} disambiguates the polo combobox when multiple polos share the same DRP.
      */
     public function index(Request $request): Response
     {
@@ -27,34 +29,70 @@ class PublicGroupController extends Controller
                 'integer',
                 Rule::exists('drps', 'id')->whereNull('deleted_at'),
             ],
+            'polo_id' => [
+                'sometimes',
+                'nullable',
+                'integer',
+                Rule::exists('polos', 'id'),
+            ],
             'page' => ['sometimes', 'integer', 'min:1'],
         ]);
+
+        $filterDrpId = null;
+        $filterPoloId = null;
+
+        if (! empty($validated['polo_id'])) {
+            $polo = Polo::query()
+                ->whereKey($validated['polo_id'])
+                ->whereHas('drp')
+                ->first();
+
+            if ($polo === null) {
+                throw ValidationException::withMessages([
+                    'polo_id' => trans('validation.exists', ['attribute' => 'polo id']),
+                ]);
+            }
+
+            $filterDrpId = (int) $polo->drp_id;
+            $filterPoloId = (int) $polo->id;
+
+            if (isset($validated['drp_id']) && (int) $validated['drp_id'] !== $filterDrpId) {
+                throw ValidationException::withMessages([
+                    'drp_id' => trans('validation.in', ['attribute' => 'drp id']),
+                ]);
+            }
+        } elseif (! empty($validated['drp_id'])) {
+            $filterDrpId = (int) $validated['drp_id'];
+        }
 
         $query = Group::query()
             ->whereHas('drp')
             ->with(['drp:id,name,slug'])
             ->latest('id');
 
-        if (! empty($validated['drp_id'])) {
-            $query->where('drp_id', $validated['drp_id']);
+        if ($filterDrpId !== null) {
+            $query->where('drp_id', $filterDrpId);
         }
 
-        $groups = $query->paginate(15)->through(function (Group $group): array {
-            return [
-                'id' => $group->id,
-                'title' => $group->title,
-                'drp' => $group->drp === null ? null : [
-                    'id' => $group->drp->id,
-                    'name' => $group->drp->name,
-                    'slug' => $group->drp->slug,
-                ],
-            ];
-        });
+        $groups = $query->paginate(15)
+            ->withQueryString()
+            ->through(function (Group $group): array {
+                return [
+                    'id' => $group->id,
+                    'title' => $group->title,
+                    'drp' => $group->drp === null ? null : [
+                        'id' => $group->drp->id,
+                        'name' => $group->drp->name,
+                        'slug' => $group->drp->slug,
+                    ],
+                ];
+            });
 
         return Inertia::render('groups/index', [
             'groups' => $groups,
             'filters' => [
-                'drp_id' => isset($validated['drp_id']) ? (int) $validated['drp_id'] : null,
+                'drp_id' => $filterDrpId,
+                'polo_id' => $filterPoloId,
             ],
             'poloOptions' => Polo::inertiaSelectOptions(),
             'canRegister' => Features::enabled(Features::registration()),
@@ -62,26 +100,37 @@ class PublicGroupController extends Controller
     }
 
     /**
-     * Public group detail: member names; optional social URLs when set (email and phone stay private).
+     * Public group detail: member names and emails; optional social URLs; phone numbers only when the
+     * authenticated viewer belongs to the group.
      */
     public function show(Request $request, Group $group): Response
     {
+        $user = $request->user();
+        $isViewerMember = $user instanceof User
+            && $group->members()->where('users.id', $user->id)->exists();
+
+        $memberColumns = [
+            'users.id',
+            'users.name',
+            'users.email',
+            'users.instagram_url',
+            'users.linkedin_url',
+            'users.twitter_url',
+        ];
+
+        if ($isViewerMember) {
+            $memberColumns[] = 'users.phone';
+        }
+
         $group->load([
             'drp:id,name,slug',
-            'members' => fn ($query) => $query->select(
-                'users.id',
-                'users.name',
-                'users.instagram_url',
-                'users.linkedin_url',
-                'users.twitter_url',
-            ),
+            'members' => fn ($query) => $query->select($memberColumns),
         ]);
 
         if ($group->drp === null) {
             abort(404);
         }
 
-        $user = $request->user();
         $viewer = null;
 
         if ($user instanceof User) {
@@ -143,6 +192,7 @@ class PublicGroupController extends Controller
             'group' => [
                 'id' => $group->id,
                 'title' => $group->title,
+                'description' => $group->description,
                 'drp' => [
                     'id' => $group->drp->id,
                     'name' => $group->drp->name,
@@ -151,6 +201,8 @@ class PublicGroupController extends Controller
                 'members' => $group->members->map(fn ($member): array => [
                     'id' => $member->id,
                     'name' => $member->name,
+                    'email' => $member->email,
+                    'phone' => $isViewerMember ? $member->phone : null,
                     'instagram_url' => $member->instagram_url,
                     'linkedin_url' => $member->linkedin_url,
                     'twitter_url' => $member->twitter_url,

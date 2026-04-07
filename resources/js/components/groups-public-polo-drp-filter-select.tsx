@@ -33,7 +33,10 @@ type GroupsPublicPoloDrpFilterSelectProps = {
     toggleButtonId: string;
     poloOptions: PoloDrpOption[];
     selectedDrpId: number | null;
-    onSelectDrpId: (drpId: number | null) => void;
+    selectedPoloId: number | null;
+    onSelectPoloFilter: (
+        selection: { drp_id: number; polo_id: number } | null,
+    ) => void;
 };
 
 /**
@@ -58,16 +61,31 @@ export function GroupsPublicPoloDrpFilterSelect(
     );
 
     const selectedOption = useMemo((): GroupsPublicPoloDrpFilterOption => {
+        if (props.selectedPoloId !== null) {
+            const byPolo = props.poloOptions.find(
+                (polo) => polo.id === props.selectedPoloId,
+            );
+
+            if (byPolo !== undefined) {
+                return byPolo;
+            }
+        }
+
         if (props.selectedDrpId === null) {
             return allOption;
         }
 
-        const found = props.poloOptions.find(
+        const byDrp = props.poloOptions.find(
             (polo) => polo.drp_id === props.selectedDrpId,
         );
 
-        return found ?? allOption;
-    }, [props.selectedDrpId, props.poloOptions, allOption]);
+        return byDrp ?? allOption;
+    }, [
+        props.selectedDrpId,
+        props.selectedPoloId,
+        props.poloOptions,
+        allOption,
+    ]);
 
     const filteredPoloOptions = useMemo(() => {
         return props.poloOptions.filter((poloOption) =>
@@ -107,12 +125,15 @@ export function GroupsPublicPoloDrpFilterSelect(
                 }
 
                 if (nextValue.id === GROUPS_PUBLIC_POLO_FILTER_ALL_ID) {
-                    props.onSelectDrpId(null);
+                    props.onSelectPoloFilter(null);
 
                     return;
                 }
 
-                props.onSelectDrpId(nextValue.drp_id);
+                props.onSelectPoloFilter({
+                    drp_id: nextValue.drp_id,
+                    polo_id: nextValue.id,
+                });
             }}
             onClose={() => {
                 setQuery('');

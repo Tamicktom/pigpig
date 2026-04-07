@@ -13,12 +13,13 @@ use App\Models\User;
  */
 class CreateGroup
 {
-    public function execute(User $creator, string $title, ?string $externalCommunicationLink = null): Group
+    public function execute(User $creator, string $title, ?string $externalCommunicationLink = null, ?string $description = null): Group
     {
         return Group::query()->create([
             'drp_id' => $creator->drp_id,
             'creator_id' => $creator->id,
             'title' => $title,
+            'description' => $description,
             'external_communication_link' => $externalCommunicationLink,
         ]);
     }

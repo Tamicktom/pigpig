@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 
 //* Lib imports
 import { useTranslations } from '@/lib/i18n';
@@ -67,6 +68,27 @@ export default function GroupsCreate(
                                 />
                                 <InputError
                                     message={formRenderProps.errors.title}
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="groups-create-description">
+                                    {t('groups.create.label.description')}
+                                </Label>
+                                <Textarea
+                                    id="groups-create-description"
+                                    name="description"
+                                    maxLength={5000}
+                                    rows={5}
+                                    autoComplete="off"
+                                    placeholder={t(
+                                        'groups.create.placeholder.description',
+                                    )}
+                                />
+                                <InputError
+                                    message={
+                                        formRenderProps.errors.description
+                                    }
                                 />
                             </div>
 

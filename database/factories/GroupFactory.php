@@ -21,6 +21,7 @@ class GroupFactory extends Factory
     {
         return [
             'title' => fake()->sentence(3),
+            'description' => fake()->optional(0.4)->paragraph(),
             'external_communication_link' => null,
         ];
     }
