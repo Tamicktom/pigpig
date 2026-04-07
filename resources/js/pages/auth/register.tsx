@@ -1,5 +1,6 @@
 //* Libraries imports
 import { Form, Head } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 //* Components imports
 import { DrpByPoloSelect } from '@/components/drp-by-polo-select';
@@ -10,6 +11,7 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Spinner } from '@/components/ui/spinner';
 
 //* Lib imports
@@ -21,10 +23,18 @@ import { store } from '@/routes/register';
 
 type RegisterPageProps = {
     polos: PoloDrpOption[];
+    phone?: string | null;
 };
 
 export default function Register(props: RegisterPageProps) {
     const { t } = useTranslations();
+    const [phone, setPhone] = useState(() => props.phone ?? '');
+
+    // Sync controlled phone with Laravel `old('phone')` after Inertia validation errors (page does not remount).
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- external server input via Inertia props
+        setPhone(props.phone ?? '');
+    }, [props.phone]);
 
     return (
         <>
@@ -84,13 +94,18 @@ export default function Register(props: RegisterPageProps) {
                                 <Label htmlFor="phone">
                                     {t('auth.register.phone')}
                                 </Label>
-                                <Input
+                                <PhoneInput
                                     id="phone"
-                                    type="tel"
+                                    name="phone"
+                                    value={phone}
+                                    onChange={(nextValue) => {
+                                        setPhone(nextValue);
+                                    }}
+                                    defaultCountry="BR"
+                                    countrySelectButtonId="register-phone-country"
                                     required
                                     tabIndex={3}
                                     autoComplete="tel"
-                                    name="phone"
                                     placeholder={t(
                                         'auth.register.phone_placeholder',
                                     )}

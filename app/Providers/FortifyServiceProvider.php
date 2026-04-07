@@ -72,6 +72,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(fn () => Inertia::render('auth/register', [
             'polos' => Polo::inertiaSelectOptions(),
+            'phone' => old('phone'),
         ]));
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));

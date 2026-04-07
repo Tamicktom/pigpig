@@ -21,23 +21,57 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
+type CountryEntry = { label: string; value: RPNInput.Country | undefined };
+
+type CountrySelectProps = {
+  disabled?: boolean;
+  value: RPNInput.Country;
+  options: CountryEntry[];
+  onChange: (country: RPNInput.Country) => void;
+  triggerButtonId?: string;
+};
+
 type PhoneInputProps = Omit<
   React.ComponentProps<"input">,
   "onChange" | "value" | "ref"
 > &
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
     onChange?: (value: RPNInput.Value) => void;
+    countrySelectButtonId?: string;
   };
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-    ({ className, onChange, value, ...props }, ref) => {
+    (
+      {
+        className,
+        countrySelectButtonId,
+        onChange,
+        value,
+        ...props
+      },
+      ref,
+    ) => {
+      const countrySelectComponent = React.useMemo(() => {
+        function CountrySelectWithButtonId(selectProps: CountrySelectProps) {
+          return (
+            <CountrySelect
+              {...selectProps}
+              triggerButtonId={countrySelectButtonId}
+            />
+          );
+        }
+        CountrySelectWithButtonId.displayName = "CountrySelectWithButtonId";
+
+        return CountrySelectWithButtonId;
+      }, [countrySelectButtonId]);
+
       return (
         <RPNInput.default
           ref={ref}
           className={cn("flex", className)}
           flagComponent={FlagComponent}
-          countrySelectComponent={CountrySelect}
+          countrySelectComponent={countrySelectComponent}
           inputComponent={InputComponent}
           smartCaret={false}
           value={value || undefined}
@@ -70,20 +104,12 @@ const InputComponent = React.forwardRef<
 ));
 InputComponent.displayName = "InputComponent";
 
-type CountryEntry = { label: string; value: RPNInput.Country | undefined };
-
-type CountrySelectProps = {
-  disabled?: boolean;
-  value: RPNInput.Country;
-  options: CountryEntry[];
-  onChange: (country: RPNInput.Country) => void;
-};
-
 const CountrySelect = ({
   disabled,
   value: selectedCountry,
   options: countryList,
   onChange,
+  triggerButtonId,
 }: CountrySelectProps) => {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = React.useState("");
@@ -100,6 +126,7 @@ const CountrySelect = ({
     >
       <PopoverTrigger asChild>
         <Button
+          id={triggerButtonId ?? "phone-country-select"}
           type="button"
           variant="outline"
           className="flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10"
