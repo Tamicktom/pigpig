@@ -117,7 +117,64 @@ class PublicGroupDiscoveryTest extends TestCase
         $response->assertInertia(fn (Assert $page) => $page
             ->has('groups.data', 1)
             ->where('groups.data.0.title', 'Group A')
-            ->where('filters.drp_id', $drpA->id));
+            ->where('filters.drp_id', $drpA->id)
+            ->where('filters.polo_id', null));
+    }
+
+    public function test_filter_by_polo_id_disambiguates_when_multiple_polos_share_drp(): void
+    {
+        $drp = Drp::factory()->create();
+        Polo::factory()->create(['drp_id' => $drp->id, 'name' => 'Jales']);
+        $poloUrania = Polo::factory()->create(['drp_id' => $drp->id, 'name' => 'Urania']);
+        Group::factory()->create(['drp_id' => $drp->id, 'title' => 'Shared Drp Group']);
+
+        $response = $this->get(route('groups.index', [
+            'drp_id' => $drp->id,
+            'polo_id' => $poloUrania->id,
+        ]));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->has('groups.data', 1)
+            ->where('groups.data.0.title', 'Shared Drp Group')
+            ->where('filters.drp_id', $drp->id)
+            ->where('filters.polo_id', $poloUrania->id));
+    }
+
+    public function test_filter_by_polo_id_only_limits_results(): void
+    {
+        $drpA = Drp::factory()->create();
+        $drpB = Drp::factory()->create();
+        $poloA = Polo::factory()->create(['drp_id' => $drpA->id, 'name' => 'Polo A Only']);
+        Polo::factory()->create(['drp_id' => $drpB->id, 'name' => 'Polo B Only']);
+        Group::factory()->create(['drp_id' => $drpA->id, 'title' => 'Group A']);
+        Group::factory()->create(['drp_id' => $drpB->id, 'title' => 'Group B']);
+
+        $response = $this->get(route('groups.index', ['polo_id' => $poloA->id]));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->has('groups.data', 1)
+            ->where('groups.data.0.title', 'Group A')
+            ->where('filters.drp_id', $drpA->id)
+            ->where('filters.polo_id', $poloA->id));
+    }
+
+    public function test_invalid_polo_id_returns_422(): void
+    {
+        $this->getJson(route('groups.index', ['polo_id' => 999_999]))->assertUnprocessable();
+    }
+
+    public function test_polo_id_with_mismatched_drp_id_returns_422(): void
+    {
+        $drpA = Drp::factory()->create();
+        $drpB = Drp::factory()->create();
+        $polo = Polo::factory()->create(['drp_id' => $drpA->id, 'name' => 'Polo On A']);
+
+        $this->getJson(route('groups.index', [
+            'polo_id' => $polo->id,
+            'drp_id' => $drpB->id,
+        ]))->assertUnprocessable();
     }
 
     public function test_invalid_drp_id_returns_422(): void

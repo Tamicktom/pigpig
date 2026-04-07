@@ -44,6 +44,7 @@ type GroupsIndexPageProps = {
     groups: PaginatedPublicGroups;
     filters: {
         drp_id: number | null;
+        polo_id: number | null;
     };
     poloOptions: PoloDrpOption[];
 };
@@ -51,11 +52,16 @@ type GroupsIndexPageProps = {
 export default function GroupsIndex(props: GroupsIndexPageProps) {
     const { t } = useTranslations();
 
-    function handleSelectDrpId(drpId: number | null): void {
+    function handleSelectPoloFilter(
+        selection: { drp_id: number; polo_id: number } | null,
+    ): void {
         router.get(
             groupsIndex.url({
                 query: {
-                    drp_id: drpId === null ? undefined : drpId,
+                    drp_id:
+                        selection === null ? undefined : selection.drp_id,
+                    polo_id:
+                        selection === null ? undefined : selection.polo_id,
                     page: 1,
                 },
             }),
@@ -90,7 +96,8 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                             toggleButtonId="groups-index-polo-filter-toggle"
                             poloOptions={props.poloOptions}
                             selectedDrpId={props.filters.drp_id}
-                            onSelectDrpId={handleSelectDrpId}
+                            selectedPoloId={props.filters.polo_id}
+                            onSelectPoloFilter={handleSelectPoloFilter}
                         />
                     </div>
 
