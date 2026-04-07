@@ -26,6 +26,7 @@ class StoreGroupRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:5000'],
             'external_communication_link' => ['nullable', 'string', 'url', 'max:2048'],
         ];
     }
@@ -37,6 +38,7 @@ class StoreGroupRequest extends FormRequest
     {
         return [
             'title' => __('groups.create.attribute.title'),
+            'description' => __('groups.create.attribute.description'),
             'external_communication_link' => __('groups.create.attribute.external_communication_link'),
         ];
     }

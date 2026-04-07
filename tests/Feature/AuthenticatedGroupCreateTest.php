@@ -21,6 +21,7 @@ class AuthenticatedGroupCreateTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('groups.store'), [
             'title' => 'New PI Group',
+            'description' => 'We meet weekly to integrate course projects.',
             'external_communication_link' => 'https://example.com/chat',
         ]);
 
@@ -32,6 +33,7 @@ class AuthenticatedGroupCreateTest extends TestCase
             'drp_id' => $drp->id,
             'creator_id' => $user->id,
             'title' => 'New PI Group',
+            'description' => 'We meet weekly to integrate course projects.',
             'external_communication_link' => 'https://example.com/chat',
         ]);
         $this->assertDatabaseHas('group_user', [
@@ -55,8 +57,23 @@ class AuthenticatedGroupCreateTest extends TestCase
         $response->assertRedirect(route('groups.show', $group));
         $this->assertDatabaseHas('groups', [
             'id' => $group->id,
+            'description' => null,
             'external_communication_link' => null,
         ]);
+    }
+
+    public function test_store_validation_rejects_overlong_description(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->from(route('groups.create'))
+            ->post(route('groups.store'), [
+                'title' => 'Valid title',
+                'description' => str_repeat('a', 5001),
+            ])
+            ->assertRedirect(route('groups.create'))
+            ->assertSessionHasErrors('description');
     }
 
     public function test_guest_is_redirected_from_create_and_store(): void

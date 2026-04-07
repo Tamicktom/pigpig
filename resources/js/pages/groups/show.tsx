@@ -74,6 +74,7 @@ type GroupsShowPageProps = {
     group: {
         id: number;
         title: string;
+        description: string | null;
         drp: PublicDrpOption;
         members: PublicMember[];
     };
@@ -114,6 +115,25 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                             <span className="w-fit rounded-full bg-surface-container-high px-4 py-2 text-sm font-medium text-on-surface">
                                 {group.drp.name}
                             </span>
+                            {group.description !== null &&
+                            group.description.trim() !== '' ? (
+                                <section
+                                    className="flex flex-col gap-2"
+                                    aria-labelledby="groups-show-description-heading"
+                                >
+                                    <h2
+                                        id="groups-show-description-heading"
+                                        className="text-sm font-semibold text-on-surface-variant"
+                                    >
+                                        {t(
+                                            'groups.public.show.description_heading',
+                                        )}
+                                    </h2>
+                                    <p className="whitespace-pre-wrap text-base leading-relaxed text-on-surface">
+                                        {group.description}
+                                    </p>
+                                </section>
+                            ) : null}
                         </div>
                     </div>
 

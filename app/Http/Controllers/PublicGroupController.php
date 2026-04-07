@@ -192,6 +192,7 @@ class PublicGroupController extends Controller
             'group' => [
                 'id' => $group->id,
                 'title' => $group->title,
+                'description' => $group->description,
                 'drp' => [
                     'id' => $group->drp->id,
                     'name' => $group->drp->name,

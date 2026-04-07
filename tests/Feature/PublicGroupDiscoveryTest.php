@@ -36,7 +36,11 @@ class PublicGroupDiscoveryTest extends TestCase
     public function test_guest_can_view_group_show(): void
     {
         $drp = Drp::factory()->create(['name' => 'DRP-X']);
-        $group = Group::factory()->create(['drp_id' => $drp->id, 'title' => 'Detail Group']);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'title' => 'Detail Group',
+            'description' => 'Public summary of the group focus.',
+        ]);
 
         $response = $this->get(route('groups.show', $group));
 
@@ -47,6 +51,7 @@ class PublicGroupDiscoveryTest extends TestCase
             ->component('groups/show')
             ->where('group.id', $group->id)
             ->where('group.title', 'Detail Group')
+            ->where('group.description', 'Public summary of the group focus.')
             ->where('group.drp.name', 'DRP-X')
             ->has('group.members', 1)
             ->where('group.members.0.email', $creator->email)

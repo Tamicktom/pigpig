@@ -87,6 +87,7 @@ class GroupController extends Controller
             $request->user(),
             $validated['title'],
             $validated['external_communication_link'] ?? null,
+            $validated['description'] ?? null,
         );
 
         return redirect()

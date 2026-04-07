@@ -21,13 +21,19 @@ class GroupPersistenceTest extends TestCase
         $drp = Drp::factory()->create();
         $creator = User::factory()->create(['drp_id' => $drp->id]);
         $action = new CreateGroup;
-        $group = $action->execute($creator, 'Machine Learning PI', 'https://example.org/chat');
+        $group = $action->execute(
+            $creator,
+            'Machine Learning PI',
+            'https://example.org/chat',
+            'Weekly sync on applied ML topics.',
+        );
 
         $this->assertDatabaseHas('groups', [
             'id' => $group->id,
             'drp_id' => $drp->id,
             'creator_id' => $creator->id,
             'title' => 'Machine Learning PI',
+            'description' => 'Weekly sync on applied ML topics.',
             'external_communication_link' => 'https://example.org/chat',
         ]);
 

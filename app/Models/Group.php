@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 use LogicException;
 
-#[Fillable(['drp_id', 'creator_id', 'title', 'external_communication_link'])]
+#[Fillable(['drp_id', 'creator_id', 'title', 'description', 'external_communication_link'])]
 class Group extends Model
 {
     /** @use HasFactory<GroupFactory> */
