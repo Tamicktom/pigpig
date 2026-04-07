@@ -71,19 +71,7 @@ class FortifyServiceProvider extends ServiceProvider
         ]));
 
         Fortify::registerView(fn () => Inertia::render('auth/register', [
-            'polos' => Polo::query()
-                ->whereHas('drp')
-                ->with(['drp:id,name'])
-                ->orderBy('name')
-                ->get()
-                ->map(fn (Polo $polo): array => [
-                    'id' => $polo->id,
-                    'name' => $polo->name,
-                    'drp_id' => $polo->drp_id,
-                    'drp_name' => $polo->drp->name,
-                ])
-                ->values()
-                ->all(),
+            'polos' => Polo::inertiaSelectOptions(),
         ]));
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));

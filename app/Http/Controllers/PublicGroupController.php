@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\JoinRequestStatus;
-use App\Models\Drp;
 use App\Models\Group;
 use App\Models\GroupJoinRequest;
+use App\Models\Polo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -51,23 +51,12 @@ class PublicGroupController extends Controller
             ];
         });
 
-        $drpOptions = Drp::query()
-            ->orderBy('name')
-            ->get(['id', 'name', 'slug'])
-            ->map(fn (Drp $drp): array => [
-                'id' => $drp->id,
-                'name' => $drp->name,
-                'slug' => $drp->slug,
-            ])
-            ->values()
-            ->all();
-
         return Inertia::render('groups/index', [
             'groups' => $groups,
             'filters' => [
                 'drp_id' => isset($validated['drp_id']) ? (int) $validated['drp_id'] : null,
             ],
-            'drpOptions' => $drpOptions,
+            'poloOptions' => Polo::inertiaSelectOptions(),
             'canRegister' => Features::enabled(Features::registration()),
         ]);
     }

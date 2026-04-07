@@ -9,42 +9,38 @@ import {
 import { ChevronDownIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+//* Components imports
+import type { PoloDrpOption } from '@/components/drp-by-polo-select';
+import { poloMatchesQuery } from '@/components/drp-by-polo-select';
+
 //* Lib imports
 import { useTranslations } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
-const GROUPS_PUBLIC_DRP_FILTER_ALL_ID = -1;
+const GROUPS_PUBLIC_POLO_FILTER_ALL_ID = -1;
 
-export type GroupsPublicDrpFilterOption = {
-    id: number;
-    name: string;
-    slug?: string | null;
-};
+type GroupsPublicPoloDrpFilterOption =
+    | PoloDrpOption
+    | {
+          id: typeof GROUPS_PUBLIC_POLO_FILTER_ALL_ID;
+          name: string;
+          drp_id: 0;
+          drp_name: '';
+      };
 
-type GroupsPublicDrpFilterSelectProps = {
+type GroupsPublicPoloDrpFilterSelectProps = {
     inputId: string;
     toggleButtonId: string;
-    drpOptions: GroupsPublicDrpFilterOption[];
+    poloOptions: PoloDrpOption[];
     selectedDrpId: number | null;
     onSelectDrpId: (drpId: number | null) => void;
 };
 
-function drpMatchesQuery(
-    drpOption: GroupsPublicDrpFilterOption,
-    normalizedQuery: string,
-): boolean {
-    if (normalizedQuery === '') {
-        return true;
-    }
-
-    return drpOption.name.toLowerCase().includes(normalizedQuery);
-}
-
 /**
- * Public groups index: filter list by DRP using the same Combobox pattern as registration polo pick.
+ * Public groups index: filter list by DRP via polo pick (same row shape as registration).
  */
-export function GroupsPublicDrpFilterSelect(
-    props: GroupsPublicDrpFilterSelectProps,
+export function GroupsPublicPoloDrpFilterSelect(
+    props: GroupsPublicPoloDrpFilterSelectProps,
 ) {
     const { t } = useTranslations();
     const [query, setQuery] = useState('');
@@ -52,35 +48,36 @@ export function GroupsPublicDrpFilterSelect(
     const normalizedQuery = query.trim().toLowerCase();
 
     const allOption = useMemo(
-        (): GroupsPublicDrpFilterOption => ({
-            id: GROUPS_PUBLIC_DRP_FILTER_ALL_ID,
+        (): GroupsPublicPoloDrpFilterOption => ({
+            id: GROUPS_PUBLIC_POLO_FILTER_ALL_ID,
             name: t('groups.public.filter_all'),
-            slug: null,
+            drp_id: 0,
+            drp_name: '',
         }),
         [t],
     );
 
-    const selectedOption = useMemo(() => {
+    const selectedOption = useMemo((): GroupsPublicPoloDrpFilterOption => {
         if (props.selectedDrpId === null) {
             return allOption;
         }
 
-        const found = props.drpOptions.find(
-            (option) => option.id === props.selectedDrpId,
+        const found = props.poloOptions.find(
+            (polo) => polo.drp_id === props.selectedDrpId,
         );
 
         return found ?? allOption;
-    }, [props.selectedDrpId, props.drpOptions, allOption]);
+    }, [props.selectedDrpId, props.poloOptions, allOption]);
 
-    const filteredDrpOptions = useMemo(() => {
-        return props.drpOptions.filter((drpOption) =>
-            drpMatchesQuery(drpOption, normalizedQuery),
+    const filteredPoloOptions = useMemo(() => {
+        return props.poloOptions.filter((poloOption) =>
+            poloMatchesQuery(poloOption, normalizedQuery),
         );
-    }, [props.drpOptions, normalizedQuery]);
+    }, [props.poloOptions, normalizedQuery]);
 
     const displayOptions = useMemo(() => {
-        return [allOption, ...filteredDrpOptions];
-    }, [allOption, filteredDrpOptions]);
+        return [allOption, ...filteredPoloOptions];
+    }, [allOption, filteredPoloOptions]);
 
     const fieldClassName = cn(
         'flex h-10 w-full min-w-0 items-stretch overflow-hidden rounded-lg bg-surface-container-highest outline-none transition-[box-shadow] duration-200 ease-out',
@@ -109,11 +106,13 @@ export function GroupsPublicDrpFilterSelect(
                     return;
                 }
 
-                props.onSelectDrpId(
-                    nextValue.id === GROUPS_PUBLIC_DRP_FILTER_ALL_ID
-                        ? null
-                        : nextValue.id,
-                );
+                if (nextValue.id === GROUPS_PUBLIC_POLO_FILTER_ALL_ID) {
+                    props.onSelectDrpId(null);
+
+                    return;
+                }
+
+                props.onSelectDrpId(nextValue.drp_id);
             }}
             onClose={() => {
                 setQuery('');
@@ -125,9 +124,19 @@ export function GroupsPublicDrpFilterSelect(
                     autoComplete="off"
                     aria-label={t('groups.public.filter_aria')}
                     className={inputClassName}
-                    displayValue={(option: GroupsPublicDrpFilterOption | null) =>
-                        option == null ? '' : option.name
-                    }
+                    displayValue={(
+                        option: GroupsPublicPoloDrpFilterOption | null,
+                    ) => {
+                        if (option == null) {
+                            return '';
+                        }
+
+                        if (option.id === GROUPS_PUBLIC_POLO_FILTER_ALL_ID) {
+                            return option.name;
+                        }
+
+                        return `${option.name} — ${option.drp_name}`;
+                    }}
                     placeholder={t('groups.public.filter_search_placeholder')}
                     onChange={(event) => {
                         setQuery(event.target.value);
@@ -163,7 +172,9 @@ export function GroupsPublicDrpFilterSelect(
                             'data-selected:font-medium',
                         )}
                     >
-                        {option.name}
+                        {option.id === GROUPS_PUBLIC_POLO_FILTER_ALL_ID
+                            ? option.name
+                            : `${option.name} — ${option.drp_name}`}
                     </ComboboxOption>
                 ))}
             </ComboboxOptions>

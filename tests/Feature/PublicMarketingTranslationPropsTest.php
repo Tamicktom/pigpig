@@ -48,7 +48,7 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.public.heading') === 'Project groups'
-                        && $translations->get('groups.public.filter_all') === 'All DRPs'
+                        && $translations->get('groups.public.filter_all') === 'All polos'
                         && $translations->get('app.shell.theme.menu_trigger_aria') === 'Theme';
                 }));
     }
@@ -61,7 +61,7 @@ class PublicMarketingTranslationPropsTest extends TestCase
                 ->component('groups/index')
                 ->where('translations', function (Collection $translations) {
                     return $translations->get('groups.public.heading') === 'Grupos do projeto'
-                        && $translations->get('groups.public.filter_all') === 'Todas as DRPs'
+                        && $translations->get('groups.public.filter_all') === 'Todos os polos'
                         && $translations->get('app.shell.theme.menu_trigger_aria') === 'Tema';
                 }));
     }

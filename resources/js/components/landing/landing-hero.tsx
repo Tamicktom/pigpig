@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowRight, Verified } from 'lucide-react';
 
 //* Components imports
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 //* Hooks imports
 import { useTranslations } from '@/lib/i18n';
@@ -11,8 +11,11 @@ import { useTranslations } from '@/lib/i18n';
 //* Routes imports
 import { index as groupsIndex } from '@/routes/groups';
 
+//* Utils imports
+import { cn } from '@/lib/utils';
+
 const HERO_IMAGE_SRC =
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuDq-y07juAjBhSBV2VmUIKh16H_MAZVfn9XTmY9T8OCZrfsFRDA1AY5jXIsrh7Mb29QtfWj8lVvZ_D0HuqKZ6Uo8BS024rUx35AotVAIVfDaetIaVKedQXAc3R8jwo5Dj2I2MRh7PFPv5Fog9GUClaxzj3ajfeh4ottFXog96zznr6pojJh6XHwLcP1qUysev64oTkK3ZIU1i73ogWSUJPTnkdiwDnfScuKOHEsg-aiSMDZI8bc1IFCUU7Z3TpABP-5QH_KaxfG66w';
+    '/cta.png';
 
 export function LandingHero() {
     const { t } = useTranslations();
@@ -28,39 +31,33 @@ export function LandingHero() {
                         {t('landing.hero.subtitle')}
                     </p>
                     <div className="flex flex-col gap-4 sm:flex-row">
-                        <Button
+                        <Link
                             id="landing-hero-cta-polo"
-                            type="button"
-                            className="landing-primary-cta h-auto rounded-xl px-8 py-4 font-bold tracking-wide text-primary-foreground shadow-none"
-                            asChild
+                            href={groupsIndex.url()}
+                            className={
+                                cn(
+                                    buttonVariants({ variant: 'default' }),
+                                    "landing-primary-cta h-auto rounded-xl px-8 py-4 font-bold tracking-wide text-primary-foreground shadow-none"
+                                )
+                            }
                         >
-                            <Link
-                                href={groupsIndex.url()}
-                                className="inline-flex items-center justify-center gap-2"
-                            >
-                                {t('landing.hero.cta_polo')}
-                                <ArrowRight
-                                    aria-hidden
-                                    className="size-5 shrink-0"
-                                />
-                            </Link>
-                        </Button>
-                        <Button
-                            id="landing-hero-cta-learn"
-                            type="button"
-                            variant="ghost"
-                            className="ghost-border h-auto rounded-xl px-8 py-4 font-bold text-primary shadow-none hover:bg-surface-container-low"
-                            asChild
+                            {t('landing.hero.cta_polo')}
+                            <ArrowRight
+                                aria-hidden
+                                className="size-5 shrink-0"
+                            />
+                        </Link>
+
+                        <Link href="#como-funciona"
+                            className={cn(buttonVariants({ variant: 'ghost' }), 'ghost-border h-auto rounded-xl px-8 py-4 font-bold text-primary shadow-none hover:bg-surface-container-low')}
                         >
-                            <a href="#como-funciona">
-                                {t('landing.hero.cta_learn')}
-                            </a>
-                        </Button>
+                            {t('landing.hero.cta_learn')}
+                        </Link>
                     </div>
                 </div>
                 <div className="relative">
                     <div className="absolute -top-12 -right-12 size-64 rounded-full bg-primary-container/10 blur-3xl" />
-                    <div className="relative z-10 rotate-3 overflow-hidden rounded-4xl shadow-2xl motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:hover:rotate-0">
+                    <div className="relative z-10 rotate-3 overflow-hidden motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:hover:rotate-0">
                         <img
                             src={HERO_IMAGE_SRC}
                             alt={t('landing.hero.image_alt')}
