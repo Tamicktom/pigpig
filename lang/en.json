@@ -265,7 +265,7 @@
     "landing.footer.copyright": "© :year Integrative Project UNIVESP. All rights reserved.",
     "groups.public.head_title": "Groups",
     "groups.public.heading": "Project groups",
-    "groups.public.description": "Browse groups by campus polo (your DRP is shown next to each polo). Member contact details stay private on these pages.",
+    "groups.public.description": "Browse groups by campus polo (your DRP is shown next to each polo). On a group's page, member emails are listed; phone numbers are shown only to members of that group.",
     "groups.public.filter_label": "Polo",
     "groups.public.filter_all": "All polos",
     "groups.public.filter_aria": "Filter groups by polo",
@@ -288,5 +288,8 @@
     "groups.public.show.no_members": "No members listed.",
     "groups.public.show.social_instagram": "Instagram",
     "groups.public.show.social_linkedin": "LinkedIn",
-    "groups.public.show.social_twitter": "X / Twitter"
+    "groups.public.show.social_twitter": "X / Twitter",
+    "groups.public.show.member_email_label": "Email",
+    "groups.public.show.member_phone_label": "Phone",
+    "groups.public.show.member_phone_aria": "Call :name"
 }

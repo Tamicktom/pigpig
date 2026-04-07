@@ -264,7 +264,7 @@
     "landing.footer.copyright": "© :year Projeto Integrador UNIVESP. Todos os direitos reservados.",
     "groups.public.head_title": "Grupos",
     "groups.public.heading": "Grupos do projeto",
-    "groups.public.description": "Navegue pelos grupos pelo polo (a DRP aparece ao lado de cada polo). Os dados de contato dos membros permanecem privados nestas páginas.",
+    "groups.public.description": "Navegue pelos grupos pelo polo (a DRP aparece ao lado de cada polo). Na página de um grupo, os e-mails dos membros aparecem na lista; o telefone só é exibido para quem pertence ao grupo.",
     "groups.public.filter_label": "Polo",
     "groups.public.filter_all": "Todos os polos",
     "groups.public.filter_aria": "Filtrar grupos por polo",
@@ -287,5 +287,8 @@
     "groups.public.show.no_members": "Nenhum membro listado.",
     "groups.public.show.social_instagram": "Instagram",
     "groups.public.show.social_linkedin": "LinkedIn",
-    "groups.public.show.social_twitter": "X / Twitter"
+    "groups.public.show.social_twitter": "X / Twitter",
+    "groups.public.show.member_email_label": "E-mail",
+    "groups.public.show.member_phone_label": "Telefone",
+    "groups.public.show.member_phone_aria": "Ligar para :name"
 }

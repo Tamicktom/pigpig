@@ -18,6 +18,26 @@ import { useTranslations } from '@/lib/i18n';
 //* Routes imports
 import { index as groupsIndex } from '@/routes/groups';
 
+const memberContactLinkClassName =
+    'text-sm text-on-surface-variant underline-offset-4 transition-colors duration-200 ease-out [@media(hover:hover)and(pointer:fine)]:hover:text-primary [@media(hover:hover)and(pointer:fine)]:hover:underline';
+
+function memberInitialsFromName(name: string): string {
+    const parts = name.trim().split(/\s+/u).filter((part) => part.length > 0);
+
+    if (parts.length === 0) {
+        return '?';
+    }
+
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    const firstChar = parts[0].charAt(0);
+    const lastChar = parts[parts.length - 1].charAt(0);
+
+    return (firstChar + lastChar).toUpperCase();
+}
+
 type PublicDrpOption = {
     id: number;
     name: string;
@@ -27,6 +47,8 @@ type PublicDrpOption = {
 type PublicMember = {
     id: number;
     name: string;
+    email: string;
+    phone: string | null;
     instagram_url: string | null;
     linkedin_url: string | null;
     twitter_url: string | null;
@@ -70,32 +92,34 @@ export default function GroupsShow(props: GroupsShowPageProps) {
     const successMessage = page.props.success ?? null;
     const needsEmailVerification =
         page.props.auth.needsEmailVerification;
+    const showMemberPhones =
+        viewer !== null && viewer.is_member === true;
 
     return (
         <>
             <Head title={group.title} />
             <GroupsPublicShell>
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-10 md:gap-12">
+                    <div className="flex max-w-3xl flex-col gap-6">
                         <Link
                             href={groupsIndex.url()}
-                            className="w-fit text-sm text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
+                            className="w-fit text-sm text-on-surface-variant transition-colors duration-200 ease-out [@media(hover:hover)and(pointer:fine)]:hover:text-primary [@media(hover:hover)and(pointer:fine)]:hover:underline underline-offset-4"
                         >
                             {t('groups.public.show.back')}
                         </Link>
-                        <div className="flex flex-col gap-2">
-                            <h1 className="text-2xl font-semibold tracking-tight">
+                        <div className="flex flex-col gap-4">
+                            <h1 className="font-headline text-4xl font-black tracking-tight text-on-background md:text-5xl">
                                 {group.title}
                             </h1>
-                            <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                            <span className="w-fit rounded-full bg-surface-container-high px-4 py-2 text-sm font-medium text-on-surface">
                                 {group.drp.name}
-                            </p>
+                            </span>
                         </div>
                     </div>
 
                     {successMessage ? (
                         <p
-                            className="rounded-lg border border-[#19140035] bg-white px-4 py-3 text-sm text-[#1b1b18] dark:border-[#3E3E3A] dark:bg-[#161615] dark:text-[#EDEDEC]"
+                            className="rounded-2xl bg-surface-container-high px-6 py-4 text-sm text-on-surface motion-reduce:transition-none"
                             role="status"
                         >
                             {successMessage}
@@ -104,39 +128,39 @@ export default function GroupsShow(props: GroupsShowPageProps) {
 
                     {viewer !== null ? (
                         <section
-                            className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                            className="flex flex-col gap-4 rounded-2xl bg-surface-container-low p-6 md:p-8 motion-reduce:transition-none"
                             aria-labelledby="groups-show-join-heading"
                         >
                             <h2
                                 id="groups-show-join-heading"
-                                className="text-lg font-medium"
+                                className="text-lg font-semibold text-on-surface"
                             >
                                 {t('groups.public.show.join_section_title')}
                             </h2>
-                            <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                            <p className="text-sm text-on-surface-variant">
                                 {t('groups.public.show.members_progress', {
                                     current: viewer.member_count,
                                     max: viewer.max_members,
                                 })}
                             </p>
                             {viewer.is_member ? (
-                                <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <p className="text-sm text-on-surface">
                                     {t('groups.public.show.status_member')}
                                 </p>
                             ) : null}
                             {viewer.is_owner ? (
-                                <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <p className="text-sm text-on-surface">
                                     {t('groups.public.show.status_owner')}
                                 </p>
                             ) : null}
                             {viewer.has_pending_request ? (
-                                <p className="text-sm text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <p className="text-sm text-on-surface">
                                     {t('groups.public.show.status_pending')}
                                 </p>
                             ) : null}
                             {viewer.can_request_join ? (
                                 needsEmailVerification ? (
-                                    <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                                    <p className="text-sm text-on-surface-variant">
                                         {t('groups.public.show.verify_email_hint')}
                                     </p>
                                 ) : (
@@ -145,7 +169,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                             group: group.id,
                                         })}
                                         disableWhileProcessing
-                                        className="flex flex-col gap-2"
+                                        className="flex flex-col gap-3"
                                     >
                                         {(formRenderProps) => (
                                             <>
@@ -162,6 +186,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                         disabled={
                                                             formRenderProps.processing
                                                         }
+                                                        className="landing-primary-cta rounded-xl font-bold tracking-tight shadow-none"
                                                     >
                                                         {formRenderProps.processing ? (
                                                             <Spinner />
@@ -179,7 +204,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                             {!viewer.same_drp &&
                             !viewer.is_member &&
                             !viewer.is_owner ? (
-                                <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                                <p className="text-sm text-on-surface-variant">
                                     {t('groups.join.error.same_drp_only')}
                                 </p>
                             ) : null}
@@ -190,23 +215,23 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                     viewer.is_owner &&
                     viewer.pending_join_requests.length > 0 ? (
                         <section
-                            className="flex flex-col gap-3"
+                            className="flex flex-col gap-4"
                             aria-labelledby="groups-show-pending-heading"
                         >
                             <h2
                                 id="groups-show-pending-heading"
-                                className="text-lg font-medium"
+                                className="text-lg font-semibold text-on-surface"
                             >
                                 {t('groups.public.show.pending_heading')}
                             </h2>
-                            <ul className="flex flex-col gap-4">
+                            <ul className="flex flex-col gap-6">
                                 {viewer.pending_join_requests.map(
                                     (pendingRow) => (
                                         <li
                                             key={pendingRow.id}
-                                            className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                            className="flex flex-col gap-4 rounded-xl bg-surface-container-lowest p-6 md:p-8"
                                         >
-                                            <p className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                            <p className="text-sm font-semibold text-on-surface">
                                                 {pendingRow.user_name}
                                             </p>
                                             <div className="flex flex-wrap gap-3">
@@ -234,6 +259,7 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                                                                 disabled={
                                                                     acceptFormProps.processing
                                                                 }
+                                                                className="landing-primary-cta rounded-xl font-bold tracking-tight shadow-none"
                                                             >
                                                                 {acceptFormProps.processing ? (
                                                                     <Spinner />
@@ -290,89 +316,151 @@ export default function GroupsShow(props: GroupsShowPageProps) {
                     ) : null}
 
                     <section
-                        className="flex flex-col gap-3"
+                        className="flex flex-col gap-6"
                         aria-labelledby="groups-show-members-heading"
                     >
                         <h2
                             id="groups-show-members-heading"
-                            className="text-lg font-medium"
+                            className="text-lg font-semibold text-on-surface"
                         >
                             {t('groups.public.show.members_heading')}
                         </h2>
                         {group.members.length === 0 ? (
-                            <p className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                            <p className="text-base text-on-surface-variant">
                                 {t('groups.public.show.no_members')}
                             </p>
                         ) : (
-                            <ul className="flex flex-col gap-3 rounded-lg border border-[#19140035] bg-white p-4 dark:border-[#3E3E3A] dark:bg-[#161615]">
-                                {group.members.map((member) => (
-                                    <li
-                                        key={member.id}
-                                        className="flex flex-col gap-2 text-sm"
-                                    >
-                                        <span className="font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
-                                            {member.name}
-                                        </span>
-                                        {member.instagram_url ||
-                                        member.linkedin_url ||
-                                        member.twitter_url ? (
-                                            <ul className="flex flex-wrap gap-x-3 gap-y-1">
-                                                {member.instagram_url ? (
-                                                    <li>
-                                                        <a
-                                                            id={`groups-show-member-${member.id}-instagram`}
-                                                            href={
-                                                                member.instagram_url
-                                                            }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
-                                                        >
-                                                            {t(
-                                                                'groups.public.show.social_instagram',
-                                                            )}
-                                                        </a>
-                                                    </li>
+                            <div className="rounded-2xl bg-surface-container-low p-6 md:p-8">
+                                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                    {group.members.map((member) => (
+                                        <li key={member.id}>
+                                            <div className="flex h-full flex-col gap-4 rounded-xl bg-surface-container-lowest p-6">
+                                                <div className="flex items-start gap-4">
+                                                    <div
+                                                        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-container-high text-sm font-bold text-on-surface motion-reduce:transition-none"
+                                                        aria-hidden
+                                                    >
+                                                        {memberInitialsFromName(
+                                                            member.name,
+                                                        )}
+                                                    </div>
+                                                    <div className="flex min-w-0 flex-1 flex-col gap-1">
+                                                        <span className="text-base font-semibold text-on-surface">
+                                                            {member.name}
+                                                        </span>
+                                                        <div className="flex flex-col gap-0.5 text-sm">
+                                                            <span className="text-on-surface-variant">
+                                                                {t(
+                                                                    'groups.public.show.member_email_label',
+                                                                )}
+                                                            </span>
+                                                            <a
+                                                                id={`groups-show-member-${member.id}-email`}
+                                                                href={`mailto:${member.email}`}
+                                                                className={
+                                                                    memberContactLinkClassName
+                                                                }
+                                                            >
+                                                                {member.email}
+                                                            </a>
+                                                        </div>
+                                                        {showMemberPhones &&
+                                                        member.phone !== null &&
+                                                        member.phone !==
+                                                            '' ? (
+                                                            <div className="flex flex-col gap-0.5 pt-2 text-sm">
+                                                                <span className="text-on-surface-variant">
+                                                                    {t(
+                                                                        'groups.public.show.member_phone_label',
+                                                                    )}
+                                                                </span>
+                                                                <a
+                                                                    id={`groups-show-member-${member.id}-phone`}
+                                                                    href={`tel:${member.phone}`}
+                                                                    className={
+                                                                        memberContactLinkClassName
+                                                                    }
+                                                                    aria-label={t(
+                                                                        'groups.public.show.member_phone_aria',
+                                                                        {
+                                                                            name: member.name,
+                                                                        },
+                                                                    )}
+                                                                >
+                                                                    {member.phone}
+                                                                </a>
+                                                            </div>
+                                                        ) : null}
+                                                    </div>
+                                                </div>
+                                                {member.instagram_url ||
+                                                member.linkedin_url ||
+                                                member.twitter_url ? (
+                                                    <ul className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border/40 pt-4">
+                                                        {member.instagram_url ? (
+                                                            <li>
+                                                                <a
+                                                                    id={`groups-show-member-${member.id}-instagram`}
+                                                                    href={
+                                                                        member.instagram_url
+                                                                    }
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={
+                                                                        memberContactLinkClassName
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        'groups.public.show.social_instagram',
+                                                                    )}
+                                                                </a>
+                                                            </li>
+                                                        ) : null}
+                                                        {member.linkedin_url ? (
+                                                            <li>
+                                                                <a
+                                                                    id={`groups-show-member-${member.id}-linkedin`}
+                                                                    href={
+                                                                        member.linkedin_url
+                                                                    }
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={
+                                                                        memberContactLinkClassName
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        'groups.public.show.social_linkedin',
+                                                                    )}
+                                                                </a>
+                                                            </li>
+                                                        ) : null}
+                                                        {member.twitter_url ? (
+                                                            <li>
+                                                                <a
+                                                                    id={`groups-show-member-${member.id}-twitter`}
+                                                                    href={
+                                                                        member.twitter_url
+                                                                    }
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={
+                                                                        memberContactLinkClassName
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        'groups.public.show.social_twitter',
+                                                                    )}
+                                                                </a>
+                                                            </li>
+                                                        ) : null}
+                                                    </ul>
                                                 ) : null}
-                                                {member.linkedin_url ? (
-                                                    <li>
-                                                        <a
-                                                            id={`groups-show-member-${member.id}-linkedin`}
-                                                            href={
-                                                                member.linkedin_url
-                                                            }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
-                                                        >
-                                                            {t(
-                                                                'groups.public.show.social_linkedin',
-                                                            )}
-                                                        </a>
-                                                    </li>
-                                                ) : null}
-                                                {member.twitter_url ? (
-                                                    <li>
-                                                        <a
-                                                            id={`groups-show-member-${member.id}-twitter`}
-                                                            href={
-                                                                member.twitter_url
-                                                            }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-[#706f6c] underline-offset-4 hover:underline dark:text-[#A1A09A]"
-                                                        >
-                                                            {t(
-                                                                'groups.public.show.social_twitter',
-                                                            )}
-                                                        </a>
-                                                    </li>
-                                                ) : null}
-                                            </ul>
-                                        ) : null}
-                                    </li>
-                                ))}
-                            </ul>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         )}
                     </section>
                 </div>

@@ -100,26 +100,37 @@ class PublicGroupController extends Controller
     }
 
     /**
-     * Public group detail: member names; optional social URLs when set (email and phone stay private).
+     * Public group detail: member names and emails; optional social URLs; phone numbers only when the
+     * authenticated viewer belongs to the group.
      */
     public function show(Request $request, Group $group): Response
     {
+        $user = $request->user();
+        $isViewerMember = $user instanceof User
+            && $group->members()->where('users.id', $user->id)->exists();
+
+        $memberColumns = [
+            'users.id',
+            'users.name',
+            'users.email',
+            'users.instagram_url',
+            'users.linkedin_url',
+            'users.twitter_url',
+        ];
+
+        if ($isViewerMember) {
+            $memberColumns[] = 'users.phone';
+        }
+
         $group->load([
             'drp:id,name,slug',
-            'members' => fn ($query) => $query->select(
-                'users.id',
-                'users.name',
-                'users.instagram_url',
-                'users.linkedin_url',
-                'users.twitter_url',
-            ),
+            'members' => fn ($query) => $query->select($memberColumns),
         ]);
 
         if ($group->drp === null) {
             abort(404);
         }
 
-        $user = $request->user();
         $viewer = null;
 
         if ($user instanceof User) {
@@ -189,6 +200,8 @@ class PublicGroupController extends Controller
                 'members' => $group->members->map(fn ($member): array => [
                     'id' => $member->id,
                     'name' => $member->name,
+                    'email' => $member->email,
+                    'phone' => $isViewerMember ? $member->phone : null,
                     'instagram_url' => $member->instagram_url,
                     'linkedin_url' => $member->linkedin_url,
                     'twitter_url' => $member->twitter_url,

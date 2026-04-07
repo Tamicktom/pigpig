@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\GroupMemberRole;
 use App\Models\Drp;
 use App\Models\Group;
 use App\Models\Polo;
@@ -39,6 +40,8 @@ class PublicGroupDiscoveryTest extends TestCase
 
         $response = $this->get(route('groups.show', $group));
 
+        $creator = User::query()->findOrFail($group->creator_id);
+
         $response->assertOk();
         $response->assertInertia(fn (Assert $page) => $page
             ->component('groups/show')
@@ -46,6 +49,8 @@ class PublicGroupDiscoveryTest extends TestCase
             ->where('group.title', 'Detail Group')
             ->where('group.drp.name', 'DRP-X')
             ->has('group.members', 1)
+            ->where('group.members.0.email', $creator->email)
+            ->where('group.members.0.phone', null)
             ->where('viewer', null));
     }
 
@@ -69,7 +74,9 @@ class PublicGroupDiscoveryTest extends TestCase
             ->component('groups/show')
             ->where('group.members.0.linkedin_url', 'https://linkedin.com/in/example-member')
             ->where('group.members.0.instagram_url', null)
-            ->where('group.members.0.twitter_url', null));
+            ->where('group.members.0.twitter_url', null)
+            ->where('group.members.0.email', $creator->email)
+            ->where('group.members.0.phone', null));
     }
 
     public function test_show_returns_404_when_drp_is_soft_deleted(): void
@@ -190,12 +197,12 @@ class PublicGroupDiscoveryTest extends TestCase
         $this->getJson(route('groups.index', ['drp_id' => $drp->id]))->assertUnprocessable();
     }
 
-    public function test_public_show_response_does_not_expose_email_or_phone(): void
+    public function test_guest_group_show_includes_member_email_and_null_phone(): void
     {
         $drp = Drp::factory()->create();
         $user = User::factory()->create([
             'drp_id' => $drp->id,
-            'email' => 'leaky-public@example.test',
+            'email' => 'listed-on-show@example.test',
             'phone' => '+5511999887766',
             'name' => 'Member Public Name',
         ]);
@@ -204,11 +211,65 @@ class PublicGroupDiscoveryTest extends TestCase
             'creator_id' => $user->id,
         ]);
 
-        $content = $this->get(route('groups.show', $group))->assertOk()->getContent();
+        $response = $this->get(route('groups.show', $group));
 
-        $this->assertStringNotContainsString('leaky-public@example.test', $content);
-        $this->assertStringNotContainsString('+5511999887766', $content);
-        $this->assertStringContainsString('Member Public Name', $content);
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('groups/show')
+            ->where('group.members.0.email', 'listed-on-show@example.test')
+            ->where('group.members.0.phone', null));
+    }
+
+    public function test_authenticated_non_member_sees_member_emails_and_null_phones(): void
+    {
+        $drp = Drp::factory()->create();
+        $creator = User::factory()->create([
+            'drp_id' => $drp->id,
+            'email' => 'owner@example.test',
+            'phone' => '+5511999000001',
+        ]);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'creator_id' => $creator->id,
+        ]);
+        $stranger = User::factory()->create(['drp_id' => $drp->id]);
+
+        $response = $this->actingAs($stranger)->get(route('groups.show', $group));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->where('group.members.0.email', 'owner@example.test')
+            ->where('group.members.0.phone', null));
+    }
+
+    public function test_group_member_sees_member_phones_in_inertia_props(): void
+    {
+        $drp = Drp::factory()->create();
+        $owner = User::factory()->create([
+            'drp_id' => $drp->id,
+            'phone' => '+5511999000001',
+        ]);
+        $member = User::factory()->create([
+            'drp_id' => $drp->id,
+            'phone' => '+5511888000002',
+        ]);
+        $group = Group::factory()->create([
+            'drp_id' => $drp->id,
+            'creator_id' => $owner->id,
+        ]);
+        $group->members()->attach($member->id, [
+            'role' => GroupMemberRole::Member->value,
+        ]);
+
+        $response = $this->actingAs($member)->get(route('groups.show', $group));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->has('group.members', 2)
+            ->where('group.members.0.id', $owner->id)
+            ->where('group.members.0.phone', '+5511999000001')
+            ->where('group.members.1.id', $member->id)
+            ->where('group.members.1.phone', '+5511888000002'));
     }
 
     public function test_guest_cannot_create_group_via_policy(): void
