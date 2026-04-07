@@ -12,7 +12,7 @@ import { useTranslations } from '@/lib/i18n';
 import { index as groupsIndex } from '@/routes/groups';
 
 const HERO_IMAGE_SRC =
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuDq-y07juAjBhSBV2VmUIKh16H_MAZVfn9XTmY9T8OCZrfsFRDA1AY5jXIsrh7Mb29QtfWj8lVvZ_D0HuqKZ6Uo8BS024rUx35AotVAIVfDaetIaVKedQXAc3R8jwo5Dj2I2MRh7PFPv5Fog9GUClaxzj3ajfeh4ottFXog96zznr6pojJh6XHwLcP1qUysev64oTkK3ZIU1i73ogWSUJPTnkdiwDnfScuKOHEsg-aiSMDZI8bc1IFCUU7Z3TpABP-5QH_KaxfG66w';
+    '/cta.png';
 
 export function LandingHero() {
     const { t } = useTranslations();
@@ -60,7 +60,7 @@ export function LandingHero() {
                 </div>
                 <div className="relative">
                     <div className="absolute -top-12 -right-12 size-64 rounded-full bg-primary-container/10 blur-3xl" />
-                    <div className="relative z-10 rotate-3 overflow-hidden rounded-4xl shadow-2xl motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:hover:rotate-0">
+                    <div className="relative z-10 rotate-3 overflow-hidden motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:hover:rotate-0">
                         <img
                             src={HERO_IMAGE_SRC}
                             alt={t('landing.hero.image_alt')}
