@@ -3,13 +3,16 @@ import { Link } from '@inertiajs/react';
 import { ArrowRight, Verified } from 'lucide-react';
 
 //* Components imports
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 //* Hooks imports
 import { useTranslations } from '@/lib/i18n';
 
 //* Routes imports
 import { index as groupsIndex } from '@/routes/groups';
+
+//* Utils imports
+import { cn } from '@/lib/utils';
 
 const HERO_IMAGE_SRC =
     '/cta.png';
@@ -28,34 +31,28 @@ export function LandingHero() {
                         {t('landing.hero.subtitle')}
                     </p>
                     <div className="flex flex-col gap-4 sm:flex-row">
-                        <Button
+                        <Link
                             id="landing-hero-cta-polo"
-                            type="button"
-                            className="landing-primary-cta h-auto rounded-xl px-8 py-4 font-bold tracking-wide text-primary-foreground shadow-none"
-                            asChild
+                            href={groupsIndex.url()}
+                            className={
+                                cn(
+                                    buttonVariants({ variant: 'default' }),
+                                    "landing-primary-cta h-auto rounded-xl px-8 py-4 font-bold tracking-wide text-primary-foreground shadow-none"
+                                )
+                            }
                         >
-                            <Link
-                                href={groupsIndex.url()}
-                                className="inline-flex items-center justify-center gap-2"
-                            >
-                                {t('landing.hero.cta_polo')}
-                                <ArrowRight
-                                    aria-hidden
-                                    className="size-5 shrink-0"
-                                />
-                            </Link>
-                        </Button>
-                        <Button
-                            id="landing-hero-cta-learn"
-                            type="button"
-                            variant="ghost"
-                            className="ghost-border h-auto rounded-xl px-8 py-4 font-bold text-primary shadow-none hover:bg-surface-container-low"
-                            asChild
+                            {t('landing.hero.cta_polo')}
+                            <ArrowRight
+                                aria-hidden
+                                className="size-5 shrink-0"
+                            />
+                        </Link>
+
+                        <Link href="#como-funciona"
+                            className={cn(buttonVariants({ variant: 'ghost' }), 'ghost-border h-auto rounded-xl px-8 py-4 font-bold text-primary shadow-none hover:bg-surface-container-low')}
                         >
-                            <a href="#como-funciona">
-                                {t('landing.hero.cta_learn')}
-                            </a>
-                        </Button>
+                            {t('landing.hero.cta_learn')}
+                        </Link>
                     </div>
                 </div>
                 <div className="relative">
