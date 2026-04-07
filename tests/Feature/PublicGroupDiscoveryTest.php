@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Drp;
 use App\Models\Group;
+use App\Models\Polo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -17,6 +18,7 @@ class PublicGroupDiscoveryTest extends TestCase
     public function test_guest_can_view_groups_index(): void
     {
         $drp = Drp::factory()->create();
+        Polo::factory()->create(['drp_id' => $drp->id]);
         Group::factory()->create(['drp_id' => $drp->id, 'title' => 'Public PI Group']);
 
         $response = $this->get(route('groups.index'));
@@ -26,7 +28,7 @@ class PublicGroupDiscoveryTest extends TestCase
             ->component('groups/index')
             ->has('groups.data', 1)
             ->where('groups.data.0.title', 'Public PI Group')
-            ->has('drpOptions')
+            ->has('poloOptions')
             ->has('filters'));
     }
 
@@ -104,6 +106,8 @@ class PublicGroupDiscoveryTest extends TestCase
     {
         $drpA = Drp::factory()->create();
         $drpB = Drp::factory()->create();
+        Polo::factory()->create(['drp_id' => $drpA->id]);
+        Polo::factory()->create(['drp_id' => $drpB->id]);
         Group::factory()->create(['drp_id' => $drpA->id, 'title' => 'Group A']);
         Group::factory()->create(['drp_id' => $drpB->id, 'title' => 'Group B']);
 

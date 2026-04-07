@@ -2,7 +2,8 @@
 import { Head, Link, router } from '@inertiajs/react';
 
 //* Components imports
-import { GroupsPublicDrpFilterSelect } from '@/components/groups-public-drp-filter-select';
+import type { PoloDrpOption } from '@/components/drp-by-polo-select';
+import { GroupsPublicPoloDrpFilterSelect } from '@/components/groups-public-polo-drp-filter-select';
 import { GroupsPublicShell } from '@/components/groups-public-shell';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -13,7 +14,7 @@ import { useTranslations } from '@/lib/i18n';
 //* Routes imports
 import { index as groupsIndex, show as groupsShow } from '@/routes/groups';
 
-type PublicDrpOption = {
+type PublicGroupDrp = {
     id: number;
     name: string;
     slug: string | null;
@@ -22,7 +23,7 @@ type PublicDrpOption = {
 type PublicGroupRow = {
     id: number;
     title: string;
-    drp: PublicDrpOption | null;
+    drp: PublicGroupDrp | null;
 };
 
 type PaginatorLink = {
@@ -44,7 +45,7 @@ type GroupsIndexPageProps = {
     filters: {
         drp_id: number | null;
     };
-    drpOptions: PublicDrpOption[];
+    poloOptions: PoloDrpOption[];
 };
 
 export default function GroupsIndex(props: GroupsIndexPageProps) {
@@ -80,14 +81,14 @@ export default function GroupsIndex(props: GroupsIndexPageProps) {
                     <div className="flex max-w-md flex-col gap-2">
                         <Label
                             className="text-on-surface"
-                            htmlFor="groups-index-drp-filter"
+                            htmlFor="groups-index-polo-filter"
                         >
                             {t('groups.public.filter_label')}
                         </Label>
-                        <GroupsPublicDrpFilterSelect
-                            inputId="groups-index-drp-filter"
-                            toggleButtonId="groups-index-drp-filter-toggle"
-                            drpOptions={props.drpOptions}
+                        <GroupsPublicPoloDrpFilterSelect
+                            inputId="groups-index-polo-filter"
+                            toggleButtonId="groups-index-polo-filter-toggle"
+                            poloOptions={props.poloOptions}
                             selectedDrpId={props.filters.drp_id}
                             onSelectDrpId={handleSelectDrpId}
                         />

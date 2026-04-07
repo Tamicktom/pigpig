@@ -31,7 +31,10 @@ type DrpByPoloSelectProps = {
     selectClassName?: string;
 };
 
-function poloMatchesQuery(poloOption: PoloDrpOption, normalizedQuery: string): boolean {
+export function poloMatchesQuery(
+    poloOption: PoloDrpOption,
+    normalizedQuery: string,
+): boolean {
     if (normalizedQuery === '') {
         return true;
     }

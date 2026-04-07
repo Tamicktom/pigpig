@@ -21,4 +21,26 @@ class Polo extends Model
     {
         return $this->belongsTo(Drp::class);
     }
+
+    /**
+     * Polo rows with DRP labels for Inertia comboboxes (registration, public group filter).
+     *
+     * @return list<array{id: int, name: string, drp_id: int, drp_name: string}>
+     */
+    public static function inertiaSelectOptions(): array
+    {
+        return static::query()
+            ->whereHas('drp')
+            ->with(['drp:id,name'])
+            ->orderBy('name')
+            ->get()
+            ->map(fn (Polo $polo): array => [
+                'id' => $polo->id,
+                'name' => $polo->name,
+                'drp_id' => $polo->drp_id,
+                'drp_name' => $polo->drp->name,
+            ])
+            ->values()
+            ->all();
+    }
 }
