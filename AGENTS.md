@@ -228,3 +228,50 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
 
 </laravel-boost-guidelines>
+
+## Cursor Cloud specific instructions
+
+### Environment overview
+
+This is a Laravel 13 + Inertia.js v3 + React 19 + Tailwind CSS v4 application ("Pigpig") that uses Docker Compose for local development. Services: PostgreSQL 16, Redis 7, PHP 8.4 app server, queue worker, Vite dev server, and Mailpit.
+
+### Running services (Docker Compose)
+
+All services start with `docker compose up -d` from the workspace root. The `.env` file (copied from `.env.example`) must exist before starting. After first start, run migrations and seed:
+
+```
+docker compose exec app php artisan migrate --force --no-interaction
+docker compose exec app php artisan db:seed --force --no-interaction
+```
+
+The app is accessible at `http://localhost:8000` with Vite HMR on port 5173.
+
+### Running tests without Docker
+
+PHPUnit tests use SQLite in-memory (configured in `phpunit.xml`) and do NOT require Docker. You can run them directly:
+
+```
+php artisan test --compact
+```
+
+However, you must have `npm run build` completed first (tests that render Inertia pages need the Vite manifest at `public/build/manifest.json`).
+
+### Wayfinder route generation
+
+Before running `tsc --noEmit` or working with frontend routes/actions, generate Wayfinder types:
+
+```
+php artisan wayfinder:generate
+```
+
+This creates `resources/js/actions/` and `resources/js/routes/` directories. These are gitignored and must be regenerated locally.
+
+### Known pre-existing lint issues
+
+- ESLint reports import-order errors in several files (pre-existing, not blocking).
+- Prettier reports formatting issues in ~21 files (pre-existing).
+- TypeScript reports `.form()` method errors on Wayfinder-generated route types (version compatibility issue, pre-existing).
+
+### Docker build time
+
+The first `docker compose up --build` takes ~2 minutes due to PHP extension compilation. Subsequent starts are fast due to layer caching.
