@@ -1,0 +1,15 @@
+{
+  "$schema": "https://www.cursor.com/schemas/environment.schema.json",
+  "name": "pigpig-dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "composer install --no-interaction --prefer-dist\nnpm install\nnpm run build",
+  "start": "sudo dockerd &>/tmp/dockerd.log & sleep 2 && sudo chmod 666 /var/run/docker.sock",
+  "ports": [
+    { "port": 8000, "name": "Laravel app" },
+    { "port": 5173, "name": "Vite dev server" },
+    { "port": 8025, "name": "Mailpit UI" }
+  ]
+}
