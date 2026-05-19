@@ -2,7 +2,7 @@
 
 **P**rocura de **I**ntegrantes para **G**rupos de **P**rojeto **I**ntegrador em **G**rupo
 
-Plataforma web para ajudar alunos da [UNIVESP](https://univesp.br/) a encontrar colegas e montar grupos de Projeto Integrador (PI) de forma mais organizada — sem depender apenas de dezenas de grupos informais no WhatsApp.
+Plataforma web para ajudar alunos da [UNIVESP](https://univesp.br/) a encontrar colegas e montar grupos de Projeto Integrador (PI) de forma mais organizada, sem depender apenas de dezenas de grupos informais no WhatsApp.
 
 ## Sobre o projeto
 
